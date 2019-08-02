@@ -77,3 +77,5 @@
 }
 .bgca05 { background-color: rgba(0,0,0,0.5); }
 .cp { cursor: pointer; }
+.trans05 { transition: 0.5s; }
+.bgf { background: #fff; }
