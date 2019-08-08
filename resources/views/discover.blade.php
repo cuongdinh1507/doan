@@ -21,12 +21,38 @@
             <div class="d-inline-block font-weight-bolder">Coverage type</div>
             <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
         </div>
-        <div id="coverage" class="collapse cp show pb-2 pl-2"></div>
+        <div id="coverage" class="collapse cp show pb-2 pl-2">
+            <div class="custom-control custom-checkbox cp">
+              <input type="checkbox" class="custom-control-input coverage_input" id="Point">
+              <label class="custom-control-label" for="Point">Point</label>
+            </div>
+            <div class="custom-control custom-checkbox cp">
+              <input type="checkbox" class="custom-control-input coverage_input" id="Box">
+              <label class="custom-control-label" for="Box">Box</label>
+            </div>
+            <div class="custom-control custom-checkbox cp">
+              <input type="checkbox" class="custom-control-input coverage_input" id="Period">
+              <label class="custom-control-label" for="Period">Period</label>
+            </div>
+        </div>
         <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#availability">
             <div class="d-inline-block font-weight-bolder">Availability</div>
             <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
         </div>
-        <div id="availability" class="collapse cp show pb-2 pl-2"></div>
+        <div id="availability" class="collapse cp show pb-2 pl-2">
+            <div class="custom-control custom-checkbox cp w-100">
+              <input type="checkbox" class="custom-control-input availability_input" id="Discoverable">
+              <label class="custom-control-label cp" for="Discoverable">Discoverable</label>
+            </div>
+            <div class="custom-control custom-checkbox cp w-100">
+              <input type="checkbox" class="custom-control-input availability_input" id="Public">
+              <label class="custom-control-label cp" for="Public">Public</label>
+            </div>
+            <div class="custom-control custom-checkbox cp w-100">
+              <input type="checkbox" class="custom-control-input availability_input" id="Published">
+              <label class="custom-control-label cp" for="Published">Published</label>
+            </div>
+        </div>
     </div><div class="col-md-10 mt-5 d-inline-block align-top" id="tableR">
         <table class="table">
           <thead class="thead-dark">
@@ -59,9 +85,52 @@
 <script>
     $(function(){
         var count = 0,
-            pageURL,
+            pageURL = "https://www.hydroshare.org/hsapi/resource/search?count=10",
             next,
-            prev;
+            prev,
+            coverage = [],
+            availability = [],
+            text;
+        convertToUrl = function(data){
+            var string = "";
+            $.map(data, function(v,i){
+                string = string + (string == "" ? "" : "%2C") + v;
+            });
+            return string;
+        };
+        checkURL = function(){
+            newURL = pageURL + (availability.length == 0 ? "" : "&availability=" + convertToUrl(availability)) + (coverage.length == 0 ? "" : "&coverage_type=" + convertToUrl(coverage)) + (text == null ? "" : "&text=" + text);
+            $(".tr").remove();
+            getResources(newURL);
+            $("#currentPage").val(1);
+            
+        };
+        $(".coverage_input").on("click", function(){
+            var coverage_item = $(this).attr("id"),
+            check = $.grep(coverage, function(v){
+                return v == coverage_item;
+            });
+            if ( check.length == 0)
+                coverage.push(coverage_item);
+            else
+                coverage = $.grep(coverage, function(v){
+                    return v != coverage_item;
+            });
+            checkURL();
+        });
+        $(".availability_input").on("click", function(){
+            var availability_item = $(this).attr("id"),
+            check = $.grep(availability, function(v){
+                return v == availability_item;
+            });
+            if ( check.length == 0)
+                availability.push(availability_item);
+            else
+                availability = $.grep(availability, function(v){
+                    return v != availability_item;
+            });
+            checkURL();
+        });
         dateTime = function(dateTime){
             date = dateTime.split("T")[0];
             time = dateTime.split("T")[1].split("Z")[0];
@@ -110,14 +179,11 @@
         };
         $("#search_txt").on("keypress", function(e){
             if (e.which == 13){
-                pageURL = "https://www.hydroshare.org/hsapi/resource/search?count=10&text=" + $(this).val();
-                $(".tr").remove();
-                getResources(pageURL);
-                $("#currentPage").val(1);
+                text = $(this).val();
+                checkURL();
             }
         });
         getFullResources = function(){
-            pageURL = "https://www.hydroshare.org/hsapi/resource/search?count=10";
             $(".tr").remove();
             getResources(pageURL);
             $("#currentPage").val(1);
@@ -148,9 +214,9 @@
                 if (currentPage == 1)
                     getResources(pageURL);
                 else if (currentPage <= totalPage){
-                    var newUrl = pageURL + "&page=" + currentPage;
+                    var newURL = pageURL + (availability.length == 0 ? "" : "&availability=" + convertToUrl(availability)) + (coverage.length == 0 ? "" : "&coverage_type=" + convertToUrl(coverage)) + (text == null ? "" : "&text=" + text) + "&page=" + currentPage;
                     $(".tr").remove();
-                    getResources(newUrl);
+                    getResources(newURL);
                 }
             }
         });

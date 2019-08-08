@@ -40,7 +40,7 @@
                     <a class="nav-link" href="#">News</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Contact" id="">Contact</a>
+                    <a class="nav-link" href="Contact" id="">Contact us</a>
                 </li>
             </ul>
         </div>
