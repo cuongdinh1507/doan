@@ -6,40 +6,22 @@
         <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
       </div>
       <input id="search_txt" type="text" class="form-control" placeholder="Search All Public and Discoverable Resources" aria-label="Search All Public and Discoverable Resources" aria-describedby="basic-addon1">
+      <div class="dropdown">
+        <button type="button" class="btn btn-primary dropdown-toggle btn-c" data-toggle="dropdown">Hydroshare</button>
+        <div class="dropdown-menu">
+          <div class="dropdown-item cp" href="#">Hydroshare</div>
+          <div class="dropdown-item cp" href="#">MekongWater</div>
+        </div>
+      </div>
     </div>
 </div>
 <div class="col-md-10 mx-auto">
     <div class="col-md-2 mt-5 d-inline-block align-top bge p-0" id="searchToggle" style="border-radius:10px">
-        <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#author">
-            <div class="d-inline-block font-weight-bolder">Author</div>
+        <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#coverage">
+            <div class="d-inline-block font-weight-bolder">Coverage type</div>
             <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
         </div>
-        <div id="author" class="collapse cp show pb-2 pl-2">
-            <div>a</div>
-            <div>b</div>
-            <div>c</div>
-            <div>d</div>
-        </div>
-        <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#contributor">
-            <div class="d-inline-block font-weight-bolder">Contributor</div>
-            <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
-        </div>
-        <div id="contributor" class="collapse cp show pb-2 pl-2"></div>
-        <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#owner">
-            <div class="d-inline-block font-weight-bolder">Owner</div>
-            <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
-        </div>
-        <div id="owner"></div>
-        <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#content-type">
-            <div class="d-inline-block font-weight-bolder">Content type</div>
-            <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
-        </div>
-        <div id="content-type" class="collapse cp show pb-2 pl-2"></div>
-        <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#subject">
-            <div class="d-inline-block font-weight-bolder">Subject</div>
-            <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
-        </div>
-        <div id="subject" class="collapse cp show pb-2 pl-2"></div>
+        <div id="coverage" class="collapse cp show pb-2 pl-2"></div>
         <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#availability">
             <div class="d-inline-block font-weight-bolder">Availability</div>
             <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
@@ -49,11 +31,11 @@
         <table class="table">
           <thead class="thead-dark">
             <tr>
-              <th scope="col">Type</th>
-              <th scope="col">Title</th>
-              <th scope="col">First Author</th>
-              <th scope="col">Date Created</th>
-              <th scope="col">Last Modified</th>
+              <th scope="col" style="width:10%">Type</th>
+              <th scope="col" style="width:40%">Title</th>
+              <th scope="col" style="width:10%">First Author</th>
+              <th scope="col" style="width:25%">Date Created</th>
+              <th scope="col" style="width:25%">Last Modified</th>
             </tr>
           </thead>
           <tbody id="tbody"></tbody>
@@ -85,6 +67,12 @@
             time = dateTime.split("T")[1].split("Z")[0];
             return time + " (" + date + ")";
         };
+        $(".dropdown-menu").on("click", ".dropdown-item", function(){
+            $(".btn-c").text($(this).text());
+        });
+        $(".btn-c").on("change", function(){
+            console.log("1");
+        });
         $("#searchToggle").on("click",".searchToggle",function(){
             $(this).find(".fa-angle-up").length == 0 ? $(this).find(".fa-angle-down").removeClass("fa-angle-down").addClass("fa-angle-up") :  $(this).find(".fa-angle-up").removeClass("fa-angle-up").addClass("fa-angle-down") ;
         });
