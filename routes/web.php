@@ -15,10 +15,8 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('Contact', function(){
-	return view('contact');
-});
-
+Route::get('Contact','ContactFormController@create');
+Route::post('Contact','ContactFormController@store');
 Route::get('home', function(){
 	return view('home');
 });
