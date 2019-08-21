@@ -42,6 +42,9 @@
                 <li class="nav-item">
                     <a class="nav-link" href="Contact" id="">Contact us</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="login" id="">Login</a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -111,5 +114,5 @@
     </footer>
 </body>
 <script src="{{asset('js/C.js')}}"></script>
-
+<script></script>
 </html>
