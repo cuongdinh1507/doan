@@ -7,3 +7,7 @@ DATN
 
 13/8:
 - Contact Form using Mailable Laravel
+
+21/8:
+- Login + register + forgot pw form
+- Registration + Proj_info Database
