@@ -12,25 +12,17 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 });
 
-Route::get('Contact','ContactFormController@create');
-Route::post('Contact','ContactFormController@store');
+Route::get('contact','ContactFormController@create')->name("contact.create");
+Route::post('contact','ContactFormController@store')->name("contact.store");
 Route::get('home', function(){
 	return view('home');
-});
-Route::get('login', function(){
-	return view('login');
-});
-Route::get('register', function(){
-	return view('register');
-});
+})->name("home");
 Route::get('discover', function(){
 	return view('discover');
-});
-Route::get('forgot', function(){
-	return view('forgot');
-});
+})->name("discover");
+// Route::post('register','loginController@insert');
+Auth::routes();
 
-Route::get("test", "test@test1");

@@ -12,11 +12,12 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="icon" href="{{asset('img/favicon.png')}}">
+    <link rel="stylesheet" type="text/css" href="{{asset('css/my-login.css')}}">
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light bge navbar-fixed-top w-100 shadow p-3" id="menuBar">
-        <a href="home" class="w50 text-center">
+        <a href="{{route('home')}}" class="w50 text-center">
             <img src="{{asset('img/logo-lg.png')}}" alt="" class="logo-hydroshare cp">
         </a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -25,13 +26,13 @@
         <div class="collapse navbar-collapse w50 font-weight-bold" id="navbarSupportedContent">
             <ul class="navbar-nav">
                 <li class="nav-item active">
-                    <a class="nav-link" href="home">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-link" href="{{route('home')}}">Home <span class="sr-only">(current)</span></a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">My resources</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="discover">Discover</a>
+                    <a class="nav-link" href="{{route('discover')}}">Discover</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
@@ -40,11 +41,36 @@
                     <a class="nav-link" href="#">News</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="Contact" id="">Contact us</a>
+                    <a class="nav-link" href="{{route('contact.create')}}" id="">Contact us</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="login" id="">Login</a>
-                </li>
+                @guest
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                    </li>
+                    @if (Route::has('register'))
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                        </li>
+                    @endif
+                @else
+                    <li class="nav-item dropdown">
+                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                            {{ Auth::user()->name }} <span class="caret"></span>
+                        </a>
+
+                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{{ route('logout') }}"
+                               onclick="event.preventDefault();
+                                             document.getElementById('logout-form').submit();">
+                                {{ __('Logout') }}
+                            </a>
+
+                            <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                                @csrf
+                            </form>
+                        </div>
+                    </li>
+                @endguest
             </ul>
         </div>
     </nav>
