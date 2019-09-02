@@ -1,3 +1,6 @@
+DB
+![alt text](https://github.com/cuongdinh1507/doan/blob/master/db.jpg)
+
 DATN
 
 9/8:
@@ -11,3 +14,4 @@ DATN
 21/8:
 - Login + register + forgot pw form
 - Registration + Proj_info Database
+
