@@ -15,11 +15,13 @@ class CreateProjectInfoTable extends Migration
     {
         Schema::create('project_info', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unsigned();
             $table->string('title');
             $table->string('role');
             $table->string('subject');
             $table->string('species');
             $table->string('language');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

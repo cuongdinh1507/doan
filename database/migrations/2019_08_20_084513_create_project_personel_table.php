@@ -14,12 +14,16 @@ class CreateProjectPersonelTable extends Migration
     public function up()
     {
         Schema::create('project_personel', function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->bigInteger('user_id')->unsigned();
+            $table->bigInteger('title_id')->unsigned();
             $table->string('name');
             $table->string('role');
             $table->string('institution');
             $table->string('email');
             $table->string('phone');
+            $table->foreign('title_id')->references('id')->on('project_info');
+            $table->foreign('user_id')->references('id')->on('users');
+            $table->primary(['title_id','user_id']);
             $table->timestamps();
         });
     }

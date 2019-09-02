@@ -23,6 +23,8 @@ class CreateProjectDataDescriptionTable extends Migration
             $table->string('where');
             $table->string('link');
             $table->string('typeOfFile');
+            $table->bigInteger('title_id')->unsigned();
+            $table->foreign('title_id')->references('id')->on('project_info');
             $table->timestamps();
         });
     }

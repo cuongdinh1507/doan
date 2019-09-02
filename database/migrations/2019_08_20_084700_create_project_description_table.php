@@ -15,12 +15,14 @@ class CreateProjectDescriptionTable extends Migration
     {
         Schema::create('project_description', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->bigInteger('title_id')->unsigned();
             $table->string('abstract');
             $table->string('keyword');
             $table->string('funding');
             $table->date('yearStart');
             $table->date('yearEnd');
             $table->string('publication');
+            $table->foreign('title_id')->references('id')->on('project_info');
             $table->timestamps();
         });
     }
