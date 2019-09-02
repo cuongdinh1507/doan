@@ -7,7 +7,7 @@
                 <div class="card-header text-center">PROJECT GENERAL INFORMATION</div>
 
                 <div class="card-body">
-                    <form method="POST" action="{{ route('login') }}">
+                    <form method="POST" action="{{ route('addNew.add') }}">
                         @csrf
 
                         <div class="form-group row">
@@ -28,7 +28,15 @@
                             <label for="role" class="col-md-4 col-form-label text-md-right">Your role in project</label>
 
                             <div class="col-md-6">
-                                <input id="role" type="role" class="form-control @error('role') is-invalid @enderror" name="role" required autocomplete="role">
+                                {{-- <input id="role" type="role" class="form-control @error('role') is-invalid @enderror" name="role" required autocomplete="role"> --}}
+                                <div class="input-group" placeholder="Choose">
+                                  <select id="role" type="role" name="role" required autocomplete="role" class="custom-select form-control @error('role') is-invalid @enderror">
+                                    <option selected></option>
+                                    <option value="1" selected>One</option>
+                                    <option value="2">Two</option>
+                                    <option value="3">Three</option>
+                                  </select>
+                                </div>
 
                                 @error('role')
                                     <span class="invalid-feedback" role="alert">
@@ -37,6 +45,7 @@
                                 @enderror
                             </div>
                         </div>
+
 
                         <div class="form-group row">
                             <label for="subject" class="col-md-4 col-form-label text-md-right">Subject</label>
@@ -70,8 +79,12 @@
                             <label for="lang" class="col-md-4 col-form-label text-md-right">Languages</label>
 
                             <div class="col-md-6">
-                                <input id="lang" type="lang" class="form-control @error('lang') is-invalid @enderror" name="lang" required autocomplete="lang">
-
+                                {{-- <input id="lang" type="lang" class="form-control @error('lang') is-invalid @enderror" name="lang" required autocomplete="lang"> --}}
+                                <div class="input-group" placeholder="Choose">
+                                  <select id="lang" type="lang" name="lang" required autocomplete="lang" class="custom-select form-control @error('lang') is-invalid @enderror">
+                                    <option selected></option>
+                                  </select>
+                                </div>
                                 @error('lang')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
@@ -93,4 +106,16 @@
         </div>
     </div>
 </div>
+<script>
+  $(function(){
+    $.getJSON("https://gist.githubusercontent.com/piraveen/fafd0d984b2236e809d03a0e306c8a4d/raw/eb8020ec3e50e40d1dbd7005eb6ae68fc24537bf/languages.json", function(data){
+      $("#lang").append(
+        $.map(data,function(v){
+          return $("<option>", { value: v.name, text: v.name, id: v.name});
+        }),
+      );
+      $("#English").attr("selected","true")
+    });
+  });
+</script>
 @endsection

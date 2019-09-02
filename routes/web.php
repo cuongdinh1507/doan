@@ -25,6 +25,7 @@ Route::get('discover', function(){
 })->name("discover");
 Route::get('myresources', 'myResourcesController@create')->name('myresources.create');
 Route::get('addNew', 'addNewController@create')->name('addNew.create');
+Route::post('addNew', 'addNewController@add')->name('addNew.add');
 // Route::post('register','loginController@insert');
 Auth::routes();
 
