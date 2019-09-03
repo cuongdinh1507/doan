@@ -9,7 +9,7 @@
                 <div class="card-body">
                     <form method="POST" action="{{ route('addNew.add') }}">
                         @csrf
-
+                        <input id="userid" type="userid" class="form-control @error('userid') is-invalid @enderror" name="userid" style="display:none" value="{{Auth::user()->id}}">
                         <div class="form-group row">
                             <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
 
@@ -32,9 +32,8 @@
                                 <div class="input-group" placeholder="Choose">
                                   <select id="role" type="role" name="role" required autocomplete="role" class="custom-select form-control @error('role') is-invalid @enderror">
                                     <option selected></option>
-                                    <option value="1" selected>One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                    <option value="Project leader" selected>Project leader</option>
+                                    <option value="Researcher">Researcher</option>
                                   </select>
                                 </div>
 

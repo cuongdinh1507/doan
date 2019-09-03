@@ -17,3 +17,7 @@ DATN
 - Login + register + forgot pw form
 - Registration + Proj_info Database
 
+3/9:
+- Login
+- Hiển thị bài viết cá nhân trong My resources
+- Thêm bài viết ( Project information, project personel )
