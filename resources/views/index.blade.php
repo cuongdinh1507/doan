@@ -36,12 +36,12 @@
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('discover')}}">Discover</a>
                 </li>
-                <li class="nav-item">
+                <!-- <li class="nav-item">
                     <a class="nav-link" href="#">About</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">News</a>
-                </li>
+                </li> -->
                 <li class="nav-item">
                     <a class="nav-link" href="{{route('contact.create')}}" id="">Contact us</a>
                 </li>
