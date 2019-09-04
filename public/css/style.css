@@ -2,6 +2,7 @@
     padding: 0;
     margin: 0;
 }
+html, body{ height: 100%; }
 .navbar{
     color: black;
 }
@@ -79,4 +80,5 @@
 .cp { cursor: pointer; }
 .trans05 { transition: 0.5s; }
 .bgf { background: #fff; }
+.ui-datepicker-calendar { display: none; }​
 

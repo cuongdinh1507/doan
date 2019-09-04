@@ -26,6 +26,7 @@ Route::get('discover', function(){
 Route::get('myresources', 'myResourcesController@create')->name('myresources.create')->middleware("auth");
 Route::get('addNew', 'addNewController@create')->name('addNew.create');
 Route::post('addNew', 'addNewController@add')->name('addNew.add');
-// Route::post('register','loginController@insert');
+Route::get('post/postid={id}','postController@create')->name('post.create');
+Route::get('postUpdate/postid={id}', 'postController@update')->name('post.update');
 Auth::routes();
 

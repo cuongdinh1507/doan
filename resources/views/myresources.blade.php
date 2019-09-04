@@ -36,7 +36,7 @@
               <th scope="col">Species</th>
               <th scope="col">Subject</th>
               <th scope="col">Language</th>
-              <th scope="col" class="text-center">Action</th>
+              <th scope="col" class="text-center">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -52,14 +52,18 @@
             $.map(data, function(v,i){
                 return $("<tr>").append(
                     $("<th>", { class:"align-middle", scope: "row", text: i+1}),
-                    $("<th>", { class:"align-middle", text: v.title }),
+                    $("<th>", { class:"align-middle"}).append(
+                        $("<a>", { href: "post/postid="+v.id, text: v.title}),
+                    ),
                     $("<th>", { class:"align-middle", text: v.role }),
                     $("<th>", { class:"align-middle", text: v.species }),
                     $("<th>", { class:"align-middle", text: v.subject }),
                     $("<th>", { class:"align-middle", text: v.language }),
                     $("<th>", { class:"text-center"}).append(
-                        $("<button>", { class:"btn btn-success d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
-                            $("<i>", { class: "far fa-edit" }),
+                        $("<a>", { href : "postUpdate/postid=" + v.id}).append(
+                            $("<button>", { class:"btn btn-success d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
+                                $("<i>", { class: "far fa-edit" }),
+                            ),
                         ),
                         $("<button>", { class:"btn btn-danger d-inline-block cp pt-2 pb-2 pr-3 pl-3 align-middle", "data-toggle": "modal", "data-target": "#modal"}).append(
                             $("<i>", { class: "far fa-trash-alt" }),

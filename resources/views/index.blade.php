@@ -15,6 +15,8 @@
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="icon" href="{{asset('img/favicon.png')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/my-login.css')}}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
 </head>
 
 <body>
@@ -86,11 +88,11 @@
             </ul>
         </div>
     </nav>
-    <div id="middle">
+    <div id="middle" style="flex: 1 0 auto;">
         @yield('content')
     </div>
     
-    <footer class="page-footer font-small indigo pt-4 mt-4 bge footer ">
+    <footer class="py-4 font-small indigo pt-4 mt-4 bge footer " style="flex-shrink: none">
     <!-- Footer Links -->
         <div class="container text-center text-md-left">
             <!-- Grid row -->
