@@ -80,5 +80,5 @@ html, body{ height: 100%; }
 .cp { cursor: pointer; }
 .trans05 { transition: 0.5s; }
 .bgf { background: #fff; }
-.ui-datepicker-calendar { display: none; }​
+.ui-datepicker-calendar { display: none; }
 
