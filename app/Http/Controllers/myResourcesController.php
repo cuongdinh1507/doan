@@ -9,7 +9,7 @@ use DB;
 class myResourcesController extends Controller
 {
     public function create(){
-    	$project_info = DB::table('project_info')
+    	$project_info = DB::table('project_personel')
     	->where('user_id', Auth::user()->id)
     	->orderBy('id','desc')
     	->get();
