@@ -25,11 +25,7 @@ class addNewController extends Controller
     	DB::table('project_personel')->insert([
     		'user_id' => request()->userid,
     		'title_id'=> $id,
-    		'name' => Auth::user()->name,
     		'role' => request()->role,
-    		'institution' => Auth::user()->institution,
-    		'email' => Auth::user()->email,
-    		'phone' => Auth::user()->phone,
     	]);
 
     	return redirect()->route('myresources.create')->with('message_add','Post successfully added');

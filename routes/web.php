@@ -28,5 +28,9 @@ Route::get('addNew', 'addNewController@create')->name('addNew.create');
 Route::post('addNew', 'addNewController@add')->name('addNew.add');
 Route::get('post/postid={id}','postController@create')->name('post.create');
 Route::get('postUpdate/postid={id}', 'postController@update')->name('post.update');
+Route::get('postUpdate/savepostid={id}','postController@save')->name('post.save');
+Route::get('postUpdate/deleteUserpostid={id}','postController@deleteUser')->name('post.DelUser');
+Route::get('postUpdate/getAll={id}','postController@getAll')->name('post.getAll');
+Route::get('postUpdate/updateUserpostid={id}', 'postController@updateUser')->name('post.updateUser');
 Auth::routes();
 
