@@ -11,7 +11,7 @@ class myResourcesController extends Controller
     public function create(){
     	$project_info = DB::table('project_personel')
     	->where('user_id', Auth::user()->id)
-    	->orderBy('id','desc')
+    	->orderBy('title_id','desc')
     	->get();
 
     	return view('myresources')->with('data',$project_info);
