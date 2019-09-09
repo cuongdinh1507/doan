@@ -21,3 +21,7 @@ DATN
 - Login
 - Hiển thị bài viết cá nhân trong My resources
 - Thêm bài viết ( Project information, project personel )
+
+9/9:
+- Thêm sửa xoá Project personnel
+- Cập nhật bài viết Project info + description
