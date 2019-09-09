@@ -91,7 +91,109 @@
                                 @enderror
                             </div>
                         </div>
+                        <div class="form-group row">
+                              <label for="abstract" class="col-md-4 col-form-label text-md-right">Abstract</label>
 
+                              <div class="col-md-6">
+                                  {{-- <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus> --}}
+                                  <textarea id="abstract" type="abstract" class="form-control @error('abstract') is-invalid @enderror" name="abstract" value="{{ old('abstract') }}" required autocomplete="abstract" autofocus cols="30" rows="10"></textarea>
+                                  @error('title')
+                                      <span class="invalid-feedback" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                  @enderror
+                              </div>
+                          </div>
+
+                          <div class="form-group row">
+                              <label for="keyword" class="col-md-4 col-form-label text-md-right">Keyword</label>
+
+                              <div class="col-md-6">
+                                  <input id="keyword" type="keyword" class="form-control @error('keyword') is-invalid @enderror" name="keyword" required autocomplete="keyword">
+
+                                  @error('keyword')
+                                      <span class="invalid-feedback" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                  @enderror
+                              </div>
+                          </div>
+
+
+                          <div class="form-group row">
+                              <label for="funding" class="col-md-4 col-form-label text-md-right">Funding</label>
+
+                              <div class="col-md-6">
+                                  <input id="funding" type="funding" class="form-control @error('funding') is-invalid @enderror" name="funding" required autocomplete="funding">
+
+                                  @error('funding')
+                                      <span class="invalid-feedback" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                  @enderror
+                              </div>
+                          </div>
+
+                          <div class="form-group row">
+                              <label for="start" class="col-md-4 col-form-label text-md-right">Year start</label>
+
+                              <div class="col-md-6 date">
+                                  <input id="start" type="start" class="ys form-control @error('start') is-invalid @enderror" name="start" required autocomplete="start">
+
+                                  @error('start')
+                                      <span class="invalid-feedback" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                  @enderror
+                              </div>
+                          </div>
+
+                          <div class="form-group row">
+                              <label for="end" class="col-md-4 col-form-label text-md-right">Year end</label>
+
+                              <div class="col-md-6 date">
+                                  <input id="end" type="end" class="ys form-control @error('end') is-invalid @enderror" name="end" required autocomplete="end">
+                                  @error('end')
+                                      <span class="invalid-feedback" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                  @enderror
+                              </div>
+                          </div>
+
+                          <div class="form-group row">
+                              <label for="publication" class="col-md-4 col-form-label text-md-right">Publications</label>
+
+                              <div class="col-md-6">
+                                  <input id="publication" type="publication" class="form-control @error('publication') is-invalid @enderror" name="publication" required autocomplete="publication">
+
+                                  @error('publication')
+                                      <span class="invalid-feedback" role="alert">
+                                          <strong>{{ $message }}</strong>
+                                      </span>
+                                  @enderror
+                              </div>
+                          </div>
+                          <div class="form-group row">
+                            <label for="availability" class="col-md-4 col-form-label text-md-right">Availability</label>
+
+                            <div class="col-md-6">
+                                {{-- <input id="role" type="role" class="form-control @error('role') is-invalid @enderror" name="role" required autocomplete="role"> --}}
+                                <div class="input-group" placeholder="Choose">
+                                  <select id="availability" type="availability" name="availability" required autocomplete="availability" class="custom-select form-control @error('availability') is-invalid @enderror">
+                                    <option selected></option>
+                                    <option value="Project leader" selected>Private</option>
+                                    <option value="Researcher">Public</option>
+                                  </select>
+                                </div>
+
+                                @error('availability')
+                                    <span class="invalid-feedback" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                        </div>
                         <div class="form-group row mb-0">
                             <div class="col-md-8 offset-md-4">
                                 <button type="submit" class="btn btn-primary">Next</button>
@@ -105,6 +207,15 @@
 </div>
 <script>
   $(function(){
+    $(".ys").datepicker({
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'yy',
+        onClose: function(dateText, inst) { 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(year, 1));
+        }
+    });
     $.getJSON("https://gist.githubusercontent.com/piraveen/fafd0d984b2236e809d03a0e306c8a4d/raw/eb8020ec3e50e40d1dbd7005eb6ae68fc24537bf/languages.json", function(data){
       $("#lang").append(
         $.map(data,function(v){

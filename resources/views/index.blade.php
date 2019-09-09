@@ -15,7 +15,6 @@
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
     <link rel="icon" href="{{asset('img/favicon.png')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('css/my-login.css')}}">
-    <script src="{{asset('js/SimpleTableCellEditor.js')}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/js/bootstrap-datepicker.js"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.6.4/css/bootstrap-datepicker.css" rel="stylesheet"/>
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>

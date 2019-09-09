@@ -20,6 +20,7 @@ class addNewController extends Controller
     		'subject' => request()->subject,
     		'species' => request()->species,
     		'language' => request()->lang,
+            'availability' => request()->availability,
     	]);
 
     	DB::table('project_personel')->insert([
@@ -27,6 +28,16 @@ class addNewController extends Controller
     		'title_id'=> $id,
     		'role' => request()->role,
     	]);
+
+        DB::table('project_description')->insert([
+            'title_id' => $id,
+            'abstract' => request()->abstract,
+            'keyword' => request()->keyword,
+            'funding' => request()->funding,
+            'yearStart' => request()->start,
+            'yearEnd' => request()->end,
+            'publication' => request()->publication,
+        ]);
 
     	return redirect()->route('myresources.create')->with('message_add','Post successfully added');
     }

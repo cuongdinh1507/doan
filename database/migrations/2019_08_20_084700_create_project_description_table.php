@@ -19,8 +19,8 @@ class CreateProjectDescriptionTable extends Migration
             $table->string('abstract');
             $table->string('keyword');
             $table->string('funding');
-            $table->date('yearStart');
-            $table->date('yearEnd');
+            $table->string('yearStart');
+            $table->string('yearEnd');
             $table->string('publication');
             $table->foreign('title_id')->references('id')->on('project_info');
             $table->timestamps();

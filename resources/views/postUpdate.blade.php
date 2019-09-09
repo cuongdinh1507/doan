@@ -1,5 +1,10 @@
 @extends("index")
 @section('content')
+@if (@session()->has(ProjectMessage))
+    <div class="alert alert-success text-center col-md-8 mx-auto mt-5" role="alert">
+      <strong>{{session()->get("ProjectMessage")}}</strong>
+    </div>
+@endif
 <div id="dataPP" value="{{$data}}" style="display:none"></div>
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
@@ -18,16 +23,73 @@
     </div>
   </div>
 </div>
-<form action="postUpdate" method="POST">
+@if (count($role) != 0)
+<form action="{!! route('post.updateProjectInfo') !!}" method="POST">
   @csrf
   <div class="container">
     <div class="row justify-content-center mt-5">
         <div class="col-md-12">
             <div class="card">
-                <div class="card-header text-center">PROJECT DESCRIPTION</div>
+                <div class="card-header text-center">PROJECT INFORMATION & DESCRIPTION </div>
 
                 <div class="card-body">
                   <input id="titleid" type="titleid" class="form-control @error('titleid') is-invalid @enderror" name="titleid" style="display:none" value="{{$id}}">
+                  <div class="form-group row">
+                      <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
+
+                      <div class="col-md-6">
+                          <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
+
+                          @error('title')
+                              <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                          @enderror
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="subject" class="col-md-4 col-form-label text-md-right">Subject</label>
+
+                      <div class="col-md-6">
+                          <input id="subject" type="subject" class="form-control @error('subject') is-invalid @enderror" name="subject" required autocomplete="subject">
+
+                          @error('subject')
+                              <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                          @enderror
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="species" class="col-md-4 col-form-label text-md-right">Species</label>
+
+                      <div class="col-md-6">
+                          <input id="species" type="species" class="form-control @error('species') is-invalid @enderror" name="species" required autocomplete="species">
+
+                          @error('species')
+                              <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                          @enderror
+                      </div>
+                  </div>
+                  <div class="form-group row">
+                      <label for="lang" class="col-md-4 col-form-label text-md-right">Languages</label>
+
+                      <div class="col-md-6">
+                          {{-- <input id="lang" type="lang" class="form-control @error('lang') is-invalid @enderror" name="lang" required autocomplete="lang"> --}}
+                          <div class="input-group" placeholder="Choose">
+                            <select id="lang" type="lang" name="lang" required autocomplete="lang" class="custom-select form-control @error('lang') is-invalid @enderror">
+                              <option selected></option>
+                            </select>
+                          </div>
+                          @error('lang')
+                              <span class="invalid-feedback" role="alert">
+                                  <strong>{{ $message }}</strong>
+                              </span>
+                          @enderror
+                      </div>
+                  </div>
                   <div class="form-group row">
                       <label for="abstract" class="col-md-4 col-form-label text-md-right">Abstract</label>
 
@@ -89,7 +151,7 @@
                       <label for="end" class="col-md-4 col-form-label text-md-right">Year end</label>
 
                       <div class="col-md-6 date">
-                          <input id="end" type="end" class="ys form-control @error('end') is-invalid @enderror" name="end" required autocomplete="end">
+                          <input id="end" type="end" class="ye form-control @error('end') is-invalid @enderror" name="end" required autocomplete="end">
                           @error('end')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -111,13 +173,34 @@
                           @enderror
                       </div>
                   </div>
+                  <div class="form-group row">
+                    <label for="availability" class="col-md-4 col-form-label text-md-right">Availability</label>
+
+                    <div class="col-md-6">
+                        {{-- <input id="role" type="role" class="form-control @error('role') is-invalid @enderror" name="role" required autocomplete="role"> --}}
+                        <div class="input-group" placeholder="Choose">
+                          <select id="availability" type="availability" name="availability" required autocomplete="availability" class="custom-select form-control @error('availability') is-invalid @enderror">
+                            <option selected></option>
+                            <option value="Project leader" selected>Private</option>
+                            <option value="Researcher">Public</option>
+                          </select>
+                        </div>
+
+                        @error('availability')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                        @enderror
+                    </div>
+                </div>
                 </div>
                 <div class="col-md-8 mx-auto text-center mb-4">
-                    <button type="submit" class="btn btn-primary">{{$button}}</button>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </div>
         </div>
   </div>
+@endif
 </div>
 
 </form>
@@ -136,7 +219,9 @@
                       <th scope="col">Role in project</th>
                       <th scope="col">Institution</th>
                       <th scope="col">Phone</th>
-                      <th scope="col" class="text-center">Actions</th>
+                      @if ( count($role) != 0)
+                        <th scope="col" class="text-center" >Actions</th>
+                      @endif
                     </tr>
                   </thead>
                   <tbody id="tbody-pp">
@@ -149,13 +234,55 @@
 </div>
 <script>
   $(function(){
+    console.log({!!$datainfo!!});
+    var role = {!!$role!!};
     var dataPP = $.parseJSON($("#dataPP").attr("value")),
         dataPPall = {!! $datapp !!},
-        check = null;
+        check = null,
+        datainfo = {!!$datainfo!!};
+    console.log(dataPPall);
+    $('#subject').val(datainfo[0].subject);
+    $('#title').val(datainfo[0].title);
+    $('#species').val(datainfo[0].species);
+    $('#abstract').val(datainfo[0].abstract);
+    $('#lang').val(datainfo[0].language);
+    $('#keyword').val(datainfo[0].keyword);
+    $('#funding').val(datainfo[0].funding);
+    $('#start').val(datainfo[0].yearStart);
+    $('#end').val(datainfo[0].yearEnd);
+    $('#publication').val(datainfo[0].publication);
+    $('#availability').val(datainfo[0].availability);
     $(".ys").datepicker({
-        format: "yyyy",
-        viewMode: "years", 
-        minViewMode: "years"
+        changeYear: true,
+        dateFormat: 'yy',
+        numberOfMonths: 2,
+        onClose: function(dateText, inst) { 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(year, 1));
+            $(".ye").datepicker("option","minDate", selected);
+        }
+    });
+    $(".ye").datepicker({
+        changeYear: true,
+        showButtonPanel: true,
+        dateFormat: 'yy',
+        numberOfMonths: 2,
+        onClose: function(dateText, inst) { 
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(year, 1));
+            $(".ys").datepicker("option","maxDate", selected);
+        }
+    });
+    $.getJSON("https://gist.githubusercontent.com/piraveen/fafd0d984b2236e809d03a0e306c8a4d/raw/eb8020ec3e50e40d1dbd7005eb6ae68fc24537bf/languages.json", function(data){
+      $("#lang").append(
+        $.map(data,function(v){
+          return $("<option>", { value: v.name, text: v.name, id: v.name});
+        }),
+      );
+      $("#English").attr("selected","true")
+    });
+    $(".ys,.ye").focus(function () {
+      $(".ui-datepicker-month").hide();
     });
     createTablePP = function(data){
       var dataPPemail = [],
@@ -166,9 +293,9 @@
           dataPP.push(v);
         });
       });
-      console.log(dataPPemail);
+      // console.log(dataPPemail);
       if (data && data.length){
-        console.log(data);
+        console.log(data,{!!$id!!});
         $("#tbody-pp").append(
           $.map(data, function(v,i){
             return $("<tr>").append(
@@ -204,7 +331,7 @@
               ).css({"width": "15%"}),
               $("<td>", { scope: "row", text: v.institution }),
               $("<td>", { scope: "row", text: v.phone }),
-              $("<td>", { scope: "row", class:"text-center" }).append(
+              $("<td>", { scope: "row", class: role.length == 0 ? "d-none" : "text-center"}).append(
                 $("<div>", { class:"btn btn-success cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle d-none check"+v.id}).append(
                     $("<i>", { class: "fas fa-check" }),
                 ).on("click", function(){
@@ -240,64 +367,66 @@
           }),
         ).fadeIn();
       }
-      $("#tbody-pp").append(
-        $("<tr>").append(
-          $("<th>", { scope: "row"}).append(
-            $("<input>", { id: "input-name", class: "w-100", name: "email" }).css({"border":"0", "outline":"none"}).autocomplete({
-              source: dataPPemail
-            }).on("autocompleteclose", function(){
-              var email = $(this).val();
-              $.grep(dataPPemail, function(n,i){
-                  if (n.value == email)
-                    check = i;
-              },true);
-              if ( check != null ){
-                var textChange = $(this).parents().eq(1).children();
-                console.log(dataPP[check])
-                textChange.eq(1).text(dataPP[check].name);
-                textChange.eq(3).text(dataPP[check].institution);
-                textChange.eq(4).text(dataPP[check].phone);
-              }
-            }).focus(),
-          ).css({"width":"25%","outline":"none"}),
-          $("<td>", { scope: "row" }),
-          $("<td>", { scope: "row" }).append(
-            $("<div>", { class:"input-group", placeholder: "Choose role" }).append(
-              $("<select>", { type: "role", name: "role" }).append(
-                $("<option>", { value: "Researcher", text: "Researcher", selected: "selected" }),
-                $("<option>", { value: "Project leader", text: "Project leader" }),
-              ).css({
-                "border":"0",
-                "outline":"none"
+      if ( role.length != 0 ){
+        $("#tbody-pp").append(
+          $("<tr>").append(
+            $("<th>", { scope: "row"}).append(
+              $("<input>", { id: "input-name", class: "w-100", name: "email" }).css({"border":"0", "outline":"none"}).autocomplete({
+                source: dataPPemail
+              }).on("autocompleteclose", function(){
+                var email = $(this).val();
+                $.grep(dataPPemail, function(n,i){
+                    if (n.value == email)
+                      check = i;
+                },true);
+                if ( check != null ){
+                  var textChange = $(this).parents().eq(1).children();
+                  console.log(dataPP[check])
+                  textChange.eq(1).text(dataPP[check].name);
+                  textChange.eq(3).text(dataPP[check].institution);
+                  textChange.eq(4).text(dataPP[check].phone);
+                }
+              }).focus(),
+            ).css({"width":"25%","outline":"none"}),
+            $("<td>", { scope: "row" }),
+            $("<td>", { scope: "row" }).append(
+              $("<div>", { class:"input-group", placeholder: "Choose role" }).append(
+                $("<select>", { type: "role", name: "role" }).append(
+                  $("<option>", { value: "Researcher", text: "Researcher", selected: "selected" }),
+                  $("<option>", { value: "Project leader", text: "Project leader" }),
+                ).css({
+                  "border":"0",
+                  "outline":"none"
+                }),
+              ),
+            ).css({"width": "15%"}),
+            $("<td>", { scope: "row" }),
+            $("<td>", { scope: "row" }),
+            $("<td>", { scope: "row", class:"text-center" }).append(
+              $("<div>", { class:"btn btn-success d-inline-block cp pt-1 pb-1 pr-3 pl-3 align-middle"}).append(
+                  $("<i>", { class: "far fa-save" }),
+              ).on("click", function(){
+                var curEmail = $(this).parents().eq(1).children(":first").children(":first").val();
+                var checkCurEmail = $.grep(dataPPemail, function(n,i){
+                  return n.value == curEmail;
+                });
+                console.log(curEmail,checkCurEmail)
+                if (checkCurEmail[0].value == curEmail ){
+                  var newRole = $(this).parents().eq(1).children().eq(2).children(":first").children(":first").val();
+                  $.get("{!! route('post.save',['id'=>$id]) !!}", { userid: checkCurEmail[0].userid, role: newRole } , function(newData){
+                    console.log(newData);
+                    $("#tbody-pp").children().fadeOut().remove();
+                    createTablePP(newData);
+                  });
+                  // $.get("", function(cc){
+                  //   console.log(cc);
+                  // })
+                }
               }),
             ),
-          ).css({"width": "15%"}),
-          $("<td>", { scope: "row" }),
-          $("<td>", { scope: "row" }),
-          $("<td>", { scope: "row", class:"text-center" }).append(
-            $("<div>", { class:"btn btn-success d-inline-block cp pt-1 pb-1 pr-3 pl-3 align-middle"}).append(
-                $("<i>", { class: "far fa-save" }),
-            ).on("click", function(){
-              var curEmail = $(this).parents().eq(1).children(":first").children(":first").val();
-              var checkCurEmail = $.grep(dataPPemail, function(n,i){
-                return n.value == curEmail;
-              });
-              console.log(curEmail,checkCurEmail)
-              if (checkCurEmail[0].value == curEmail ){
-                var newRole = $(this).parents().eq(1).children().eq(2).children(":first").children(":first").val();
-                $.get("{!! route('post.save',['id'=>$id]) !!}", { userid: checkCurEmail[0].userid, role: newRole } , function(newData){
-                  console.log(newData);
-                  $("#tbody-pp").children().fadeOut().remove();
-                  createTablePP(newData);
-                });
-                // $.get("", function(cc){
-                //   console.log(cc);
-                // })
-              }
-            }),
           ),
-        ),
-      ).fadeIn();
+        ).fadeIn();
+      }
     };
     deleteUser = function(){
       var titleid = $(".modal-body").attr("titleid"),
