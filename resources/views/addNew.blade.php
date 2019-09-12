@@ -182,8 +182,8 @@
                                 <div class="input-group" placeholder="Choose">
                                   <select id="availability" type="availability" name="availability" required autocomplete="availability" class="custom-select form-control @error('availability') is-invalid @enderror">
                                     <option selected></option>
-                                    <option value="Project leader" selected>Private</option>
-                                    <option value="Researcher">Public</option>
+                                    <option value="Private" selected>Private</option>
+                                    <option value="Public">Public</option>
                                   </select>
                                 </div>
 
@@ -222,7 +222,7 @@
           return $("<option>", { value: v.name, text: v.name, id: v.name});
         }),
       );
-      $("#English").attr("selected","true")
+      $("#English").attr("selected","true");
     });
   });
 </script>

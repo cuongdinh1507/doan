@@ -33,6 +33,7 @@ Route::get('postUpdate/deleteUserpostid={id}','postController@deleteUser')->name
 Route::get('postUpdate/getAll={id}','postController@getAll')->name('post.getAll')->middleware("auth");
 Route::get('postUpdate/updateUserpostid={id}', 'postController@updateUser')->name('post.updateUser')->middleware("auth");
 Route::post('postUpdate/updateProjectInfo', 'postController@updateProjectinfo')->name('post.updateProjectInfo')->middleware("auth");
+Route::get('news', 'newsController@create')->name('news.create');
 
 Auth::routes();
 

@@ -13,11 +13,12 @@ class postController extends Controller
     }
 
     public function getAll($id){
+		$currentUser = Auth::user()->id;
     	$dataUser = DB::table('users')
-    	->leftJoin("project_personel", "id", "=", "project_personel.user_id")
-    	->where('project_personel.title_id', '!=', $id)
-    	->orWhereNull('project_personel.title_id')
-    	->get();
+    	->whereNotIn('id', function($query) use ($id){
+    		$query->select('user_id')->from('project_personel')->where('title_id', '=', $id);
+    	})->get();
+
     	return $dataUser;
     }
 
@@ -37,6 +38,7 @@ class postController extends Controller
 	    	->join('project_personel', 'id', '=', 'project_personel.user_id')
 	    	->where('role','Project leader')
 	    	->where('id',$currentUser)
+	    	->where('project_personel.title_id', $id)
 	    	->get();
 	    $check = DB::table('project_personel')
 	    	->where('title_id',$id)
@@ -81,6 +83,7 @@ class postController extends Controller
 		    	$data = DB::table('project_personel')
 		    	->join("users", "project_personel.user_id", "=", "users.id")
 		    	->where('user_id', '!=', $currentUser)
+		    	->where('title_id', $id)
 		    	->get();
 
 		    	$dataUser = DB::table('users')
@@ -113,6 +116,7 @@ class postController extends Controller
 	    		$data = DB::table('project_personel')
 		    	->join("users", "project_personel.user_id", "=", "users.id")
 		    	->where('user_id', '!=', $currentUser)
+		    	->where('title_id', $id)
 		    	->get();
 	    		
 	    		return $data;
@@ -142,6 +146,7 @@ class postController extends Controller
 	    		$data = DB::table('project_personel')
 		    	->join("users", "project_personel.user_id", "=", "users.id")
 		    	->where('user_id', '!=', $currentUser)
+		    	->where('title_id',$id)
 		    	->get();
 
 				return $data;
@@ -159,7 +164,6 @@ class postController extends Controller
     	->where('user_id',$currentUser)
     	->where('role','Project leader')
     	->get();
-
     	if ( count($check) != 0 ){
 
     		DB::table('project_info')

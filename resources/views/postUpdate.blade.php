@@ -5,7 +5,6 @@
       <strong>{{session()->get("ProjectMessage")}}</strong>
     </div>
 @endif
-<div id="dataPP" value="{{$data}}" style="display:none"></div>
 <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -80,7 +79,6 @@
                           {{-- <input id="lang" type="lang" class="form-control @error('lang') is-invalid @enderror" name="lang" required autocomplete="lang"> --}}
                           <div class="input-group" placeholder="Choose">
                             <select id="lang" type="lang" name="lang" required autocomplete="lang" class="custom-select form-control @error('lang') is-invalid @enderror">
-                              <option selected></option>
                             </select>
                           </div>
                           @error('lang')
@@ -181,8 +179,8 @@
                         <div class="input-group" placeholder="Choose">
                           <select id="availability" type="availability" name="availability" required autocomplete="availability" class="custom-select form-control @error('availability') is-invalid @enderror">
                             <option selected></option>
-                            <option value="Project leader" selected>Private</option>
-                            <option value="Researcher">Public</option>
+                            <option value="Private" selected>Private</option>
+                            <option value="Public">Public</option>
                           </select>
                         </div>
 
@@ -234,18 +232,18 @@
 </div>
 <script>
   $(function(){
-    console.log({!!$datainfo!!});
     var role = {!!$role!!};
-    var dataPP = $.parseJSON($("#dataPP").attr("value")),
-        dataPPall = {!! $datapp !!},
+    var dataPPall = {!! $datapp !!},
         check = null,
         datainfo = {!!$datainfo!!};
-    console.log(dataPPall);
+        console.log(datainfo)
     $('#subject').val(datainfo[0].subject);
     $('#title').val(datainfo[0].title);
     $('#species').val(datainfo[0].species);
     $('#abstract').val(datainfo[0].abstract);
-    $('#lang').val(datainfo[0].language);
+    $('#lang').append(
+      $("<option>", { value: datainfo[0].language, selected: "true", text: datainfo[0].language})
+    );
     $('#keyword').val(datainfo[0].keyword);
     $('#funding').val(datainfo[0].funding);
     $('#start').val(datainfo[0].yearStart);
@@ -254,6 +252,7 @@
     $('#availability').val(datainfo[0].availability);
     $(".ys").datepicker({
         changeYear: true,
+        showButtonPanel: true,
         dateFormat: 'yy',
         numberOfMonths: 2,
         onClose: function(dateText, inst) { 
@@ -279,7 +278,6 @@
           return $("<option>", { value: v.name, text: v.name, id: v.name});
         }),
       );
-      $("#English").attr("selected","true")
     });
     $(".ys,.ye").focus(function () {
       $(".ui-datepicker-month").hide();
@@ -288,12 +286,12 @@
       var dataPPemail = [],
           dataPP = [];
       $.get("{!! route('post.getAll',['id'=>$id]) !!}", function(all){
+        console.log(all)
         $.map(all,function(v){
-          dataPPemail.push({"value": v.email ,"userid":v.id});
-          dataPP.push(v);
+           dataPPemail.push({"value": v.email ,"userid":v.id});
+           dataPP.push(v);
         });
       });
-      // console.log(dataPPemail);
       if (data && data.length){
         console.log(data,{!!$id!!});
         $("#tbody-pp").append(
