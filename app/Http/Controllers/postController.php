@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use DB;
@@ -183,4 +184,106 @@ class postController extends Controller
 			return redirect()->route('post.update',['id'=>$id])->with('ProjectMessage', 'Updated Successfully');
     	}
     }
+
+    public function createDD($id){
+    	$currentUser = Auth::user()->id;
+    	$role = DB::table('project_personel')
+    	->where('user_id',$currentUser)
+    	->where('title_id', $id)
+    	->where('role', 'Project leader')
+    	->get();
+    	return view('uploadFile', ['id'=>$id, 'role'=>$role]);
+	}
+
+	public function newUpload(Request $request){
+		$currentUser = Auth::user()->id;
+		$fileName = $request->file('file')->getClientOriginalName();
+		$newFileName = md5($fileName.time()).$fileName;
+		$path = $request->file('file')->move(storage_path("/app/upload"), $newFileName);
+		DB::table('project_data_description')->insertGetId([
+			'name' => request()->name,
+			'typeOfData' => request()->tod,
+			'description' => request()->description,
+			'typeOfAnalysis' => request()->toa,
+			'when' => request()->when,
+			'where' => request()->where,
+			'title_id' => request()->titleid,
+			'user_id' => $currentUser,
+			'link' => $newFileName,
+			'typeOfFile' => request()->tof,
+		]);
+		return back()->with('uploaded','File has been successfully uploaded');
+	}
+
+	public function getAllFile($id){
+		$currentUser = Auth::user()->id;
+		$check = DB::table('project_personel')->where('user_id',$currentUser)->where('title_id', $id)->get();
+		if (count($check)!=0){
+			$data = DB::table('project_data_description')
+			->where('title_id', $id)
+			->get();
+
+			return $data;
+		}
+		return back();
+	}
+
+	public function getDownloadFile($id){
+		$data = DB::table('project_data_description')
+			->select('link')
+			->where('id', $id)
+			->get();
+		$downloadlink = storage_path()."/app/upload/".$data->first()->link;
+		return response()->download($downloadlink);
+	}
+
+	public function delFile($id){
+		$currentUser = Auth::user()->id;
+		if (request()->ajax()){
+			$idfile = request()->get('idfile');
+			DB::table('project_data_description')
+			->where('id',$idfile)
+			->where('user_id', $currentUser)
+			->delete();
+			return "ok";
+		}
+	}
+
+	public function updateFile(Request $request){
+		$currentUser = Auth::user()->id;
+		if ( $request->hasFile('fileEdit')){
+			$fileName = $request->file('fileEdit')->getClientOriginalName();
+			$newFileName = md5($fileName.time()).$fileName;
+			$path = $request->file('fileEdit')->move(storage_path("/app/upload"), $newFileName);
+			DB::table('project_data_description')
+			->where('id', request()->fileid)
+			->update([
+				'name' => request()->nameEdit,
+				'typeOfData' => request()->todEdit,
+				'description' => request()->descriptionEdit,
+				'typeOfAnalysis' => request()->toaEdit,
+				'when' => request()->whenEdit,
+				'where' => request()->whereEdit,
+				'title_id' => request()->titleid,
+				'user_id' => $currentUser,
+				'link' => $newFileName,
+				'typeOfFile' => request()->tofEdit,
+			]);
+			return back()->with('updated file','File has been successfully updated');
+		}
+		else {
+			DB::table('project_data_description')
+			->where('id', '=', request()->fileid)
+			->update([
+				'name' => request()->nameEdit,
+				'typeOfData' => request()->todEdit,
+				'description' => request()->descriptionEdit,
+				'typeOfAnalysis' => request()->toaEdit,
+				'when' => request()->whenEdit,
+				'where' => request()->whereEdit,
+				'title_id' => request()->titleid,
+				'user_id' => $currentUser,
+			]);
+		}
+	}
 }

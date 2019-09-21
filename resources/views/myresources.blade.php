@@ -65,11 +65,16 @@
                                 $("<i>", { class: "far fa-edit" }),
                             ),
                         ),
-                        $("<button>", { class:"btn btn-danger d-inline-block cp pt-2 pb-2 pr-3 pl-3 align-middle", "data-toggle": "modal", "data-target": "#modal"}).append(
+                        $("<button>", { class:"btn btn-danger d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle", "data-toggle": "modal", "data-target": "#modal"}).append(
                             $("<i>", { class: "far fa-trash-alt" }),
                         ).on("click", function(){
                             $(".modal-body").text("Delete " + v.title + " ?").attr("titleid", v.id);
                         }),
+                        $("<a>", { href: "post/uploadpostid="+ v.id }).append(
+                            $("<button>", { class:"btn btn-primary d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
+                                $("<i>", { class: "fas fa-upload" }),
+                            ),
+                        ),
                     ),
                 );
             }),

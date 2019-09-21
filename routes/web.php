@@ -34,6 +34,13 @@ Route::get('postUpdate/getAll={id}','postController@getAll')->name('post.getAll'
 Route::get('postUpdate/updateUserpostid={id}', 'postController@updateUser')->name('post.updateUser')->middleware("auth");
 Route::post('postUpdate/updateProjectInfo', 'postController@updateProjectinfo')->name('post.updateProjectInfo')->middleware("auth");
 Route::get('news', 'newsController@create')->name('news.create');
+// Route::get('postUpdate/createDDpostid={id}', 'postController@createDD')->name('post.createdd')->middleware('auth');
+Route::get('post/uploadpostid={id}', 'postController@createDD')->name('post.createdd')->middleware('auth');
+Route::post('post/newUploadpostid', 'postController@newUpload')->name('post.newUpload')->middleware('auth');
+Route::get('post/getAllFilepostid={id}', 'postController@getAllFile')->name('post.getAllFile')->middleware('auth');
+Route::get('post/getDownloadFileid={id}', 'postController@getDownloadFile')->name('post.getDownloadFile');
+Route::get('post/delFilepostid={id}', 'postController@delFile')->name('post.delFile')->middleware('auth');
+Route::post('post/updateFilepostid', 'postController@updateFile')->name('post.updateFile')->middleware('auth');
 
 Auth::routes();
 

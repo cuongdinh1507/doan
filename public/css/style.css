@@ -81,4 +81,12 @@ html, body{ height: 100%; }
 .trans05 { transition: 0.5s; }
 .bgf { background: #fff; }
 .ui-datepicker-calendar { display: none; }
-
+.modal-lg {
+    max-width: 80% !important;
+}
+.put-dot{
+  width: 10%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
