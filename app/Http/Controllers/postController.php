@@ -4,6 +4,10 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\projectPersonnel;
+use App\projectDescription;
+use App\projectInfoModel;
+use App\projectDataDescription;
 use DB;
 
 class postController extends Controller
@@ -75,11 +79,11 @@ class postController extends Controller
 	    	->get();
 
 	    	if (count($check) != 0){
-	    		DB::table('project_personel')->insert([
-		    		'user_id' => request()->userid,
-		    		'title_id'=> $id,
-		    		'role' => request()->role,
-		    	]);
+				$newpp = new projectPersonnel;
+				$newpp->user_id = request()->userid;
+				$newpp->title_id = $id;
+				$newpp->role = request()->role;
+				$newpp->save();
 
 		    	$data = DB::table('project_personel')
 		    	->join("users", "project_personel.user_id", "=", "users.id")
@@ -141,11 +145,10 @@ class postController extends Controller
 	    	->get();
 
 	    	if ( count($check) != 0 ){
+				$pp = new projectPersonnel;
+	    		$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role'=>$role]);
 
-	    		DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->update(['role'=>$role]);
-
-	    		$data = DB::table('project_personel')
-		    	->join("users", "project_personel.user_id", "=", "users.id")
+	    		$data = $pp::join("users", "project_personel.user_id", "=", "users.id")
 		    	->where('user_id', '!=', $currentUser)
 		    	->where('title_id',$id)
 		    	->get();
@@ -166,14 +169,13 @@ class postController extends Controller
     	->where('role','Project leader')
     	->get();
     	if ( count($check) != 0 ){
-
-    		DB::table('project_info')
-    		->where('id','=', $id)
+			$pi = new projectInfoModel;
+			$pd = new projectDescription;
+    		$pi::where('id','=', $id)
     		->where('user_id','=', $currentUser)
     		->update(['title'=> request()->title, 'subject' => request()->subject, 'species' => request()->species, 'language' => request()->lang, 'availability' => request()->availability ]);
 
-    		DB::table('project_description')
-    		->where('title_id','=', $id)
+    		$pd::where('title_id','=', $id)
     		->update(['abstract'=> request()->abstract, 'keyword' => request()->keyword, 'funding' => request()->funding, 'yearStart' => request()->start, 'yearEnd' => request()->end, 'publication' => request()->publication ]);
 
     		$data = DB::table('project_personel')
@@ -199,19 +201,23 @@ class postController extends Controller
 		$currentUser = Auth::user()->id;
 		$fileName = $request->file('file')->getClientOriginalName();
 		$newFileName = md5($fileName.time()).$fileName;
-		$path = $request->file('file')->move(storage_path("/app/upload"), $newFileName);
-		DB::table('project_data_description')->insertGetId([
-			'name' => request()->name,
-			'typeOfData' => request()->tod,
-			'description' => request()->description,
-			'typeOfAnalysis' => request()->toa,
-			'when' => request()->when,
-			'where' => request()->where,
-			'title_id' => request()->titleid,
-			'user_id' => $currentUser,
-			'link' => $newFileName,
-			'typeOfFile' => request()->tof,
-		]);
+		// $path = $request->file('file')->move(storage_path("/app/upload"), $newFileName);
+		// $rules = [
+		// 	'file' => 'required|max:'.config('app.maxFileSize')
+		// ];
+		// $this->validate($request,$rules);
+		$pdd = new projectDataDescription;
+		$pdd->name = request()->name;
+		$pdd->typeOfData = request()->tod;
+		$pdd->description = request()->description;
+		$pdd->typeOfAnalysis = request()->toa;
+		$pdd->when = request()->when;
+		$pdd->where = request()->where;
+		$pdd->title_id = request()->titleid;
+		$pdd->user_id = $currentUser;
+		$pdd->link = $newFileName;
+		$pdd->typeOfFile = request()->tof;
+		$pdd->save();
 		return back()->with('uploaded','File has been successfully uploaded');
 	}
 
@@ -220,7 +226,10 @@ class postController extends Controller
 		$check = DB::table('project_personel')->where('user_id',$currentUser)->where('title_id', $id)->get();
 		if (count($check)!=0){
 			$data = DB::table('project_data_description')
+			->select('project_data_description.name', 'typeOfData', 'description', 'typeOfAnalysis', 'when', 'project_data_description.link', 'where', 'typeOfFile', 'users.email', 'project_data_description.user_id', 'project_data_description.id')
+			->join('users', 'user_id', '=', 'users.id')
 			->where('title_id', $id)
+			->orderBy('project_data_description.id','desc')
 			->get();
 
 			return $data;
@@ -245,18 +254,19 @@ class postController extends Controller
 			->where('id',$idfile)
 			->where('user_id', $currentUser)
 			->delete();
+			unlink(filename)(storage_path('app/upload/'.request()->get('link')));
 			return "ok";
 		}
 	}
 
 	public function updateFile(Request $request){
+		$pdd = new projectDataDescription;
 		$currentUser = Auth::user()->id;
 		if ( $request->hasFile('fileEdit')){
 			$fileName = $request->file('fileEdit')->getClientOriginalName();
 			$newFileName = md5($fileName.time()).$fileName;
 			$path = $request->file('fileEdit')->move(storage_path("/app/upload"), $newFileName);
-			DB::table('project_data_description')
-			->where('id', request()->fileid)
+			$pdd::where('id', request()->fileid)
 			->update([
 				'name' => request()->nameEdit,
 				'typeOfData' => request()->todEdit,
@@ -272,8 +282,7 @@ class postController extends Controller
 			return back()->with('updated file','File has been successfully updated');
 		}
 		else {
-			DB::table('project_data_description')
-			->where('id', '=', request()->fileid)
+			$pdd::where('id', '=', request()->fileid)
 			->update([
 				'name' => request()->nameEdit,
 				'typeOfData' => request()->todEdit,
@@ -284,6 +293,15 @@ class postController extends Controller
 				'title_id' => request()->titleid,
 				'user_id' => $currentUser,
 			]);
+		}
+	}
+
+	public function delPost(){
+		if (request()->ajax()){
+			$id = request()->get('id');
+			$pi = new projectInfoModel;
+			$pi::find($id)->delete();
+			return "ok";
 		}
 	}
 }

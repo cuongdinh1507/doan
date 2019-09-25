@@ -25,8 +25,8 @@ class CreateProjectDataDescriptionTable extends Migration
             $table->string('typeOfFile');
             $table->bigInteger('title_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
-            $table->foreign('user_id')->references('id')->on('users');
-            $table->foreign('title_id')->references('id')->on('project_info');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('title_id')->references('id')->on('project_info')->onDelete('cascade');
             $table->timestamps();
         });
     }

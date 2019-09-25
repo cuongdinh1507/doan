@@ -7,11 +7,7 @@
       </div>
       <input id="search_txt" type="text" class="form-control" placeholder="Search All Public and Discoverable Resources" aria-label="Search All Public and Discoverable Resources" aria-describedby="basic-addon1">
       <div class="dropdown">
-        <button type="button" class="btn btn-primary dropdown-toggle btn-c" data-toggle="dropdown">Hydroshare</button>
-        <div class="dropdown-menu">
-          <div class="dropdown-item cp" href="#">Hydroshare</div>
-          <div class="dropdown-item cp" href="#">MekongWater</div>
-        </div>
+        <button type="button" class="btn btn-primary btn-c"><i class="fas fa-search"></i></button>
       </div>
     </div>
 </div>
@@ -136,12 +132,6 @@
             time = dateTime.split("T")[1].split("Z")[0];
             return time + " (" + date + ")";
         };
-        $(".dropdown-menu").on("click", ".dropdown-item", function(){
-            $(".btn-c").text($(this).text());
-        });
-        $(".btn-c").on("change", function(){
-            console.log("1");
-        });
         $("#searchToggle").on("click",".searchToggle",function(){
             $(this).find(".fa-angle-up").length == 0 ? $(this).find(".fa-angle-down").removeClass("fa-angle-down").addClass("fa-angle-up") :  $(this).find(".fa-angle-up").removeClass("fa-angle-up").addClass("fa-angle-down") ;
         });
@@ -177,10 +167,13 @@
                 }
             });
         };
+        $(".btn-c").on("click", function(){
+            text = $(this).val();
+            checkURL();
+        });
         $("#search_txt").on("keypress", function(e){
             if (e.which == 13){
-                text = $(this).val();
-                checkURL();
+                $(".btn-c").click();
             }
         });
         getFullResources = function(){

@@ -18,7 +18,7 @@
       </div>
       <div class="modal-body" titleid="0"></div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-success">Yes</button>
+        <button type="button" class="btn btn-success" onclick="delPost()">Yes</button>
         <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
       </div>
     </div>
@@ -36,7 +36,7 @@
               <th scope="col">Species</th>
               <th scope="col">Subject</th>
               <th scope="col">Language</th>
-              <th scope="col" class="text-center">Actions</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>
@@ -59,27 +59,34 @@
                     $("<th>", { class:"align-middle", text: v.species }),
                     $("<th>", { class:"align-middle", text: v.subject }),
                     $("<th>", { class:"align-middle", text: v.language }),
-                    $("<th>", { class:"text-center"}).append(
+                    $("<th>").append(
                         $("<a>", { href : "postUpdate/postid=" + v.id}).append(
                             $("<button>", { class:"btn btn-success d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
                                 $("<i>", { class: "far fa-edit" }),
                             ),
                         ),
-                        $("<button>", { class:"btn btn-danger d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle", "data-toggle": "modal", "data-target": "#modal"}).append(
-                            $("<i>", { class: "far fa-trash-alt" }),
-                        ).on("click", function(){
-                            $(".modal-body").text("Delete " + v.title + " ?").attr("titleid", v.id);
-                        }),
                         $("<a>", { href: "post/uploadpostid="+ v.id }).append(
                             $("<button>", { class:"btn btn-primary d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
                                 $("<i>", { class: "fas fa-upload" }),
                             ),
                         ),
+                        $("<button>", { class:"btn btn-danger cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle " + (v.role == "Project leader" ? "d-inline-block" : "d-none"), "data-toggle": "modal", "data-target": "#modal"}).append(
+                            $("<i>", { class: "far fa-trash-alt" }),
+                        ).on("click", function(){
+                            $(".modal-body").text("Delete " + v.title + " ?").attr("titleid", v.id);
+                        }),
                     ),
                 );
             }),
         );
         $("#mytable").DataTable();
+        delPost = function(){
+          var id = $('.modal-body').attr('titleid');
+          $.get('{!! route('post.delPost') !!}', { id: id}, function(data){
+            if ( data == "ok")
+              location.reload();
+          });
+        };
     });
 </script>
 @endsection

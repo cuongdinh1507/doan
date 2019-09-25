@@ -285,14 +285,16 @@
                 <table class="table table-bordered" id="tableDD">
                   <thead class="thead-dark">
                     <tr>
-                      <th scope="col">Name</th>
-                      <th scope="col">Tyfe of data</th>
-                      <th scope="col">Data description</th>
-                      <th scope="col">Type of analysis</th>
-                      <th scope="col">When</th>
-                      <th scope="col">Where</th>
-                      <th scope="col">Link</th>
-                      <th scope="col">Type of file</th>
+                      <th scope="col" >#</th>
+                      <th scope="col" >Name</th>
+                      <th scope="col" >Tyfe of data</th>
+                      <th scope="col" >Data description</th>
+                      <th scope="col" >Type of analysis</th>
+                      <th scope="col" >When</th>
+                      <th scope="col" >Where</th>
+                      <th scope="col" >Link</th>
+                      <th scope="col" >Type of file</th>
+                      <th scope="col" >Uploaded by</th>
                       <th scope="col" class="text-center" >Actions</th>
                     </tr>
                   </thead>
@@ -314,9 +316,11 @@
     refresh = function(){
       $("#tbody-dd").children().remove();
       $.get("{!! route('post.getAllFile', ['id'=>$id]) !!}", function(data){
+        console.log(data);
         $("#tbody-dd").append(
-          $.map(data, function(v){
+          $.map(data, function(v,i){
             return $("<tr>").append(
+              $("<td>", { text: i+1}),
               $("<td>", { text: v.name, class: "put-dot" }),
               $("<td>", { text: v.typeOfData, class: "put-dot" }),
               $("<td>").append(
@@ -329,8 +333,9 @@
                 $("<a>",  { text: v.link.slice(32).split(".")[0], href: "getDownloadFileid=" + v.id }),
               ),
               $("<td>", { text: v.typeOfFile }),
+              $("<td>", { text: v.email }),
               $("<td>", ).css({"width":"8%"}).append(
-                $("<div>", { class:"btn btn-success cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle " + ( ((v.user_id == "{!! Auth::user()->id; !!}")||({!! count($role) !!} == 1)  ) ? "d-inline-block" : "d-none"),"data-toggle":"modal", "data-target":"#modalEdit"  }).append(
+                $("<div>", { class:"btn btn-success cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle w-50 mx-auto mb-2 " + ( (({!! count($role) !!} == 1)|| (v.user_id == {!! Auth::user()->id; !!})  ) ? "d-block" : "d-none"),"data-toggle":"modal", "data-target":"#modalEdit"  }).append(
                   $("<i>", { class: "fas fa-edit" }),
                 ).on("click", function(){
                   $("#nameEdit").val(v.name);
@@ -360,10 +365,10 @@
                     ),
                   );
                 }),
-                $("<div>", { class:"btn btn-danger cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle " + ( ((v.user_id == "{!! Auth::user()->id; !!}")||({!! count($role) !!} == 1)  ) ? "d-inline-block" : "d-none"), "data-toggle":"modal", "data-target":"#delFile" }).append(
+                $("<div>", { class:"btn btn-danger cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle w-50 mx-auto " + ( ((v.user_id == "{!! Auth::user()->id; !!}")||({!! count($role) !!} == 1)  ) ? "d-block" : "d-none"), "data-toggle":"modal", "data-target":"#delFile" }).append(
                   $("<i>", { class: "fas fa-trash-alt" }),
                 ).on("click", function(){
-                  $("#bodyDel").text("Delete "+ v.name + " ?").attr("fileid", v.id);
+                  $("#bodyDel").text("Delete "+ v.name + " ?").attr({"fileid": v.id, "linkFile": v.link});
                 }),
               ),
             );
@@ -374,11 +379,12 @@
     };
     refresh();
     delFile = function(){
-      var id = $("#bodyDel").attr("fileid");
-      $.get("{!! route("post.delFile",['id'=>$id]) !!}", {idfile: id}, function(data){
+      var id = $("#bodyDel").attr("fileid"),
+          link = $("#bodyDel").attr("linkFile");
+      $.get("{!! route("post.delFile",['id'=>$id]) !!}", {idfile: id, link: link}, function(data){
         if ( data = "oke"){
-          $(".alert").remove();
-          refresh();
+          $(".alert").remove(); 
+          location.reload();
         }
       });
     };

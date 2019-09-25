@@ -22,7 +22,7 @@
     </div>
   </div>
 </div>
-@if (count($role) != 0)
+
 <form action="{!! route('post.updateProjectInfo') !!}" method="POST">
   @csrf
   <div class="container">
@@ -37,7 +37,7 @@
                       <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
 
                       <div class="col-md-6">
-                          <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
+                          <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title">
 
                           @error('title')
                               <span class="invalid-feedback" role="alert">
@@ -93,7 +93,7 @@
 
                       <div class="col-md-6">
                           {{-- <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus> --}}
-                          <textarea id="abstract" type="abstract" class="form-control @error('abstract') is-invalid @enderror" name="abstract" value="{{ old('abstract') }}" required autocomplete="abstract" autofocus cols="30" rows="10"></textarea>
+                          <textarea id="abstract" type="abstract" class="form-control @error('abstract') is-invalid @enderror" name="abstract" value="{{ old('abstract') }}" required autocomplete="abstract" cols="30" rows="10"></textarea>
                           @error('title')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -192,13 +192,14 @@
                     </div>
                 </div>
                 </div>
+                @if (count($role) != 0)
                 <div class="col-md-8 mx-auto text-center mb-4">
                     <button type="submit" class="btn btn-primary">Update</button>
                 </div>
+                @endif
             </div>
         </div>
   </div>
-@endif
 </div>
 
 </form>

@@ -22,7 +22,7 @@ class CreateProjectDescriptionTable extends Migration
             $table->string('yearStart');
             $table->string('yearEnd');
             $table->string('publication');
-            $table->foreign('title_id')->references('id')->on('project_info');
+            $table->foreign('title_id')->references('id')->on('project_info')->onDelete('cascade');
             $table->timestamps();
         });
     }

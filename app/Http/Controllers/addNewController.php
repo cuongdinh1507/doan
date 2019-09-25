@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\projectPersonnel;
+use App\projectDescription;
+use App\projectInfoModel;
 use DB;
 
 class addNewController extends Controller
@@ -13,31 +16,31 @@ class addNewController extends Controller
     }
 
     public function add(){
-    	$id = DB::table('project_info')->insertGetId([
-    		'user_id' => request()->userid,
-    		'title'=> request()->title,
-    		'role' => request()->role,
-    		'subject' => request()->subject,
-    		'species' => request()->species,
-    		'language' => request()->lang,
-            'availability' => request()->availability,
-    	]);
+		$pi = new projectInfoModel;
+		$pd = new projectDescription;
+		$pp = new projectPersonnel;
+    	$pi->user_id = request()->userid;
+    	$pi->title = request()->title;
+    	$pi->role = request()->role;
+    	$pi->subject = request()->subject;
+    	$pi->species = request()->species;
+    	$pi->language = request()->lang;
+		$pi->availability = request()->availability;
+		$pi->save();
 
-    	DB::table('project_personel')->insert([
-    		'user_id' => request()->userid,
-    		'title_id'=> $id,
-    		'role' => request()->role,
-    	]);
+    	$pp->user_id = request()->userid;
+    	$pp->title_id = $pi->id;
+    	$pp->role = request()->role;
+		$pp->save();
 
-        DB::table('project_description')->insert([
-            'title_id' => $id,
-            'abstract' => request()->abstract,
-            'keyword' => request()->keyword,
-            'funding' => request()->funding,
-            'yearStart' => request()->start,
-            'yearEnd' => request()->end,
-            'publication' => request()->publication,
-        ]);
+        $pd->title_id = $pi->id;
+        $pd->abstract = request()->abstract;
+        $pd->keyword = request()->keyword;
+        $pd->funding = request()->funding;
+        $pd->yearStart = request()->start;
+        $pd->yearEnd = request()->end;
+        $pd->publication = request()->publication;
+        $pd->save();
 
     	return redirect()->route('myresources.create')->with('message_add','Post successfully added');
     }

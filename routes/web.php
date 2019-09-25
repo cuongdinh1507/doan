@@ -41,6 +41,7 @@ Route::get('post/getAllFilepostid={id}', 'postController@getAllFile')->name('pos
 Route::get('post/getDownloadFileid={id}', 'postController@getDownloadFile')->name('post.getDownloadFile');
 Route::get('post/delFilepostid={id}', 'postController@delFile')->name('post.delFile')->middleware('auth');
 Route::post('post/updateFilepostid', 'postController@updateFile')->name('post.updateFile')->middleware('auth');
+Route::get('post/delPost', 'postController@delPost')->name('post.delPost')->middleware('auth');
 
 Auth::routes();
 

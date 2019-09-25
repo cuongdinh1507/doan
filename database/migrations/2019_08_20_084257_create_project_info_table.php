@@ -21,7 +21,7 @@ class CreateProjectInfoTable extends Migration
             $table->string('subject');
             $table->string('species');
             $table->string('language');
-            $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->string('availability')->default('Private');
             $table->timestamps();
         });
