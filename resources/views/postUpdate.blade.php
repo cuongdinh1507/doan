@@ -135,7 +135,7 @@
                       <label for="start" class="col-md-4 col-form-label text-md-right">Year start</label>
 
                       <div class="col-md-6 date">
-                          <input id="start" type="start" class="ys form-control @error('start') is-invalid @enderror" name="start" required autocomplete="start">
+                          <input id="start" type="start" class="ys form-control @error('start') is-invalid @enderror" name="start" required>
 
                           @error('start')
                               <span class="invalid-feedback" role="alert">
@@ -149,7 +149,7 @@
                       <label for="end" class="col-md-4 col-form-label text-md-right">Year end</label>
 
                       <div class="col-md-6 date">
-                          <input id="end" type="end" class="ye form-control @error('end') is-invalid @enderror" name="end" required autocomplete="end">
+                          <input id="end" type="end" class="ye form-control @error('end') is-invalid @enderror" name="end" required>
                           @error('end')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -251,26 +251,13 @@
     $('#end').val(datainfo[0].yearEnd);
     $('#publication').val(datainfo[0].publication);
     $('#availability').val(datainfo[0].availability);
-    $(".ys").datepicker({
+    $(".ys,.ye").datepicker({
         changeYear: true,
         showButtonPanel: true,
         dateFormat: 'yy',
-        numberOfMonths: 2,
         onClose: function(dateText, inst) { 
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).datepicker('setDate', new Date(year, 1));
-            $(".ye").datepicker("option","minDate", selected);
-        }
-    });
-    $(".ye").datepicker({
-        changeYear: true,
-        showButtonPanel: true,
-        dateFormat: 'yy',
-        numberOfMonths: 2,
-        onClose: function(dateText, inst) { 
-            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-            $(this).datepicker('setDate', new Date(year, 1));
-            $(".ys").datepicker("option","maxDate", selected);
         }
     });
     $.getJSON("https://gist.githubusercontent.com/piraveen/fafd0d984b2236e809d03a0e306c8a4d/raw/eb8020ec3e50e40d1dbd7005eb6ae68fc24537bf/languages.json", function(data){

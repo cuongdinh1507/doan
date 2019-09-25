@@ -138,7 +138,7 @@
                               <label for="start" class="col-md-4 col-form-label text-md-right">Year start</label>
 
                               <div class="col-md-6 date">
-                                  <input id="start" type="start" class="ys form-control @error('start') is-invalid @enderror" name="start" required autocomplete="start">
+                                  <input id="start" type="start" class="ys form-control @error('start') is-invalid @enderror" name="start" required>
 
                                   @error('start')
                                       <span class="invalid-feedback" role="alert">
@@ -152,7 +152,7 @@
                               <label for="end" class="col-md-4 col-form-label text-md-right">Year end</label>
 
                               <div class="col-md-6 date">
-                                  <input id="end" type="end" class="ys form-control @error('end') is-invalid @enderror" name="end" required autocomplete="end">
+                                  <input id="end" type="end" class="ys form-control @error('end') is-invalid @enderror" name="end" required>
                                   @error('end')
                                       <span class="invalid-feedback" role="alert">
                                           <strong>{{ $message }}</strong>
