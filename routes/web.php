@@ -33,6 +33,10 @@ Route::middleware('checkAdmin')->group(function(){
 	Route::get('dashboard', 'adminController@createDashboard')->name('admin.dashboard');
 	Route::get('charts', 'adminController@createCharts')->name('admin.charts');
 	Route::get('tables', 'adminController@createTables')->name('admin.tables');
+	Route::get('dashboard/totalPostToday', 'adminController@totalPostToday')->name('admin.tpt');
+	Route::get('dashboard/totalUser', 'adminController@totalUser')->name('admin.tu');
+	Route::get('dashboard/totalPost', 'adminController@totalPost')->name('admin.tp');
+	Route::get('dashboard/totalFileUploaded', 'adminController@totalFileUploaded')->name('admin.tfu');
 });
 Route::middleware('auth')->group(function(){
 	Route::get('post/delFilepostid={id}', 'postController@delFile')->name('post.delFile');

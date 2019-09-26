@@ -79,9 +79,9 @@
             <div class="card text-white bg-primary o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <i class="fas fa-fw fa-comments"></i>
+                  <i class="fas fa-newspaper"></i>
                 </div>
-                <div class="mr-5">26 New Messages!</div>
+                <div class="mr-5 postToday"></div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>
@@ -92,12 +92,12 @@
             </div>
           </div>
           <div class="col-xl-3 col-sm-6 mb-3">
-            <div class="card text-white bg-warning o-hidden h-100">
+            <div class="card text-white bg-dark o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <i class="fas fa-fw fa-list"></i>
+                  <i class="fas fa-users"></i>
                 </div>
-                <div class="mr-5">11 New Tasks!</div>
+                <div class="mr-5 totalUser"></div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>
@@ -111,9 +111,9 @@
             <div class="card text-white bg-success o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <i class="fas fa-fw fa-shopping-cart"></i>
+                <i class="fas fa-newspaper"></i>
                 </div>
-                <div class="mr-5">123 New Orders!</div>
+                <div class="mr-5 totalPost"></div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>
@@ -127,9 +127,9 @@
             <div class="card text-white bg-danger o-hidden h-100">
               <div class="card-body">
                 <div class="card-body-icon">
-                  <i class="fas fa-fw fa-life-ring"></i>
+                  <i class="fas fa-file-upload"></i>
                 </div>
-                <div class="mr-5">13 New Tickets!</div>
+                <div class="mr-5 totalFileUploaded"></div>
               </div>
               <a class="card-footer text-white clearfix small z-1" href="#">
                 <span class="float-left">View Details</span>
@@ -711,5 +711,21 @@
   <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
 
 </body>
-
+<script>
+  $(function(){
+    $.get('{!! route('admin.tu') !!}', function(data){
+      $(".totalUser").text(data.length + (data.length > 1 ? " USERS!" : " USER!"));
+    });
+    $.get('{!! route('admin.tp') !!}', function(data){
+      $(".totalPost").text(data.length + (data.length > 1 ? " POSTS!" : " POST!"));
+    });
+    $.get('{!! route('admin.tfu') !!}', function(data){
+      $(".totalFileUploaded").text(data.length + (data.length > 1 ? " FILES UPLOADED!" : " FILE UPLOADED!"));
+    });
+    $.get('{!! route('admin.tpt') !!}', function(data){
+      console.log(data);
+      $(".postToday").text(data.length + (data.length > 1 ? " NEW POSTS TODAY!" : " NEW POST TODAY!"));
+    });
+  });
+</script>
 </html>
