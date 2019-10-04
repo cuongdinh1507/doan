@@ -30,7 +30,7 @@
                             <div class="col-md-6">
                                 {{-- <input id="role" type="role" class="form-control @error('role') is-invalid @enderror" name="role" required autocomplete="role"> --}}
                                 <div class="input-group" placeholder="Choose">
-                                  <select id="role" type="role" name="role" required autocomplete="role" class="custom-select form-control @error('role') is-invalid @enderror">
+                                  <select id="role" type="role" name="role" required autocomplete="role" class="custom-select form-control @error('role') is-invalid @enderror" disabled>
                                     <option selected></option>
                                     <option value="Project leader" selected>Project leader</option>
                                     <option value="Researcher">Researcher</option>

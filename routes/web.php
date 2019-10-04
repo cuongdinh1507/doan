@@ -37,6 +37,8 @@ Route::middleware('checkAdmin')->group(function(){
 	Route::get('dashboard/totalUser', 'adminController@totalUser')->name('admin.tu');
 	Route::get('dashboard/totalPost', 'adminController@totalPost')->name('admin.tp');
 	Route::get('dashboard/totalFileUploaded', 'adminController@totalFileUploaded')->name('admin.tfu');
+	Route::get('changepw', 'loginController@changepw')->name('changepw');
+	Route::get('getPw', 'loginController@getPw')->name('getpw');
 });
 Route::middleware('auth')->group(function(){
 	Route::get('post/delFilepostid={id}', 'postController@delFile')->name('post.delFile');
@@ -52,5 +54,7 @@ Route::middleware('auth')->group(function(){
 	Route::post('postUpdate/updateProjectInfo', 'postController@updateProjectinfo')->name('post.updateProjectInfo');
 	Route::get('post/postid={id}','postController@create')->name('post.create');
 	Route::get('myresources', 'myResourcesController@create')->name('myresources.create');
+	Route::get('changepw', 'loginController@changepw')->name('changepw');
+	Route::get('getPw', 'loginController@getPw')->name('getpw');
 });
 Auth::routes();

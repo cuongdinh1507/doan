@@ -1,6 +1,6 @@
 @extends("index")
 @section('content')
-<div class="col-md-4 mx-auto mt-5">
+<div class="col-md-6 mx-auto mt-5">
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
@@ -9,6 +9,16 @@
       <div class="dropdown">
         <button type="button" class="btn btn-primary btn-c"><i class="fas fa-search"></i></button>
       </div>
+    </div>
+</div>
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+        <div class="modal-body col-lg-12"></div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        </div>
+        </div>
     </div>
 </div>
 <div class="col-md-10 mx-auto">
@@ -50,7 +60,7 @@
             </div>
         </div>
     </div><div class="col-md-10 mt-5 d-inline-block align-top" id="tableR">
-        <table class="table">
+        <table class="table table-responsive-lg table-hover table-bordered">
           <thead class="thead-dark">
             <tr>
               <th scope="col" style="width:10%">Type</th>
@@ -136,11 +146,23 @@
             $(this).find(".fa-angle-up").length == 0 ? $(this).find(".fa-angle-down").removeClass("fa-angle-down").addClass("fa-angle-up") :  $(this).find(".fa-angle-up").removeClass("fa-angle-up").addClass("fa-angle-down") ;
         });
         createTable = function(data){
+            var hUrl = "https://www.hydroshare.org/resource/" + data.text.split("\n")[1].trim();
             $("#tbody").hide().append(
                 $("<tr>", {class:"tr"}).append(
                     $("<th>", { scope: "row", text: data.resource_type }),
                     $("<th>").append(
-                        $("<a>", { text: data.text.split("\n")[3].trim(), href: "https://www.hydroshare.org/resource/" + data.text.split("\n")[1].trim(), target: "_blank" }),
+                        $("<a>", { text: data.text.split("\n")[3].trim(), href: hUrl, target: "_blank", "data-toggle":"modal", "data-target":"#exampleModal" }).on("click",function(event){
+                            event.preventDefault();
+                            $(".embedd, .modal-footer>.mx-auto").remove();
+                            $(".modal-body").append(
+                                $("<embed>", { src : hUrl, class:"embedd col-lg-12" }).css({"height":"80vh"}),
+                            );
+                            $(".modal-footer").prepend(
+                                $("<div>", { class: "mx-auto small"}).append(
+                                    $("<a>", { text: " " + hUrl, href: hUrl, target: "_blank"}),
+                                ),
+                            );
+                        }),
                     ),
                     $("<th>", { text: data.author }),
                     $("<th>", { text: dateTime(data.created)}).css({"width":"15%"}),

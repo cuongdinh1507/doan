@@ -28,13 +28,12 @@ class adminController extends Controller
         $post = new projectInfoModel;
         $now = Carbon::now()->toDateString();
         $postToday = $post::where('created_at','>=',$now)->where('updated_at','>=',$now)->where('availability','=','Public')->get();
-        // $postToday = $post::select(DB::raw("STR_TO_DATE(created_at,'%y-%m-%d')"));
         return $postToday;
     }
     
     public function totalUser(){
         $user = new User;
-        return $user::all();
+        return $user::all()->where("name","!=","admin");
     }
 
     public function totalPost(){

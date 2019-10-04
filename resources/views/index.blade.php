@@ -63,16 +63,26 @@
                         </a>
 
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            <a class="dropdown-item" href="#"
+                            {{-- <a class="dropdown-item" href="#"
                                onclick="event.preventDefault();
-                                             document.getElementById('profile-form').submit();">
-                                {{ __('Profile') }}
+                                             document.getElementById('changpw-form').submit();">
+                                {{ __('Change Password') }}
                             </a>
 
-                            <form id="profile-form" action="#" method="POST" style="display: none;">
+                            <form id="changpw-form" action="{{ route('changepw') }}" method="GET" style="display: none;">
                                 @csrf
-                            </form>
+                            </form> --}}
+                            @if ( Auth::user()->name == "admin")
+                                <a class="dropdown-item" href="#"
+                                onclick="event.preventDefault();
+                                                document.getElementById('admin-form').submit();">
+                                    {{ __('Dashboard') }}
+                                </a>
 
+                                <form id="admin-form" action="{{ route('admin.dashboard') }}" method="GET" style="display: none;">
+                                    @csrf
+                                </form>
+                            @endif
                             <a class="dropdown-item" href="{{ route('logout') }}"
                                onclick="event.preventDefault();
                                              document.getElementById('logout-form').submit();">

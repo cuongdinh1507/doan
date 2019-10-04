@@ -210,7 +210,7 @@
               <div class="card-header text-center">PROJECT PERSONNEL</div>
 
               <div class="card-body">
-                <table class="table table-bordered">
+                <table class="table table-responsive-lg table-bordered">
                   <thead class="thead-dark">
                     <tr>
                       <th scope="col">Email</th>

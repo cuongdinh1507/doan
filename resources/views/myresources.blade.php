@@ -24,10 +24,10 @@
     </div>
   </div>
 </div>
-<div class="col-md-8 mx-auto">
+<div class="col-lg-10 mx-auto">
     <a href="{{route('addNew.create')}}"><button type="button" class="btn btn-primary mt-2 mb-2 addnew"><i class="fas fa-plus"></i> Add new</button></a>
     <div>
-        <table class="table" id="mytable">
+        <table class="table table-responsive-lg table-hover table-bordered" id="mytable">
           <thead class="thead-dark">
             <tr>
               <th scope="col">#</th>
@@ -36,7 +36,7 @@
               <th scope="col">Species</th>
               <th scope="col">Subject</th>
               <th scope="col">Language</th>
-              <th scope="col">Actions</th>
+              <th scope="col" class="w-20">Actions</th>
             </tr>
           </thead>
           <tbody>

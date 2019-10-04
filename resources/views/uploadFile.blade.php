@@ -281,20 +281,20 @@
           <div class="card">
               <div class="card-header text-center">PROJECT DATA DESCRIPTION</div>
 
-              <div class="card-body">
-                <table class="table table-bordered" id="tableDD">
+              <div class="card-body col-md-12">
+                <table class="table table-responsive-lg table-bordered table-hover " id="tableDD">
                   <thead class="thead-dark">
                     <tr>
-                      <th scope="col" >#</th>
-                      <th scope="col" >Name</th>
-                      <th scope="col" >Tyfe of data</th>
-                      <th scope="col" >Data description</th>
-                      <th scope="col" >Type of analysis</th>
-                      <th scope="col" >When</th>
-                      <th scope="col" >Where</th>
-                      <th scope="col" >Link</th>
-                      <th scope="col" >Type of file</th>
-                      <th scope="col" >Uploaded by</th>
+                      <th scope="col">#</th>
+                      <th scope="col" class="w-5" >Name</th>
+                      <th scope="col" class="w-5" >Tyfe of data</th>
+                      <th scope="col" class="w-20" >Data description</th>
+                      <th scope="col" class="w-10" >Type of analysis</th>
+                      <th scope="col" class="w-10" >When</th>
+                      <th scope="col" class="w-10" >Where</th>
+                      <th scope="col" class="w-10" >Link</th>
+                      <th scope="col" class="w-5">Type of file</th>
+                      <th scope="col" class="w-10" >Uploaded by</th>
                       <th scope="col" class="text-center" >Actions</th>
                     </tr>
                   </thead>
@@ -324,7 +324,7 @@
               $("<td>", { text: v.name, class: "put-dot" }),
               $("<td>", { text: v.typeOfData, class: "put-dot" }),
               $("<td>").append(
-                $("<textarea>", { class: "w-100", text: v.description , disabled: true}),
+                $("<div>", { text: v.description}),
               ),
               $("<td>", { text: v.typeOfAnalysis, class: "put-dot" }),
               $("<td>", { text: v.when, class: "put-dot" }),
@@ -334,8 +334,8 @@
               ),
               $("<td>", { text: v.typeOfFile }),
               $("<td>", { text: v.email }),
-              $("<td>", ).css({"width":"8%"}).append(
-                $("<div>", { class:"btn btn-success cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle w-50 mx-auto mb-2 " + ( (({!! count($role) !!} == 1)|| (v.user_id == {!! Auth::user()->id; !!})  ) ? "d-block" : "d-none"),"data-toggle":"modal", "data-target":"#modalEdit"  }).append(
+              $("<td>", ).append(
+                $("<div>", { class:"btn btn-success cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle mx-auto mb-2 " + ( (({!! count($role) !!} == 1)|| (v.user_id == {!! Auth::user()->id; !!})  ) ? "d-block" : "d-none"),"data-toggle":"modal", "data-target":"#modalEdit"  }).append(
                   $("<i>", { class: "fas fa-edit" }),
                 ).on("click", function(){
                   $("#nameEdit").val(v.name);
@@ -354,7 +354,7 @@
                       ).on("click", function(){
                         $(this).parent().remove();
                         $(".divEdit").append(
-                          $("<input>", { class: "d-none ifUpdateFile", id: "tofEdit", name: "tofEdit"}),
+                          $("<input>", { class: "d-none ifUpdateFile text-center", id: "tofEdit", name: "tofEdit"}),
                           $("<div>", { class: "col-md-6 ifUpdateFile" }).append(
                             $("<input>", { id: "fileEdit", type:"file", class:"form-control-file @error('file') is-invalid @enderror", name:"fileEdit", required: true}).on("change", function(){
                               $("#tofEdit").val($("#fileEdit").val().split(".").reverse()[0]);
@@ -365,7 +365,7 @@
                     ),
                   );
                 }),
-                $("<div>", { class:"btn btn-danger cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle w-50 mx-auto " + ( ((v.user_id == "{!! Auth::user()->id; !!}")||({!! count($role) !!} == 1)  ) ? "d-block" : "d-none"), "data-toggle":"modal", "data-target":"#delFile" }).append(
+                $("<div>", { class:"btn btn-danger cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle mx-auto " + ( ((v.user_id == "{!! Auth::user()->id; !!}")||({!! count($role) !!} == 1)  ) ? "d-block" : "d-none"), "data-toggle":"modal", "data-target":"#delFile" }).append(
                   $("<i>", { class: "fas fa-trash-alt" }),
                 ).on("click", function(){
                   $("#bodyDel").text("Delete "+ v.name + " ?").attr({"fileid": v.id, "linkFile": v.link});
@@ -382,7 +382,7 @@
       var id = $("#bodyDel").attr("fileid"),
           link = $("#bodyDel").attr("linkFile");
       $.get("{!! route("post.delFile",['id'=>$id]) !!}", {idfile: id, link: link}, function(data){
-        if ( data = "oke"){
+        if ( data = "ok"){
           $(".alert").remove(); 
           location.reload();
         }

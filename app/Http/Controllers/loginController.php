@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use DB;
 
 class loginController extends Controller
@@ -54,5 +55,17 @@ class loginController extends Controller
     	else{
     		return view('register', ["show"=>"no"]);
     	}
-    }
+	}
+	
+	public function changepw(){
+		return view('changePassword');
+	}
+
+	public function getPw(){
+		if (request()->ajax()){
+			if (password_verify(request()->get('pw'), Auth::user()->password)) {
+				return "ok" ;
+			}
+		}
+	}
 }

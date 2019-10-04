@@ -201,7 +201,7 @@ class postController extends Controller
 		$currentUser = Auth::user()->id;
 		$fileName = $request->file('file')->getClientOriginalName();
 		$newFileName = md5($fileName.time()).$fileName;
-		// $path = $request->file('file')->move(storage_path("/app/upload"), $newFileName);
+		$path = $request->file('file')->move(storage_path("/app/upload"), $newFileName);
 		// $rules = [
 		// 	'file' => 'required|max:'.config('app.maxFileSize')
 		// ];
@@ -254,7 +254,7 @@ class postController extends Controller
 			->where('id',$idfile)
 			->where('user_id', $currentUser)
 			->delete();
-			unlink(filename)(storage_path('app/upload/'.request()->get('link')));
+			unlink(storage_path('app/upload/'.request()->get('link')));
 			return "ok";
 		}
 	}
@@ -293,6 +293,7 @@ class postController extends Controller
 				'title_id' => request()->titleid,
 				'user_id' => $currentUser,
 			]);
+			return back()->with('updated file','File has been successfully updated');
 		}
 	}
 
