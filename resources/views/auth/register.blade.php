@@ -123,7 +123,11 @@
                             <label for="country" class="col-md-4 col-form-label text-md-right">{{ __('Country') }}</label>
 
                             <div class="col-md-6">
-                                <input id="country" type="country" class="form-control @error('country') is-invalid @enderror" name="country" required autocomplete="country">
+                                <div class="input-group" placeholder="Choose">
+                                    <select id="country" type="country" name="country" required autocomplete="country" class="custom-select form-control @error('country') is-invalid @enderror">
+                                        <option selected></option>
+                                    </select>
+                                </div>
 
                                 @error('country')
                                     <span class="invalid-feedback" role="alert">
@@ -202,4 +206,17 @@
         </div>
     </div>
 </div>
+<script>
+    $(function(){
+        console.log("hihi");
+        $.getJSON("https://raw.githubusercontent.com/tarraq/JSON-data-arrays/master/countries/english/countries-key-value.json", function(data){
+            $("#country").append(
+                $.map(data,function(v,i){
+                    return $("<option>", { value: v, text: v, id: i});
+                }),
+            );
+            $("#VN").attr("selected",true);
+        });
+    });
+</script>
 @endsection

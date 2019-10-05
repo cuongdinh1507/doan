@@ -9,11 +9,11 @@
   <meta name="description" content="">
   <meta name="author" content="">
 
-  <title>Admin - Charts</title>
+  <title>Admin - Dashboard</title>
 
   <!-- Custom fonts for this template-->
   <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
-
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <!-- Page level plugin CSS-->
   <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.css') }}" rel="stylesheet">
 
@@ -38,21 +38,42 @@
 
     <!-- Sidebar -->
     <ul class="sidebar navbar-nav">
-      <li class="nav-item">
+      <li class="nav-item active">
         <a class="nav-link" href="{{ route('admin.dashboard') }}">
           <i class="fas fa-fw fa-tachometer-alt"></i>
           <span>Dashboard</span>
         </a>
       </li>
-      <li class="nav-item active">
-        <a class="nav-link" href="{{ route('admin.charts') }}">
-          <i class="fas fa-fw fa-chart-area"></i>
-          <span>Charts</span></a>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('home') }}">
+            <i class="fas fa-home"></i>
+          <span>Home</span>
+        </a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="{{ route('admin.tables') }}">
-          <i class="fas fa-fw fa-table"></i>
-          <span>Tables</span></a>
+        <a class="nav-link" href="{{ route('admin.users') }}">
+          <i class="fas fa-user"></i>
+          <span>Users</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.projectInfo') }}">
+          <i class="far fa-newspaper"></i>
+          <span>Project Information</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.projectDescription') }}">
+          <i class="fas fa-newspaper"></i>
+          <span>Project Description</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.projectPersonnel') }}">
+          <i class="fas fa-users"></i>
+          <span>Project Personnel</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.projectDD') }}">
+          <i class="far fa-file"></i>
+          <span>Project Data Description</span></a>
       </li>
       <li class="nav-item">
         <a class="nav-link" href="#" data-toggle="modal" data-target="#logoutModal">
@@ -65,53 +86,9 @@
 
       <div class="container-fluid">
 
-        <!-- Breadcrumbs-->
-        <ol class="breadcrumb">
-          <li class="breadcrumb-item">
-            <a href="{{ route('admin.dashboard') }}">Dashboard</a>
-          </li>
-          <li class="breadcrumb-item active">Charts</li>
-        </ol>
-
-        <!-- Area Chart Example-->
-        <div class="card mb-3">
-          <div class="card-header">
-            <i class="fas fa-chart-area"></i>
-            Area Chart Example</div>
-          <div class="card-body">
-            <canvas id="myAreaChart" width="100%" height="30"></canvas>
-          </div>
-          <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
+        <div id="middle">
+          @yield('content')
         </div>
-
-        <div class="row">
-          <div class="col-lg-8">
-            <div class="card mb-3">
-              <div class="card-header">
-                <i class="fas fa-chart-bar"></i>
-                Bar Chart Example</div>
-              <div class="card-body">
-                <canvas id="myBarChart" width="100%" height="50"></canvas>
-              </div>
-              <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-          </div>
-          <div class="col-lg-4">
-            <div class="card mb-3">
-              <div class="card-header">
-                <i class="fas fa-chart-pie"></i>
-                Pie Chart Example</div>
-              <div class="card-body">
-                <canvas id="myPieChart" width="100%" height="100"></canvas>
-              </div>
-              <div class="card-footer small text-muted">Updated yesterday at 11:59 PM</div>
-            </div>
-          </div>
-        </div>
-
-        <p class="small text-center text-muted my-5">
-          <em>More chart examples coming soon...</em>
-        </p>
 
       </div>
       <!-- /.container-fluid -->
@@ -141,7 +118,7 @@
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+          <h5 class="modal-title" id="exampleModalLabel">Are you sure?</h5>
           <button class="close" type="button" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">×</span>
           </button>
@@ -168,16 +145,30 @@
   <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
 
   <!-- Page level plugin JavaScript-->
-  <script src="{{ asset('vendor/chart.js/Chart.min.js') }}"></script>
+  <script src="{{ asset('vendor/datatables/jquery.dataTables.js') }}"></script>
+  <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.js') }}"></script>
 
   <!-- Custom scripts for all pages-->
   <script src="{{ asset('js/sb-admin.min.js') }}"></script>
 
   <!-- Demo scripts for this page-->
-  <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
-  <script src="{{ asset('js/demo/chart-bar-demo.js') }}"></script>
-  <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
+  <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>
 
 </body>
-
+<script>
+  $(function(){
+    $.get('{!! route('admin.tu') !!}', function(data){
+      $(".totalUser").text(data.length + (data.length > 1 ? " USERS!" : " USER!"));
+    });
+    $.get('{!! route('admin.tp') !!}', function(data){
+      $(".totalPost").text(data.length + (data.length > 1 ? " POSTS!" : " POST!"));
+    });
+    $.get('{!! route('admin.tfu') !!}', function(data){
+      $(".totalFileUploaded").text(data.length + (data.length > 1 ? " FILES UPLOADED!" : " FILE UPLOADED!"));
+    });
+    $.get('{!! route('admin.tpt') !!}', function(data){
+      $(".postToday").text(data.length + (data.length > 1 ? " NEW POSTS TODAY!" : " NEW POST TODAY!"));
+    });
+  });
+</script>
 </html>
