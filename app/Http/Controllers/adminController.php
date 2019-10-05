@@ -45,7 +45,7 @@ class adminController extends Controller
     
     public function totalUser(){
         $user = new User;
-        return $user::all()->where("name","!=","admin");
+        return $user::where("name","!=","admin")->get();
     }
 
     public function totalPost(){
