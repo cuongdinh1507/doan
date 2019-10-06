@@ -14,17 +14,17 @@ class CreateProjectDataDescriptionTable extends Migration
     public function up()
     {
         Schema::create('project_data_description', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->string('name');
-            $table->string('typeOfData');
-            $table->string('description');
-            $table->string('typeOfAnalysis');
-            $table->string('when');
-            $table->string('where');
-            $table->string('link');
-            $table->string('typeOfFile');
-            $table->bigInteger('title_id')->unsigned();
-            $table->bigInteger('user_id')->unsigned();
+            $table->smallInteger('id')->unsigned()->autoIncrement();
+            $table->string('name',50);
+            $table->string('typeOfData',10);
+            $table->text('description');
+            $table->string('typeOfAnalysis',30);
+            $table->string('when',100);
+            $table->string('where',120);
+            $table->string('link',80);
+            $table->string('typeOfFile',10);
+            $table->smallInteger('title_id')->unsigned();
+            $table->smallInteger('user_id')->unsigned();
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('title_id')->references('id')->on('project_info')->onDelete('cascade');
             $table->timestamps();

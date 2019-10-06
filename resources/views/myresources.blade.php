@@ -70,7 +70,7 @@
                                 $("<i>", { class: "fas fa-upload" }),
                             ),
                         ),
-                        $("<button>", { class:"btn btn-danger cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle " + (v.role == "Project leader" ? "d-inline-block" : "d-none"), "data-toggle": "modal", "data-target": "#modal"}).append(
+                        $("<button>", { class:"btn btn-danger cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle " + ((v.role == "Owner") ? "d-inline-block" : "d-none"), "data-toggle": "modal", "data-target": "#modal"}).append(
                             $("<i>", { class: "far fa-trash-alt" }),
                         ).on("click", function(){
                             $(".modal-body").text("Delete " + v.title + " ?").attr("titleid", v.id);

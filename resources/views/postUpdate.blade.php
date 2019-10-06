@@ -37,7 +37,7 @@
                       <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
 
                       <div class="col-md-6">
-                          <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title">
+                          <input id="title" maxlength="60" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title">
 
                           @error('title')
                               <span class="invalid-feedback" role="alert">
@@ -50,7 +50,7 @@
                       <label for="subject" class="col-md-4 col-form-label text-md-right">Subject</label>
 
                       <div class="col-md-6">
-                          <input id="subject" type="subject" class="form-control @error('subject') is-invalid @enderror" name="subject" required autocomplete="subject">
+                          <input id="subject" maxlength="30" type="subject" class="form-control @error('subject') is-invalid @enderror" name="subject" required autocomplete="subject">
 
                           @error('subject')
                               <span class="invalid-feedback" role="alert">
@@ -63,7 +63,7 @@
                       <label for="species" class="col-md-4 col-form-label text-md-right">Species</label>
 
                       <div class="col-md-6">
-                          <input id="species" type="species" class="form-control @error('species') is-invalid @enderror" name="species" required autocomplete="species">
+                          <input id="species" type="species" maxlength="30" class="form-control @error('species') is-invalid @enderror" name="species" required autocomplete="species">
 
                           @error('species')
                               <span class="invalid-feedback" role="alert">
@@ -103,7 +103,7 @@
                   </div>
 
                   <div class="form-group row">
-                      <label for="keyword" class="col-md-4 col-form-label text-md-right">Keyword</label>
+                      <label for="keyword" maxlength="100" class="col-md-4 col-form-label text-md-right">Keyword</label>
 
                       <div class="col-md-6">
                           <input id="keyword" type="keyword" class="form-control @error('keyword') is-invalid @enderror" name="keyword" required autocomplete="keyword">
@@ -118,7 +118,7 @@
 
 
                   <div class="form-group row">
-                      <label for="funding" class="col-md-4 col-form-label text-md-right">Funding</label>
+                      <label for="funding" maxlength="100" class="col-md-4 col-form-label text-md-right">Funding</label>
 
                       <div class="col-md-6">
                           <input id="funding" type="funding" class="form-control @error('funding') is-invalid @enderror" name="funding" required autocomplete="funding">
@@ -135,7 +135,7 @@
                       <label for="start" class="col-md-4 col-form-label text-md-right">Year start</label>
 
                       <div class="col-md-6 date">
-                          <input id="start" type="start" class="ys form-control @error('start') is-invalid @enderror" name="start" required>
+                          <input id="start" maxlength="4" type="start" class="ys form-control @error('start') is-invalid @enderror" name="start" required>
 
                           @error('start')
                               <span class="invalid-feedback" role="alert">
@@ -149,7 +149,7 @@
                       <label for="end" class="col-md-4 col-form-label text-md-right">Year end</label>
 
                       <div class="col-md-6 date">
-                          <input id="end" type="end" class="ye form-control @error('end') is-invalid @enderror" name="end" required>
+                          <input id="end" maxlength="4" type="end" class="ye form-control @error('end') is-invalid @enderror" name="end" required>
                           @error('end')
                               <span class="invalid-feedback" role="alert">
                                   <strong>{{ $message }}</strong>
@@ -162,7 +162,7 @@
                       <label for="publication" class="col-md-4 col-form-label text-md-right">Publications</label>
 
                       <div class="col-md-6">
-                          <input id="publication" type="publication" class="form-control @error('publication') is-invalid @enderror" name="publication" required autocomplete="publication">
+                          <input id="publication" maxlength="100" type="publication" class="form-control @error('publication') is-invalid @enderror" name="publication" required autocomplete="publication">
 
                           @error('publication')
                               <span class="invalid-feedback" role="alert">
@@ -307,6 +307,7 @@
               $("<td>", { scope: "row" }).append(
                 $("<div>", { class:"input-group", placeholder: "Choose role" }).append(
                   $("<select>", { type: "role", name: "role", disabled: "disabled" , class:"disabled-up"+v.id}).append(
+                    $("<option>", { value: "Owner", text: "Owner" }).attr(v.role == "Owner" ? "selected":"vl", "selected").attr(v.role != "Owner" ? "class":"vl","d-none"),
                     $("<option>", { value: "Researcher", text: "Researcher" }).attr(v.role == "Researcher" ? "selected":"vl", "selected"),
                     $("<option>", { value: "Project leader", text: "Project leader" }).attr(v.role == "Project leader" ? "selected":"vl", "selected"),
                   ).css({
@@ -317,7 +318,7 @@
               ).css({"width": "15%"}),
               $("<td>", { scope: "row", text: v.institution }),
               $("<td>", { scope: "row", text: v.phone }),
-              $("<td>", { scope: "row", class: role.length == 0 ? "d-none" : "text-center"}).append(
+              $("<td>", { scope: "row", class: ((role.length == 0) || (v.role == "Owner")) ? "d-none" : "text-center"}).append(
                 $("<div>", { class:"btn btn-success cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle d-none check"+v.id}).append(
                     $("<i>", { class: "fas fa-check" }),
                 ).on("click", function(){

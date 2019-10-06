@@ -14,15 +14,14 @@ class CreateProjectInfoTable extends Migration
     public function up()
     {
         Schema::create('project_info', function (Blueprint $table) {
-            $table->bigIncrements('id');
-            $table->bigInteger('user_id')->unsigned();
-            $table->string('title');
-            $table->string('role');
-            $table->string('subject');
-            $table->string('species');
-            $table->string('language');
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
-            $table->string('availability')->default('Private');
+            $table->smallInteger('id')->unsigned()->autoIncrement();
+            $table->smallInteger('user_id')->unsigned();
+            $table->string('title',60);
+            $table->string('role',20);
+            $table->string('subject',30);
+            $table->string('species',30);
+            $table->string('language',30);
+            $table->string('availability',10)->default('Private');
             $table->timestamps();
         });
     }

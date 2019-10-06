@@ -15,8 +15,8 @@ class checkAdmin
      */
     public function handle($request, Closure $next)
     {
-        $username = Auth::user()->name;
-        if ( $username == "admin")
+        $checkAdmin = Auth::user()->isAdmin;
+        if ( $checkAdmin == 1)
             return $next($request);
         else
             return redirect()->route('home');

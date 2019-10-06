@@ -41,8 +41,11 @@ class postController extends Controller
 	    	->get();
 	    $role = DB::table('users')
 	    	->join('project_personel', 'id', '=', 'project_personel.user_id')
-	    	->where('role','Project leader')
 	    	->where('id',$currentUser)
+	    	->where('project_personel.title_id', $id)
+			->where('role','Project leader')
+			->orWhere('role','Owner')
+			->where('id',$currentUser)
 	    	->where('project_personel.title_id', $id)
 	    	->get();
 	    $check = DB::table('project_personel')
@@ -75,7 +78,10 @@ class postController extends Controller
     		$check = DB::table('project_personel')
 	    	->where('title_id',$id)
 	    	->where('user_id',$currentUser)
-	    	->where('role','Project leader')
+			->where('role','Project leader')
+			->orWhere('role','Owner')
+			->where('title_id',$id)
+	    	->where('user_id',$currentUser)
 	    	->get();
 
 	    	if (count($check) != 0){
@@ -110,21 +116,45 @@ class postController extends Controller
     	if (request()->ajax()){
     		$userid = request()->get('userid');
     		$currentUser = Auth::user()->id;
-    		$check = DB::table('project_personel')
+    		$check_pl = DB::table('project_personel')
 	    	->where('title_id',$id)
 	    	->where('user_id',$currentUser)
-	    	->where('role','Project leader')
-	    	->get();
-	    	if (count($check) != 0){
-	    		DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->delete();
+			->where('role','Project leader')
+			->get();
+			$check_owner = DB::table('project_personel')
+	    	->where('title_id',$id)
+	    	->where('user_id',$currentUser)
+			->where('role','Owner')
+			->get();
+	    	if ((count($check_pl) != 0) || (count($check_owner) != 0)){
+				if (count($check_owner) != 0 ){
+					DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->delete();
 
-	    		$data = DB::table('project_personel')
-		    	->join("users", "project_personel.user_id", "=", "users.id")
-		    	->where('user_id', '!=', $currentUser)
-		    	->where('title_id', $id)
-		    	->get();
-	    		
-	    		return $data;
+					$data = DB::table('project_personel')
+					->join("users", "project_personel.user_id", "=", "users.id")
+					->where('user_id', '!=', $currentUser)
+					->where('title_id', $id)
+					->get();
+					
+					return $data;
+				}
+				
+				else {
+					$if_delete_owner = DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->where('role','=','Owner')->get();
+					if ( count($if_delete_owner) != 0 )
+						return redirect()->route('post.update',['id'=>$id]);
+					else {
+						DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->delete();
+
+						$data = DB::table('project_personel')
+						->join("users", "project_personel.user_id", "=", "users.id")
+						->where('user_id', '!=', $currentUser)
+						->where('title_id', $id)
+						->get();
+						
+						return $data;
+					}
+				}
 	    	}
 	    	else
 	    		return redirect()->route('post.update',['id'=>$id]);
@@ -138,22 +168,44 @@ class postController extends Controller
     		$currentUser = Auth::user()->id;
     		$userid = request()->get('userid');
     		$role = request()->get('role');
-    		$check = DB::table('project_personel')
+    		$check_pl = DB::table('project_personel')
 	    	->where('title_id',$id)
 	    	->where('user_id',$currentUser)
-	    	->where('role','Project leader')
-	    	->get();
+			->where('role','Project leader')
+			->get();
+			$check_owner = DB::table('project_personel')
+	    	->where('title_id',$id)
+	    	->where('user_id',$currentUser)
+			->where('role','Owner')
+			->get();
 
-	    	if ( count($check) != 0 ){
+	    	if ( (count($check_pl) != 0) || ( count($check_owner) != 0 ) ){
 				$pp = new projectPersonnel;
-	    		$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role'=>$role]);
+				if ( count($check_owner) != 0 ){
+					$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role'=>$role]);
 
-	    		$data = $pp::join("users", "project_personel.user_id", "=", "users.id")
-		    	->where('user_id', '!=', $currentUser)
-		    	->where('title_id',$id)
-		    	->get();
+					$data = $pp::join("users", "project_personel.user_id", "=", "users.id")
+					->where('user_id', '!=', $currentUser)
+					->where('title_id',$id)
+					->get();
 
-				return $data;
+					return $data;
+				}
+				if (count($check_pl) != 0){
+					$if_owner = $pp::where('title_id','=', $id)->where('user_id','=', $userid)->where('role','=','Owner')->get();
+					if ( count($if_owner) != 0 )
+						return redirect()->route('post.update',['id'=>$id]);
+					else {
+						$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role'=>$role]);
+
+						$data = $pp::join("users", "project_personel.user_id", "=", "users.id")
+						->where('user_id', '!=', $currentUser)
+						->where('title_id',$id)
+						->get();
+
+						return $data;
+					}
+				}
 	    	}
     	}
     	else
@@ -166,7 +218,10 @@ class postController extends Controller
 		$check = DB::table('project_personel')
     	->where('title_id',$id)
     	->where('user_id',$currentUser)
-    	->where('role','Project leader')
+		->where('role','Project leader')
+		->orWhere('role','Owner')
+		->where('title_id',$id)
+    	->where('user_id',$currentUser)
     	->get();
     	if ( count($check) != 0 ){
 			$pi = new projectInfoModel;
@@ -192,7 +247,10 @@ class postController extends Controller
     	$role = DB::table('project_personel')
     	->where('user_id',$currentUser)
     	->where('title_id', $id)
-    	->where('role', 'Project leader')
+		->where('role', 'Project leader')
+		->orWhere('role','Owner')
+		->where('user_id',$currentUser)
+    	->where('title_id', $id)
     	->get();
     	return view('uploadFile', ['id'=>$id, 'role'=>$role]);
 	}
@@ -261,39 +319,76 @@ class postController extends Controller
 
 	public function updateFile(Request $request){
 		$pdd = new projectDataDescription;
+		$pp = new projectPersonnel;
+		$titleid = request()->titleid;
 		$currentUser = Auth::user()->id;
+		$check = $pp::where('title_id', '=', $titleid)
+		->where('user_id','=', $currentUser)
+		->where('role', '=', 'Owner')
+		->orWhere('role', '=', 'Project leader')
+		->where('title_id', '=', $titleid)
+		->where('user_id','=', $currentUser)
+		->get();
 		if ( $request->hasFile('fileEdit')){
 			$fileName = $request->file('fileEdit')->getClientOriginalName();
 			$newFileName = md5($fileName.time()).$fileName;
 			$path = $request->file('fileEdit')->move(storage_path("/app/upload"), $newFileName);
-			$pdd::where('id', request()->fileid)
-			->update([
-				'name' => request()->nameEdit,
-				'typeOfData' => request()->todEdit,
-				'description' => request()->descriptionEdit,
-				'typeOfAnalysis' => request()->toaEdit,
-				'when' => request()->whenEdit,
-				'where' => request()->whereEdit,
-				'title_id' => request()->titleid,
-				'user_id' => $currentUser,
-				'link' => $newFileName,
-				'typeOfFile' => request()->tofEdit,
-			]);
-			return back()->with('updated file','File has been successfully updated');
+			if ( count($check) != 0 ){
+				$pdd::where('id', request()->fileid)
+				->update([
+					'name' => request()->nameEdit,
+					'typeOfData' => request()->todEdit,
+					'description' => request()->descriptionEdit,
+					'typeOfAnalysis' => request()->toaEdit,
+					'when' => request()->whenEdit,
+					'where' => request()->whereEdit,
+					'link' => $newFileName,
+					'typeOfFile' => request()->tofEdit,
+				]);
+				return back()->with('updated file','File has been successfully updated');
+			}
+			else{
+				$pdd::where('id', request()->fileid)
+				->where('user_id','=',$currentUser)
+				->update([
+					'name' => request()->nameEdit,
+					'typeOfData' => request()->todEdit,
+					'description' => request()->descriptionEdit,
+					'typeOfAnalysis' => request()->toaEdit,
+					'when' => request()->whenEdit,
+					'where' => request()->whereEdit,
+					'link' => $newFileName,
+					'typeOfFile' => request()->tofEdit,
+				]);
+				return back()->with('updated file','File has been successfully updated');
+			}
 		}
 		else {
-			$pdd::where('id', '=', request()->fileid)
-			->update([
-				'name' => request()->nameEdit,
-				'typeOfData' => request()->todEdit,
-				'description' => request()->descriptionEdit,
-				'typeOfAnalysis' => request()->toaEdit,
-				'when' => request()->whenEdit,
-				'where' => request()->whereEdit,
-				'title_id' => request()->titleid,
-				'user_id' => $currentUser,
-			]);
-			return back()->with('updated file','File has been successfully updated');
+			if ( count($check) != 0 ){
+				$pdd::where('id', '=', request()->fileid)
+				->update([
+					'name' => request()->nameEdit,
+					'typeOfData' => request()->todEdit,
+					'description' => request()->descriptionEdit,
+					'typeOfAnalysis' => request()->toaEdit,
+					'when' => request()->whenEdit,
+					'where' => request()->whereEdit,
+				]);
+				return back()->with('updated file','File has been successfully updated');
+			}
+			else{
+				$pdd::where('id', '=', request()->fileid)
+				->where('user_id','=',$currentUser)
+				->update([
+					'name' => request()->nameEdit,
+					'typeOfData' => request()->todEdit,
+					'description' => request()->descriptionEdit,
+					'typeOfAnalysis' => request()->toaEdit,
+					'when' => request()->whenEdit,
+					'where' => request()->whereEdit,
+				]);
+				return back()->with('updated file','File has been successfully updated');
+			}
 		}
 	}
 

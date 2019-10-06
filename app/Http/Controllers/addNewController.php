@@ -21,7 +21,7 @@ class addNewController extends Controller
 		$pp = new projectPersonnel;
     	$pi->user_id = request()->userid;
     	$pi->title = request()->title;
-    	$pi->role = "Project leader";
+    	$pi->role = "Owner";
     	$pi->subject = request()->subject;
     	$pi->species = request()->species;
     	$pi->language = request()->lang;
@@ -30,7 +30,7 @@ class addNewController extends Controller
 
     	$pp->user_id = request()->userid;
     	$pp->title_id = $pi->id;
-    	$pp->role = request()->role;
+    	$pp->role = "Owner";
 		$pp->save();
 
         $pd->title_id = $pi->id;

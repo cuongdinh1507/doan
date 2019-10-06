@@ -14,7 +14,7 @@
                             <label for="title" class="col-md-4 col-form-label text-md-right">{{ __('Title') }}</label>
 
                             <div class="col-md-6">
-                                <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
+                                <input id="title" maxlength="60" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus>
 
                                 @error('title')
                                     <span class="invalid-feedback" role="alert">
@@ -32,7 +32,8 @@
                                 <div class="input-group" placeholder="Choose">
                                   <select id="role" type="role" name="role" required autocomplete="role" class="custom-select form-control @error('role') is-invalid @enderror" disabled>
                                     <option selected></option>
-                                    <option value="Project leader" selected>Project leader</option>
+                                    <option value="Owner" selected>Owner</option>
+                                    <option value="Project leader">Project leader</option>
                                     <option value="Researcher">Researcher</option>
                                   </select>
                                 </div>
@@ -50,7 +51,7 @@
                             <label for="subject" class="col-md-4 col-form-label text-md-right">Subject</label>
 
                             <div class="col-md-6">
-                                <input id="subject" type="subject" class="form-control @error('subject') is-invalid @enderror" name="subject" required autocomplete="subject">
+                                <input id="subject" maxlength="30" type="subject" class="form-control @error('subject') is-invalid @enderror" name="subject" required autocomplete="subject">
 
                                 @error('subject')
                                     <span class="invalid-feedback" role="alert">
@@ -64,7 +65,7 @@
                             <label for="species" class="col-md-4 col-form-label text-md-right">Species</label>
 
                             <div class="col-md-6">
-                                <input id="species" type="species" class="form-control @error('species') is-invalid @enderror" name="species" required autocomplete="species">
+                                <input id="species" maxlength="30" type="species" class="form-control @error('species') is-invalid @enderror" name="species" required autocomplete="species">
 
                                 @error('species')
                                     <span class="invalid-feedback" role="alert">
@@ -109,7 +110,7 @@
                               <label for="keyword" class="col-md-4 col-form-label text-md-right">Keyword</label>
 
                               <div class="col-md-6">
-                                  <input id="keyword" type="keyword" class="form-control @error('keyword') is-invalid @enderror" name="keyword" required autocomplete="keyword">
+                                  <input id="keyword" maxlength="100" type="keyword" class="form-control @error('keyword') is-invalid @enderror" name="keyword" required autocomplete="keyword">
 
                                   @error('keyword')
                                       <span class="invalid-feedback" role="alert">
@@ -121,7 +122,7 @@
 
 
                           <div class="form-group row">
-                              <label for="funding" class="col-md-4 col-form-label text-md-right">Funding</label>
+                              <label for="funding" maxlength="100" class="col-md-4 col-form-label text-md-right">Funding</label>
 
                               <div class="col-md-6">
                                   <input id="funding" type="funding" class="form-control @error('funding') is-invalid @enderror" name="funding" required autocomplete="funding">
@@ -138,7 +139,7 @@
                               <label for="start" class="col-md-4 col-form-label text-md-right">Year start</label>
 
                               <div class="col-md-6 date">
-                                  <input id="start" type="start" class="ys form-control @error('start') is-invalid @enderror" name="start" required>
+                                  <input id="start" maxlength="4" type="start" class="ys form-control @error('start') is-invalid @enderror" name="start" required>
 
                                   @error('start')
                                       <span class="invalid-feedback" role="alert">
@@ -152,7 +153,7 @@
                               <label for="end" class="col-md-4 col-form-label text-md-right">Year end</label>
 
                               <div class="col-md-6 date">
-                                  <input id="end" type="end" class="ys form-control @error('end') is-invalid @enderror" name="end" required>
+                                  <input id="end" maxlength="4" type="end" class="ys form-control @error('end') is-invalid @enderror" name="end" required>
                                   @error('end')
                                       <span class="invalid-feedback" role="alert">
                                           <strong>{{ $message }}</strong>
@@ -165,7 +166,7 @@
                               <label for="publication" class="col-md-4 col-form-label text-md-right">Publications</label>
 
                               <div class="col-md-6">
-                                  <input id="publication" type="publication" class="form-control @error('publication') is-invalid @enderror" name="publication" required autocomplete="publication">
+                                  <input id="publication" maxlength="100" type="publication" class="form-control @error('publication') is-invalid @enderror" name="publication" required autocomplete="publication">
 
                                   @error('publication')
                                       <span class="invalid-feedback" role="alert">

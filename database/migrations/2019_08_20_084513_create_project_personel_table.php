@@ -14,9 +14,9 @@ class CreateProjectPersonelTable extends Migration
     public function up()
     {
         Schema::create('project_personel', function (Blueprint $table) {
-            $table->bigInteger('user_id')->unsigned();
-            $table->bigInteger('title_id')->unsigned();
-            $table->string('role');
+            $table->smallInteger('user_id')->unsigned();
+            $table->smallInteger('title_id')->unsigned();
+            $table->string('role',20);
             $table->foreign('title_id')->references('id')->on('project_info')->onDelete('cascade');
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->primary(['title_id','user_id']);

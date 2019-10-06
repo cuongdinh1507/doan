@@ -14,13 +14,16 @@
   <!-- Custom fonts for this template-->
   <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.css">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
   <!-- Page level plugin CSS-->
-  <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.css') }}" rel="stylesheet">
+  {{-- <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.css') }}" rel="stylesheet"> --}}
 
   <!-- Custom styles for this template-->
   <link href="{{ asset('css/sb-admin.css') }}" rel="stylesheet">
   <link rel="icon" href="{{asset('img/favicon.png')}}">
-
 </head>
 
 <body id="page-top">
@@ -137,14 +140,14 @@
     </div>
   </div>
 
-  <!-- Bootstrap core JavaScript-->
+  {{-- <!-- Bootstrap core JavaScript-->
   <script src="{{ asset('vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{ asset('vendor/bootstrap/js/bootstrap.bundle.min.js') }}"></script>
 
   <!-- Core plugin JavaScript-->
-  <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script>
+  <script src="{{ asset('vendor/jquery-easing/jquery.easing.min.js') }}"></script> --}}
 
-  <!-- Page level plugin JavaScript-->
+  {{-- <!-- Page level plugin JavaScript-->
   <script src="{{ asset('vendor/datatables/jquery.dataTables.js') }}"></script>
   <script src="{{ asset('vendor/datatables/dataTables.bootstrap4.js') }}"></script>
 
@@ -152,7 +155,7 @@
   <script src="{{ asset('js/sb-admin.min.js') }}"></script>
 
   <!-- Demo scripts for this page-->
-  <script src="{{ asset('js/demo/datatables-demo.js') }}"></script>
+  <script src="{{ asset('js/demo/datatables-demo.js') }}"></script> --}}
 
 </body>
 <script>

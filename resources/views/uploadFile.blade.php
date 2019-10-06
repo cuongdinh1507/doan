@@ -45,7 +45,7 @@
                                   <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
 
                                   <div class="col-md-6">
-                                      <input id="name" type="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+                                      <input id="name" maxlength="50" type="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
 
                                       @error('name')
                                           <span class="invalid-feedback" role="alert">
@@ -59,7 +59,7 @@
                                   <label for="tod" class="col-md-4 col-form-label text-md-right">Type of data</label>
 
                                   <div class="col-md-6">
-                                      <input id="tod" type="tod" class="form-control @error('tod') is-invalid @enderror" name="tod" value="{{ old('tod') }}" required autocomplete="tod" autofocus>
+                                      <input id="tod" maxlength="10" type="tod" class="form-control @error('tod') is-invalid @enderror" name="tod" value="{{ old('tod') }}" required autocomplete="tod" autofocus>
 
                                       @error('tod')
                                           <span class="invalid-feedback" role="alert">
@@ -88,7 +88,7 @@
                                   <label for="toa" class="col-md-4 col-form-label text-md-right">Type of analysis</label>
 
                                   <div class="col-md-6">
-                                      <input id="toa" type="toa" class="form-control @error('toa') is-invalid @enderror" name="toa" required autocomplete="toa">
+                                      <input id="toa" maxlength="30" type="toa" class="form-control @error('toa') is-invalid @enderror" name="toa" required autocomplete="toa">
 
                                       @error('toa')
                                           <span class="invalid-feedback" role="alert">
@@ -99,10 +99,10 @@
                               </div>
 
                               <div class="form-group row">
-                                  <label for="lang" class="col-md-4 col-form-label text-md-right">When</label>
+                                  <label for="when" class="col-md-4 col-form-label text-md-right">When</label>
 
                                   <div class="col-md-6">
-                                      <input id="when" type="when" class="form-control @error('when') is-invalid @enderror" name="when" required autocomplete="when">
+                                      <input id="when" maxlength="100" type="when" class="form-control @error('when') is-invalid @enderror" name="when" required autocomplete="when">
 
                                       @error('when')
                                           <span class="invalid-feedback" role="alert">
@@ -116,7 +116,7 @@
 
                                     <div class="col-md-6">
                                         {{-- <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus> --}}
-                                        <input id="where" type="where" class="form-control @error('where') is-invalid @enderror" name="where" required autocomplete="where">
+                                        <input id="where" maxlength="120" type="where" class="form-control @error('where') is-invalid @enderror" name="where" required autocomplete="where">
                                         @error('where')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -176,7 +176,7 @@
                                   <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
 
                                   <div class="col-md-6">
-                                      <input id="nameEdit" type="nameEdit" class="form-control @error('nameEdit') is-invalid @enderror" name="nameEdit" value="{{ old('nameEdit') }}" required autocomplete="name" autofocus>
+                                      <input id="nameEdit" maxlength="50" type="nameEdit" class="form-control @error('nameEdit') is-invalid @enderror" name="nameEdit" value="{{ old('nameEdit') }}" required autocomplete="name" autofocus>
 
                                       @error('nameEdit')
                                           <span class="invalid-feedback" role="alert">
@@ -190,7 +190,7 @@
                                   <label for="todEdit" class="col-md-4 col-form-label text-md-right">Type of data</label>
 
                                   <div class="col-md-6">
-                                      <input id="todEdit" type="todEdit" class="form-control @error('todEdit') is-invalid @enderror" name="todEdit" value="{{ old('todEdit') }}" required autocomplete="tod" autofocus>
+                                      <input id="todEdit" maxlength="10" type="todEdit" class="form-control @error('todEdit') is-invalid @enderror" name="todEdit" value="{{ old('todEdit') }}" required autocomplete="tod" autofocus>
 
                                       @error('todEdit')
                                           <span class="invalid-feedback" role="alert">
@@ -219,7 +219,7 @@
                                   <label for="toaEdit" class="col-md-4 col-form-label text-md-right">Type of analysis</label>
 
                                   <div class="col-md-6">
-                                      <input id="toaEdit" type="toa" class="form-control @error('toaEdit') is-invalid @enderror" name="toaEdit" required autocomplete="toaEdit">
+                                      <input id="toaEdit" maxlength="10" type="toa" class="form-control @error('toaEdit') is-invalid @enderror" name="toaEdit" required autocomplete="toaEdit">
 
                                       @error('toaEdit')
                                           <span class="invalid-feedback" role="alert">
@@ -233,7 +233,7 @@
                                   <label for="whenEdit" class="col-md-4 col-form-label text-md-right">When</label>
 
                                   <div class="col-md-6">
-                                      <input id="whenEdit" type="whenEdit" class="form-control @error('whenEdit') is-invalid @enderror" name="whenEdit" required autocomplete="whenEdit">
+                                      <input id="whenEdit" maxlength="100" type="whenEdit" class="form-control @error('whenEdit') is-invalid @enderror" name="whenEdit" required autocomplete="whenEdit">
 
                                       @error('whenEdit')
                                           <span class="invalid-feedback" role="alert">
@@ -247,7 +247,7 @@
 
                                     <div class="col-md-6">
                                         {{-- <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus> --}}
-                                        <input id="whereEdit" type="where" class="form-control @error('whereEdit') is-invalid @enderror" name="whereEdit" required autocomplete="whereEdit">
+                                        <input id="whereEdit" maxlength="120" type="where" class="form-control @error('whereEdit') is-invalid @enderror" name="whereEdit" required autocomplete="whereEdit">
                                         @error('whereEdit')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
@@ -316,7 +316,6 @@
     refresh = function(){
       $("#tbody-dd").children().remove();
       $.get("{!! route('post.getAllFile', ['id'=>$id]) !!}", function(data){
-        console.log(data);
         $("#tbody-dd").append(
           $.map(data, function(v,i){
             return $("<tr>").append(

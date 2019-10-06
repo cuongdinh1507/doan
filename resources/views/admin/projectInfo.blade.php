@@ -13,9 +13,10 @@
     Projects Information</div>
   <div class="card-body">
     <div class="table-responsive">
-      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered table-responsive-lg" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
+            <th>#</th>
             <th>Title</th>
             <th>Owner</th>
             <th>Subject</th>
@@ -25,17 +26,7 @@
             <th>Action</th>
           </tr>
         </thead>
-        <tfoot>
-          <tr>
-            <th>Title</th>
-            <th>Owner</th>
-            <th>Subject</th>
-            <th>Species</th>
-            <th>Language</th>
-            <th>Availability</th>
-            <th>Action</th>
-          </tr>
-        </tfoot>
+        <tbody id="tbody-pi"></tbody>
       </table>
     </div>
   </div>
@@ -49,6 +40,25 @@
     var day = dt.getDate();
     var date = ((''+day).length<2 ? '0' : '') + day + '/' + ((''+month).length<2 ? '0' : '') + month + '/' + dt.getFullYear();
     $(".updateDT").text("Updated at " + time + " on "+ date);
+    $.get("{!! route('admin.tp') !!}", function(data){
+      $("#tbody-pi").append(
+        $.map(data, function(v,i){
+          return $("<tr>").append(
+            $("<td>", { text: i+1 }),
+            $("<td>", { text: v.title }),
+            $("<td>", { text: v.user_id }),
+            $("<td>", { text: v.subject }),
+            $("<td>", { text: v.species }),
+            $("<td>", { text: v.language }),
+            $("<td>", { text: v.availability }),
+            $("<td>").append(
+              $("<button>", { class: "btn btn-danger", text: "Delete"}),
+            ),
+          );
+        }),
+      );
+      $("#dataTable").DataTable();
+    });
   });
 </script>
 @endsection

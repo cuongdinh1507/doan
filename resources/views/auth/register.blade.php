@@ -92,34 +92,6 @@
                         </div>
 
                         <div class="form-group row">
-                            <label for="city" class="col-md-4 col-form-label text-md-right">{{ __('City') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="city" type="city" class="form-control @error('city') is-invalid @enderror" name="city" required autocomplete="city">
-
-                                @error('city')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="state" class="col-md-4 col-form-label text-md-right">{{ __('State') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="state" type="state" class="form-control @error('state') is-invalid @enderror" name="state" required autocomplete="state">
-
-                                @error('state')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
                             <label for="country" class="col-md-4 col-form-label text-md-right">{{ __('Country') }}</label>
 
                             <div class="col-md-6">
@@ -130,20 +102,6 @@
                                 </div>
 
                                 @error('country')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="zipcode" class="col-md-4 col-form-label text-md-right">{{ __('Zip Code') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="zipcode" type="zipcode" class="form-control @error('zipcode') is-invalid @enderror" name="zipcode" required autocomplete="zipcode">
-
-                                @error('zipcode')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>
@@ -172,20 +130,6 @@
                                 <input id="phone" type="phone" class="form-control @error('phone') is-invalid @enderror" name="phone" required autocomplete="phone">
 
                                 @error('phone')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
-                        </div>
-
-                        <div class="form-group row">
-                            <label for="link" class="col-md-4 col-form-label text-md-right">{{ __('Link') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="link" type="link" class="form-control @error('link') is-invalid @enderror" name="link" required autocomplete="link">
-
-                                @error('link')
                                     <span class="invalid-feedback" role="alert">
                                         <strong>{{ $message }}</strong>
                                     </span>

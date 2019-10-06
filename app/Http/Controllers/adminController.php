@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\projectInfoModel;
 use App\projectDescription;
 use App\projectDataDescription;
+use App\projectPersonnel;
 use App\User;
 use DB;
 
@@ -45,16 +46,29 @@ class adminController extends Controller
     
     public function totalUser(){
         $user = new User;
-        return $user::where("name","!=","admin")->get();
+        return $user::where("name","!=","admin")->orderBy('id','desc')->get();
     }
 
     public function totalPost(){
         $post = new projectInfoModel;
-        return $post::all();
+        return $post::orderBy("id","desc")->get();
     }
 
     public function totalFileUploaded(){
         $file = new projectDataDescription;
-        return $file::all();
+        return $file::select('project_data_description.name', 'typeOfData', 'description', 'typeOfAnalysis', 'when', 'project_data_description.link', 'where', 'typeOfFile', 'users.email', 'project_data_description.user_id', 'project_data_description.id')
+        ->join('users', 'user_id', '=', 'users.id')
+        ->orderBy('id','desc')
+        ->get();
+    }
+
+    public function getProjectDescription(){
+        $pd = new projectDescription;
+        return $pd::join('project_info','title_id','=','project_info.id')->orderBy('project_description.id','desc')->get();
+    }
+
+    public function getPP(){
+        $pp = new projectPersonnel;
+        return $pp::join('users','user_id','=','users.id')->join('project_info','title_id','=','project_info.id')->get();
     }
 }

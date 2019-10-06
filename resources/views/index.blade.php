@@ -72,7 +72,7 @@
                             <form id="changpw-form" action="{{ route('changepw') }}" method="GET" style="display: none;">
                                 @csrf
                             </form> --}}
-                            @if ( Auth::user()->name == "admin")
+                            @if ( Auth::user()->isAdmin == 1)
                                 <a class="dropdown-item" href="#"
                                 onclick="event.preventDefault();
                                                 document.getElementById('admin-form').submit();">

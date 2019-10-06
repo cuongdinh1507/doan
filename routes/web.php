@@ -39,6 +39,8 @@ Route::middleware('checkAdmin')->group(function(){
 	Route::get('projectDD', 'adminController@createProjectDD')->name('admin.projectDD');
 	Route::get('projectDescription', 'adminController@createProjectDescription')->name('admin.projectDescription');
 	Route::get('projectPersonnel', 'adminController@createProjectPersonnel')->name('admin.projectPersonnel');
+	Route::get('getProjectDescription', 'adminController@getProjectDescription')->name('admin.getProjectDescription');
+	Route::get('getProjectPersonnel', 'adminController@getPP')->name('admin.getPP');
 });
 Route::middleware('auth')->group(function(){
 	Route::get('post/delFilepostid={id}', 'postController@delFile')->name('post.delFile');
