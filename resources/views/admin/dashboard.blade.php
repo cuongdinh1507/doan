@@ -16,7 +16,7 @@
         </div>
         <div class="mr-5 postToday"></div>
       </div>
-      <a class="card-footer text-white clearfix small z-1" href="#">
+      <a class="card-footer text-white clearfix small z-1" href="{!! route('admin.projectInfo') !!}">
         <span class="float-left">View Details</span>
         <span class="float-right">
           <i class="fas fa-angle-right"></i>
@@ -32,7 +32,7 @@
         </div>
         <div class="mr-5 totalUser"></div>
       </div>
-      <a class="card-footer text-white clearfix small z-1" href="#">
+      <a class="card-footer text-white clearfix small z-1" href="{!! route('admin.users') !!}">
         <span class="float-left">View Details</span>
         <span class="float-right">
           <i class="fas fa-angle-right"></i>
@@ -48,7 +48,7 @@
         </div>
         <div class="mr-5 totalPost"></div>
       </div>
-      <a class="card-footer text-white clearfix small z-1" href="#">
+      <a class="card-footer text-white clearfix small z-1" href="{!! route('admin.projectInfo') !!}">
         <span class="float-left">View Details</span>
         <span class="float-right">
           <i class="fas fa-angle-right"></i>
@@ -64,7 +64,7 @@
         </div>
         <div class="mr-5 totalFileUploaded"></div>
       </div>
-      <a class="card-footer text-white clearfix small z-1" href="#">
+      <a class="card-footer text-white clearfix small z-1" href="{!! route('admin.projectDD') !!}">
         <span class="float-left">View Details</span>
         <span class="float-right">
           <i class="fas fa-angle-right"></i>

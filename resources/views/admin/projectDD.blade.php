@@ -6,13 +6,34 @@
   </li>
   <li class="breadcrumb-item active">Project Data Description</li>
 </ol>
+<div class="alert alert-success text-center col-md-8 mx-auto d-none" role="alert">
+</div>
+<div class="modal fade" id="delPdd" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-body-pdd">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="delPdd()">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="card mb-3">
   <div class="card-header">
     <i class="fas fa-table"></i>
     Project Data Description</div>
   <div class="card-body">
     <div class="table-responsive">
-        <table class="table table-bordered table-responsive-lg" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered table-responsive-lg table-hover" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
             <th>#</th>
@@ -57,13 +78,29 @@
             ),
             $("<td>", { text: v.email }),
             $("<td>").append(
-              $("<button>", { class: "btn btn-danger", text: "Delete"}),
+              $("<button>", { class: "btn btn-danger", text: "Delete", "data-toggle":"modal", "data-target":"#delPdd"}).on("click", function(){
+                $(".modal-body-pdd").text("Do you want to delete user "+ v.name + " (" + v.email + ") ?").attr("file",v.id);
+              }),
             ),
           );
         }),
       );
       $("#dataTable").DataTable();
     });
+    delPdd = function(){
+      var id = $(".modal-body-pdd").attr("file");
+      console.log(id);
+      $.get('{!! route('admin.delPdd') !!}', { id: id }, function(data){
+        if ( data == "ok" ){
+          $(".alert").removeClass('d-none').append(
+            $("<strong>", { text: "File ID:"+ id +" has been deleted!"}),
+          );
+          setTimeout(function(){
+            location.reload();
+          },1000);
+        }
+      });
+    };
   });
 </script>
 @endsection

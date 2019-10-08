@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use App\User;
 use DB;
 
 class loginController extends Controller
@@ -58,14 +60,26 @@ class loginController extends Controller
 	}
 	
 	public function changepw(){
-		return view('changePassword');
+		$user = new User();
+		if (request()->ajax()){
+			$newpassword = Hash::make(request()->get('newpw'));
+			$user::find(Auth::user()->id)->update(["password" => $newpassword]);
+			return "ok";
+		}
 	}
 
-	public function getPw(){
-		if (request()->ajax()){
-			if (password_verify(request()->get('pw'), Auth::user()->password)) {
-				return "ok" ;
-			}
-		}
+	public function updateProfile(){
+		$user = new User;
+		$user::where('id','=', request()->userid)
+		->update([
+			'name' => request()->name,
+			'email' => request()->email,
+			'country' => request()->country,
+			'address' => request()->address,
+			'phone' => request()->phone,
+			'institution' => request()->institution,
+			'position' => request()->position,
+		]);
+		return back()->with(["updateProfile","Your profile updated successfully!"]);
 	}
 }

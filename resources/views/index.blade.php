@@ -57,21 +57,178 @@
                         </li>
                     @endif
                 @else
+                    <div class="modal fade" id="modalProfile" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title mx-auto" id="exampleModalLongTitle">
+                                        <div class="brand">
+                                            <img src="{{asset('img/user.png')}}" alt="logo">
+                                        </div>
+                                    </h5>
+                                </div>
+                                <div class="modal-body modal-body-profile" titleid="0" userid="0">
+                                    <form action="{!! route('update.profile') !!}" method="POST" id="FormUpdate">
+                                        @csrf
+                                    </form>
+                                </div>
+                                <div class="modal-footer mx-auto">
+                                    <button class="btn btn-primary" form="FormUpdate" type="submit">Update</button>
+                                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="modalPw" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title mx-auto" id="exampleModalLongTitle">
+                                        <div class="brand">
+                                            <img src="{{asset('img/user.png')}}" alt="logo">
+                                        </div>
+                                    </h5>
+                                </div>
+                                <div class="modal-body modal-body-pw" titleid="0" userid="0">
+                                    <div class="form-group row">
+                                        <label for="newpw" class="col-md-5 col-form-label text-md-right">{{ __('New Password') }}</label>
+            
+                                        <div class="col-md-7">
+                                            <input id="newpw" type="password" class="form-control @error('newpw') is-invalid @enderror" name="newpw">
+            
+                                            @error('newpw')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="cfpw" class="col-md-5 col-form-label text-md-right">{{ __('Confirm password') }}</label>
+            
+                                        <div class="col-md-7">
+                                            <input id="cfpw" type="password" class="form-control @error('cfpw') is-invalid @enderror" name="cfpw">
+            
+                                            @error('cfpw')
+                                                <span class="invalid-feedback" role="alert">
+                                                    <strong>{{ $message }}</strong>
+                                                </span>
+                                            @enderror
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer mx-auto">
+                                    <button class="btn btn-primary" onclick="changepw()">Change</button>
+                                    <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <script>
+                        $(function(){
+                            $("#FormUpdate").append(
+                                $("<div>", { class: "col-md-12 mb-2"}).append(
+                                    $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Name"}),
+                                    $("<div>", { class: "col-md-8 d-inline-block" }).append(
+                                        $("<input>", { class: "form-control", name: "name" , maxlength: "30", value: "{!! Auth::user()->name !!}" }),
+                                    ),
+                                ),
+                                $("<div>", { class: "col-md-12 mb-2"}).append(
+                                    $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Email"}),
+                                    $("<div>", { class: "col-md-8 d-inline-block" }).append(
+                                        $("<input>", { class: "form-control", name: "email" , maxlength: "30", value: "{!! Auth::user()->email !!}" }),
+                                    ),
+                                ),
+                                $("<div>", { class: "col-md-12 mb-2"}).append(
+                                    $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Address"}),
+                                    $("<div>", { class: "col-md-8 d-inline-block" }).append(
+                                        $("<input>", { class: "form-control", name: "address" , maxlength: "30", value: "{!! Auth::user()->address !!}" }),
+                                    ),
+                                ),
+                                $("<div>", { class: "col-md-12 mb-2"}).append(
+                                    $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Country"}),
+                                    $("<div>", { class: "col-md-8 d-inline-block" }).append(
+                                        $("<select>", { class: "custom-select form-control country", name: "country"  }).append(
+                                            $("<option>", { text: "{!! Auth::user()->country !!}", value: "{!! Auth::user()->country !!}", selected: "true" }),
+                                        ),
+                                    ),
+                                ),
+                                $("<div>", { class: "col-md-12 mb-2"}).append(
+                                    $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Phone"}),
+                                    $("<div>", { class: "col-md-8 d-inline-block" }).append(
+                                        $("<input>", { class: "form-control", name: "phone" , maxlength: "30", value: "{!! Auth::user()->phone !!}" }),
+                                    ),
+                                ),
+                                $("<div>", { class: "col-md-12 mb-2"}).append(
+                                    $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Institution"}),
+                                    $("<div>", { class: "col-md-8 d-inline-block" }).append(
+                                        $("<input>", { class: "form-control", name: "institution" , maxlength: "30", value: "{!! Auth::user()->institution !!}" }),
+                                    ),
+                                ),
+                                $("<div>", { class: "col-md-12 mb-2"}).append(
+                                    $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Position"}),
+                                    $("<div>", { class: "col-md-8 d-inline-block" }).append(
+                                        $("<input>", { class: "form-control", name: "position", maxlength: "30", value: "{!! Auth::user()->position !!}" }),
+                                    ),
+                                ),
+                                $("<input>", { class: "d-none", name: "userid", value: "{!! Auth::user()->id !!}"}),
+                            );
+                            $.getJSON("https://raw.githubusercontent.com/tarraq/JSON-data-arrays/master/countries/english/countries-key-value.json", function(data){
+                                $(".country").append(
+                                    $.map(data,function(v,i){
+                                        if ( v != "{!! Auth::user()->country !!}")
+                                            return $("<option>", { value: v, text: v, id: i});
+                                    }),
+                                );
+                            });
+                            changepw = function(){
+                                var newpw = $("#newpw").val(),
+                                    cfpw = $("#cfpw").val();
+                                $(".pw-alert").remove();
+                                if ( newpw == cfpw ){
+                                    if ( newpw.length < 8 )
+                                        $(".modal-body-pw").append(
+                                            $("<div>", { class: "text-danger text-center pw-alert", text: "Your password must have more than 8 characters!"})  
+                                        );
+                                    else {
+                                        $.get("{!! route("changepw") !!}", { newpw: newpw }, function(data){
+                                            $(".modal-body-pw").append(
+                                                $("<div>", { class: "text-success text-center pw-alert", text: "Your password updated successfully!"})  
+                                            );
+                                        });
+                                        setTimeout(function(){
+                                            location.reload();
+                                        },1000);
+                                    }
+                                }
+                                else
+                                    $(".modal-body-pw").append(
+                                        $("<div>", { class: "text-danger text-center pw-alert", text: "Confirm password doesn't match!"})  
+                                    );
+                            };
+                        });
+                    </script>
                     <li class="nav-item dropdown">
                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                             {{ Auth::user()->name }} <span class="caret"></span>
                         </a>
-
                         <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                            {{-- <a class="dropdown-item" href="#"
+                            <a class="dropdown-item" href="#"
                                onclick="event.preventDefault();
-                                             document.getElementById('changpw-form').submit();">
+                                             document.getElementById('btn-profile').click();">
+                                {{ __('Profile') }}
+                            </a>
+
+                            <button data-toggle="modal" data-target="#modalProfile" id="btn-profile" class="d-none"></button>
+
+                            <a class="dropdown-item" href="#"
+                               onclick="event.preventDefault();
+                                             document.getElementById('btn-pw').click();">
                                 {{ __('Change Password') }}
                             </a>
 
-                            <form id="changpw-form" action="{{ route('changepw') }}" method="GET" style="display: none;">
-                                @csrf
-                            </form> --}}
+                            <button data-toggle="modal" data-target="#modalPw" id="btn-pw" class="d-none"></button>
+
                             @if ( Auth::user()->isAdmin == 1)
                                 <a class="dropdown-item" href="#"
                                 onclick="event.preventDefault();
@@ -98,6 +255,11 @@
             </ul>
         </div>
     </nav>
+    @if (@session()->has(updateProfile))
+        <div class="alert alert-success text-center col-md-8 mx-auto" role="alert">
+            <strong>Success</strong> {{session()->get("updateProfile")}}
+        </div>
+    @endif
     <div id="middle" style="flex: 1 0 auto;">
         @yield('content')
     </div>
@@ -164,5 +326,4 @@
     </footer>
 </body>
 <script src="{{asset('js/C.js')}}"></script>
-<script></script>
 </html>

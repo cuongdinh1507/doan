@@ -12,7 +12,7 @@
     Project Description</div>
   <div class="card-body">
     <div class="table-responsive">
-        <table class="table table-bordered table-responsive-lg" id="dataTable" width="100%" cellspacing="0">
+        <table class="table table-bordered table-responsive-lg table-hover" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <tr>
             <th>#</th>

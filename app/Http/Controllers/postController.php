@@ -13,8 +13,17 @@ use DB;
 class postController extends Controller
 {
     public function create($id){
-
-    	return view('post',['id'=>$id]);
+		$currentUser = Auth::user()->id;
+		$pi = new projectInfoModel;
+		$pd = new projectDescription;
+		$pdd = new projectDataDescription;
+		$pp = new projectPersonnel;
+		$checkAuthor = $pp::where('title_id', '=', $id)->where('user_id', '=', $currentUser)->get();
+		$postInfo = $pi::find($id)->get();
+		$postDescription = $pd::where('title_id', '=', $id)->get();
+		$author = $pp::where('title_id', '=', $id)->get();
+		$fileData = $pdd::where('title_id', '=', $id)->get();
+    	return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData]);
     }
 
     public function getAll($id){

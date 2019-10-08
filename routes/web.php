@@ -41,6 +41,11 @@ Route::middleware('checkAdmin')->group(function(){
 	Route::get('projectPersonnel', 'adminController@createProjectPersonnel')->name('admin.projectPersonnel');
 	Route::get('getProjectDescription', 'adminController@getProjectDescription')->name('admin.getProjectDescription');
 	Route::get('getProjectPersonnel', 'adminController@getPP')->name('admin.getPP');
+	Route::get('delUser', 'adminController@delUser')->name('admin.delUser');
+	Route::get('delPi', 'adminController@delPi')->name('admin.delPi');
+	Route::get('delPp', 'adminController@delPp')->name('admin.delPp');
+	Route::get('delPd', 'adminController@delPd')->name('admin.delPd');
+	Route::get('delPdd', 'adminController@delPdd')->name('admin.delPdd');
 });
 Route::middleware('auth')->group(function(){
 	Route::get('post/delFilepostid={id}', 'postController@delFile')->name('post.delFile');
@@ -58,5 +63,6 @@ Route::middleware('auth')->group(function(){
 	Route::get('myresources', 'myResourcesController@create')->name('myresources.create');
 	Route::get('changepw', 'loginController@changepw')->name('changepw');
 	Route::get('getPw', 'loginController@getPw')->name('getpw');
+	Route::post('updateMyProfile', 'loginController@updateProfile')->name('update.profile');
 });
 Auth::routes();

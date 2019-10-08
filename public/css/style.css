@@ -95,3 +95,6 @@ html, body{ height: 100%; }
 .w-15 { width: 15% !important; }
 .w-20 { width: 20% !important; }
 .w-5 { width: 5% !important; }
+.modal-backdrop {
+  z-index: 1;
+}
