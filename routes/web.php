@@ -20,7 +20,7 @@ Route::post('contact','ContactFormController@store')->name("contact.store");
 Route::get('home', function(){
 	return view('home');
 })->name("home");
-Route::get('discover', function(){
+Route::get('discoverHydroshare', function(){
 	return view('discover');
 })->name("discover");
 Route::get('addNew', 'addNewController@create')->name('addNew.create');
@@ -28,6 +28,8 @@ Route::post('addNew', 'addNewController@add')->name('addNew.add');
 Route::get('postUpdate/postid={id}', 'postController@update')->name('post.update');
 Route::get('news', 'newsController@create')->name('news.create');
 Route::get('post/getDownloadFileid={id}', 'postController@getDownloadFile')->name('post.getDownloadFile');
+Route::get('ToolAndServices', 'mkController@createTNS')->name('toolNservices');
+Route::get('discoverMekongWater', 'mkController@viewMk')->name('discoverMk');
 Route::middleware('checkAdmin')->group(function(){
 	Route::get('dashboard', 'adminController@createDashboard')->name('admin.dashboard');
 	Route::get('usersInformation', 'adminController@createUsers')->name('admin.users');

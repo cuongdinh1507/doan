@@ -9,14 +9,25 @@
     </div>
 @endif
 <form action="contact" method="POST" class="text-center border border-light shadow-lg p-5 mx-auto mt-5 ctForm" id="formContact">
-    <div class="form-group">
-       <input type="text" id="defaultContactFormName" class="form-control mb-4" placeholder="Name" name="name">
-       <div>{{ $errors->first("name") }}</div>
-    </div>
-    <div class="form-group">
-        <input type="email" id="defaultContactFormEmail" class="form-control mb-4" placeholder="E-mail" name="email">
-        <div>{{ $errors->first("email") }}</div>
-    </div>
+    @guest
+        <div class="form-group">
+            <input type="text" id="defaultContactFormName" class="form-control mb-4" placeholder="Name" name="name"">
+        <div>{{ $errors->first("name") }}</div>
+        </div>
+        <div class="form-group">
+            <input type="email" id="defaultContactFormEmail" class="form-control mb-4" placeholder="E-mail" name="email">
+            <div>{{ $errors->first("email") }}</div>
+        </div>
+    @else
+        <div class="form-group">
+            <input type="text" id="defaultContactFormName" class="form-control mb-4 disabled" placeholder="Name" name="name" value="{!! Auth::user()->name !!}">
+        <div>{{ $errors->first("name") }}</div>
+        </div>
+        <div class="form-group">
+            <input type="email" id="defaultContactFormEmail" class="form-control mb-4 disabled" placeholder="E-mail" name="email" value="{!! Auth::user()->email !!}">
+            <div>{{ $errors->first("email") }}</div>
+        </div>
+    @endguest
     <div class="form-group">
         <input type="organization" id="defaultContactFormOrganization" class="form-control mb-4" placeholder="Organization" name="organization">
         <div>{{ $errors->first("organization") }}</div>

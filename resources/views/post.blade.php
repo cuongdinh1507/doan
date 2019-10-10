@@ -8,7 +8,7 @@
         postInfo = {!! $postInfo !!},
         postDescription = {!! $postDescription !!},
         author = {!! $author !!};
-    console.log(author);
+    console.log(fileData);
   });
 </script>
 @endsection

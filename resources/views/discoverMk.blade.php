@@ -21,40 +21,18 @@
 </div>
 <div class="col-md-10 mx-auto">
     <div class="col-md-2 mt-5 d-inline-block align-top bge p-0" id="searchToggle" style="border-radius:10px">
-        <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#coverage">
-            <div class="d-inline-block font-weight-bolder">Coverage type</div>
-            <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
-        </div>
-        <div id="coverage" class="collapse cp show pb-2 pl-2">
-            <div class="custom-control custom-checkbox cp">
-              <input type="checkbox" class="custom-control-input coverage_input" id="Point">
-              <label class="custom-control-label" for="Point">Point</label>
-            </div>
-            <div class="custom-control custom-checkbox cp">
-              <input type="checkbox" class="custom-control-input coverage_input" id="Box">
-              <label class="custom-control-label" for="Box">Box</label>
-            </div>
-            <div class="custom-control custom-checkbox cp">
-              <input type="checkbox" class="custom-control-input coverage_input" id="Period">
-              <label class="custom-control-label" for="Period">Period</label>
-            </div>
-        </div>
-        <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#availability">
+        <div class="position-relative cp searchToggle p-2" data-toggle="collapse" data-target="#published">
             <div class="d-inline-block font-weight-bolder">Availability</div>
             <div class="d-inline-block text-right position-absolute mr-2" style="right:0"><i class="fas fa-angle-up"></i></div>
         </div>
-        <div id="availability" class="collapse cp show pb-2 pl-2">
-            <div class="custom-control custom-checkbox cp w-100">
-              <input type="checkbox" class="custom-control-input availability_input" id="Discoverable">
-              <label class="custom-control-label cp" for="Discoverable">Discoverable</label>
-            </div>
-            <div class="custom-control custom-checkbox cp w-100">
-              <input type="checkbox" class="custom-control-input availability_input" id="Public">
-              <label class="custom-control-label cp" for="Public">Public</label>
-            </div>
-            <div class="custom-control custom-checkbox cp w-100">
-              <input type="checkbox" class="custom-control-input availability_input" id="Published">
+        <div id="published" class="collapse cp show pb-2 pl-2">
+            <div class="custom-control custom-radio cp w-100">
+              <input type="radio" class="custom-control-input availability_input" id="Published" value="true" name="availability">
               <label class="custom-control-label cp" for="Published">Published</label>
+            </div>
+            <div class="custom-control custom-radio cp w-100">
+              <input type="radio" class="custom-control-input availability_input" id="Unpublished" value="false" name="availability">
+              <label class="custom-control-label cp" for="Unpublished">Unpublished</label>
             </div>
         </div>
     </div><div class="col-md-10 mt-5 d-inline-block align-top" id="tableR">
@@ -63,7 +41,7 @@
             <tr>
               <th scope="col" style="width:10%">Type</th>
               <th scope="col" style="width:40%">Title</th>
-              <th scope="col" style="width:10%">First Author</th>
+              <th scope="col" style="width:10%">Creator</th>
               <th scope="col" style="width:25%">Date Created</th>
               <th scope="col" style="width:25%">Last Modified</th>
             </tr>
@@ -89,88 +67,55 @@
 <script>
     $(function(){
         var count = 0,
-            pageURL = "https://www.hydroshare.org/hsapi/resource/search?count=10",
+            pageURL = "http://data.mekongwater.org/hsapi/resource/?count=10",
             next,
             prev,
             coverage = [],
             availability = [],
             text;
-        convertToUrl = function(data){
-            var string = "";
-            $.map(data, function(v,i){
-                string = string + (string == "" ? "" : "%2C") + v;
-            });
-            return string;
-        };
         checkURL = function(){
-            newURL = pageURL + (availability.length == 0 ? "" : "&availability=" + convertToUrl(availability)) + (coverage.length == 0 ? "" : "&coverage_type=" + convertToUrl(coverage)) + (text == null ? "" : "&text=" + text);
+            newURL = pageURL + (availability == "" ? "" : "&published=" + availability ) + (text == null ? "" : "&full_text_search=" + text);
+            console.log(newURL);
             $(".tr").remove();
             getResources(newURL);
             $("#currentPage").val(1);
             
         };
-        $(".coverage_input").on("click", function(){
-            var coverage_item = $(this).attr("id"),
-            check = $.grep(coverage, function(v){
-                return v == coverage_item;
-            });
-            if ( check.length == 0)
-                coverage.push(coverage_item);
-            else
-                coverage = $.grep(coverage, function(v){
-                    return v != coverage_item;
-            });
-            checkURL();
-        });
         $(".availability_input").on("click", function(){
-            var availability_item = $(this).attr("id"),
-            check = $.grep(availability, function(v){
-                return v == availability_item;
-            });
-            if ( check.length == 0)
-                availability.push(availability_item);
-            else
-                availability = $.grep(availability, function(v){
-                    return v != availability_item;
-            });
+            availability = $(this).val();
             checkURL();
         });
-        dateTime = function(dateTime){
-            date = dateTime.split("T")[0];
-            time = dateTime.split("T")[1].split("Z")[0];
-            return time + " (" + date + ")";
-        };
         $("#searchToggle").on("click",".searchToggle",function(){
             $(this).find(".fa-angle-up").length == 0 ? $(this).find(".fa-angle-down").removeClass("fa-angle-down").addClass("fa-angle-up") :  $(this).find(".fa-angle-up").removeClass("fa-angle-up").addClass("fa-angle-down") ;
         });
         createTable = function(data){
-            var hUrl = "https://www.hydroshare.org/resource/" + data.text.split("\n")[1].trim();
             $("#tbody").hide().append(
                 $("<tr>", {class:"tr"}).append(
                     $("<th>", { scope: "row", text: data.resource_type }),
                     $("<th>").append(
-                        $("<a>", { text: data.text.split("\n")[3].trim(), href: hUrl, target: "_blank", "data-toggle":"modal", "data-target":"#exampleModal" }).on("click",function(event){
+                        $("<a>", { text: data.resource_title, href: data.resource_url, target: "_blank", "data-toggle":"modal", "data-target":"#exampleModal" }).on("click",function(event){
                             event.preventDefault();
                             $(".embedd, .modal-footer>.mx-auto").remove();
                             $(".modal-body").append(
-                                $("<embed>", { src : hUrl, class:"embedd col-lg-12" }).css({"height":"80vh"}),
+                                $("<embed>", { src : data.resource_url, class:"embedd col-lg-12" }).css({"height":"80vh"}),
                             );
                             $(".modal-footer").prepend(
                                 $("<div>", { class: "mx-auto small"}).append(
-                                    $("<a>", { text: " " + hUrl, href: hUrl, target: "_blank"}),
+                                    $("<a>", { text: " " + data.resource_url, href: data.resource_url, target: "_blank"}),
                                 ),
                             );
                         }),
                     ),
-                    $("<th>", { text: data.author }),
-                    $("<th>", { text: dateTime(data.created)}).css({"width":"15%"}),
-                    $("<th>", { text: dateTime(data.modified)}).css({"width":"15%"}),
+                    $("<th>", { text: data.creator }),
+                    $("<th>", { text: data.date_created}).css({"width":"15%"}),
+                    $("<th>", { text: data.date_last_updated}).css({"width":"15%"}),
                 )
             ).fadeIn();
         };
         getResources = function(pUrl){
             $("#notFound").hide();
             $.get(pUrl, function(data){
+                console.log(data);
                 if (data.count != 0){
                     next = data.next;
                     prev = data.previous;
@@ -189,6 +134,7 @@
         };
         $(".btn-c").on("click", function(){
             text = $("#search_txt").val();
+            console.log(text);
             checkURL();
         });
         $("#search_txt").on("keypress", function(e){
@@ -227,7 +173,7 @@
                 if (currentPage == 1)
                     getResources(pageURL);
                 else if (currentPage <= totalPage){
-                    var newURL = pageURL + (availability.length == 0 ? "" : "&availability=" + convertToUrl(availability)) + (coverage.length == 0 ? "" : "&coverage_type=" + convertToUrl(coverage)) + (text == null ? "" : "&text=" + text) + "&page=" + currentPage;
+                    newURL = pageURL + (availability == "" ? "" : "&published=" + availability ) + ( text == null ? "" : "&full_text_search=" + text) + "&page=" + currentPage;
                     $(".tr").remove();
                     getResources(newURL);
                 }
