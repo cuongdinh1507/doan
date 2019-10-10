@@ -10,7 +10,7 @@
     </div>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog-centered modal-lg" role="document">
+    <div class="modal-dialog-centered modal-dialog modal-lg" role="document">
         <div class="modal-content">
         <div class="modal-body col-lg-12"></div>
         <div class="modal-footer">
