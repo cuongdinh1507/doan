@@ -1,5 +1,153 @@
 @extends("index")
 @section('content')
+<div class="modal fade" id="delFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body" id="bodyDel"></div>
+      <div class="modal-footer" id="delFooter">
+        <button type="button" class="btn btn-success" onclick="delFile()" data-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-danger btn-close" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="modalUpload" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">NEW UPLOAD</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-body-upload">
+        <div class="container">
+          <div class="row justify-content-center mt-5">
+              <div class="col-md-12">
+                  <div class="card">
+
+                      <div class="card-body">
+                          <form method="POST" action="{{ route('post.newUpload') }}" id="form1" enctype="multipart/form-data">
+                              @csrf
+                              <input type="text" value="{{$id}}" name="titleid" style="display:none">
+                              <div class="form-group row">
+                                  <label for="name" class="col-md-4 col-form-label text-md-right">Name</label>
+
+                                  <div class="col-md-6">
+                                      <input id="name" maxlength="50" type="name" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+
+                                      @error('name')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
+                                  </div>
+                              </div>
+
+                              <div class="form-group row">
+                                  <label for="tod" class="col-md-4 col-form-label text-md-right">Type of data</label>
+
+                                  <div class="col-md-6">
+                                      <input id="tod" maxlength="10" type="tod" class="form-control @error('tod') is-invalid @enderror" name="tod" value="{{ old('tod') }}" required autocomplete="tod" autofocus>
+
+                                      @error('tod')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
+                                  </div>
+                              </div>
+
+
+                              <div class="form-group row">
+                                  <label for="description" class="col-md-4 col-form-label text-md-right">Description</label>
+
+                                  <div class="col-md-6">
+                                      <textarea id="description" type="description" class="form-control @error('description') is-invalid @enderror" name="description" required autocomplete="description" cols="30" rows="10"></textarea>
+
+                                      @error('description')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
+                                  </div>
+                              </div>
+
+                              <div class="form-group row">
+                                  <label for="toa" class="col-md-4 col-form-label text-md-right">Type of analysis</label>
+
+                                  <div class="col-md-6">
+                                      <input id="toa" maxlength="30" type="toa" class="form-control @error('toa') is-invalid @enderror" name="toa" required autocomplete="toa">
+
+                                      @error('toa')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
+                                  </div>
+                              </div>
+
+                              <div class="form-group row">
+                                  <label for="when" class="col-md-4 col-form-label text-md-right">When</label>
+
+                                  <div class="col-md-6">
+                                      <input id="when" maxlength="100" type="when" class="form-control @error('when') is-invalid @enderror" name="when" required autocomplete="when">
+
+                                      @error('when')
+                                          <span class="invalid-feedback" role="alert">
+                                              <strong>{{ $message }}</strong>
+                                          </span>
+                                      @enderror
+                                  </div>
+                              </div>
+                              <div class="form-group row">
+                                    <label for="where" class="col-md-4 col-form-label text-md-right">Where</label>
+
+                                    <div class="col-md-6">
+                                        {{-- <input id="title" type="title" class="form-control @error('title') is-invalid @enderror" name="title" value="{{ old('title') }}" required autocomplete="title" autofocus> --}}
+                                        <input id="where" maxlength="120" type="where" class="form-control @error('where') is-invalid @enderror" name="where" required autocomplete="where">
+                                        @error('where')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label for="file" class="col-md-4 col-form-label text-md-right">Upload File</label>
+
+                                    <div class="col-md-6">
+                                        <input id="fileUp" type="file" class="form-control-file @error('file') is-invalid @enderror" name="fileUp" required autocomplete="file">
+
+                                        @error('file')
+                                            <span class="invalid-feedback" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <input type="text" name="tof" style="display:none" id="tof">
+                          </form>
+                      </div>
+                  </div>
+              </div>
+          </div>
+      </div>
+      </div>
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary" form="form1" >Save</button>
+        <button type="button" class="btn btn-secondary btn-close" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="modalAuthor" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
         <div class="modal-content">
@@ -68,6 +216,83 @@
         role = {!! $role !!};
     var check = checkAuthor.length == 0 ? "d-none" : "d-inline-block";
     console.log(author);
+    createFileList = function(data){
+      return $("<tbody>", { class: "tbody-file"}).append(
+        $.map(data, function(v){
+          return $("<tr>", { class: "mb-2 cp"}).append(
+            $("<td>", { class: "text-left w-10"}).append(
+              files(v.typeOfFile),
+            ),
+            $("<td>", { class: "w-75", text: v.name}).on("click", function(){
+              $(".selectFile").addClass("d-none");
+              $(".metadata").children().remove();
+              $(".metadata").append(
+                $("<div>", { class: "iDefault"}).append(
+                  $("<div>", { class: "modal-header", text: "Title: " + v.name}),
+                  $("<div>", { class: "modal-header", text: "Description: " + v.description}),
+                  $("<div>", { class: "modal-header", text: "Type of analysis: " + v.typeOfAnalysis}),
+                    $("<div>", { class: "modal-header", text: "Type of data: " + v.typeOfData}),
+                  $("<div>", { class: "modal-header", text: "When: " + v.when}),
+                  $("<div>", { class: "modal-header", text: "Where: " + v.where}),
+                ),
+              );
+            }),
+            $("<td>", { class: "w-5 iEditFile d-none" }).append(
+              $("<button>", { class: "btn btn-primary btn-file-edit d-inline-block mr-2"}).append(
+                $("<i>", { class :"far fa-edit"}),
+              ).on("click", function(){
+                $(".metadata").children().remove();
+                $(".metadata").append(
+                  $("<div>", { class: "col-lg-12"}).append(
+                    $("<div>", { class: "form-group row col-lg-12"}).append(
+                      $("<label>", { class: "col-lg-4 col-form-label", text: "Title:"}),
+                      $("<input>", { class: "form-control col-lg-8", value: v.name}),
+                    ),
+                    $("<div>", { class: "form-group row col-lg-12"}).append(
+                      $("<label>", { class: "col-lg-4 col-form-label", text: "Description:"}),
+                      $("<input>", { class: "form-control col-lg-8", value: v.description}),
+                    ),
+                    $("<div>", { class: "form-group row col-lg-12"}).append(
+                      $("<label>", { class: "col-lg-4 col-form-label", text: "Type of Analysis:"}),
+                      $("<input>", { class: "form-control col-lg-8", value: v.typeOfAnalysis}),
+                    ),
+                    $("<div>", { class: "form-group row col-lg-12"}).append(
+                      $("<label>", { class: "col-lg-4 col-form-label", text: "Type of data:"}),
+                      $("<input>", { class: "form-control col-lg-8", value: v.typeOfData}),
+                    ),
+                    $("<div>", { class: "form-group row col-lg-12"}).append(
+                      $("<label>", { class: "col-lg-4 col-form-label", text: "When:"}),
+                      $("<input>", { class: "form-control col-lg-8", value: v.when}),
+                    ),
+                    $("<div>", { class: "form-group row col-lg-12"}).append(
+                      $("<label>", { class: "col-lg-4 col-form-label", text: "Where:"}),
+                      $("<input>", { class: "form-control col-lg-8", value: v.where}),
+                    ),
+                    $("<div>", { class: "col-lg-12 text-right mb-2"}).append(
+                      $("<button>", { class: "btn btn-success", text: "Save" }),
+                    ),
+                  ),
+                )
+              }),
+            ),
+            $("<td>", { class: "w-5 iEditFile d-none" }).append(
+              $("<button>", { class: "btn btn-danger btn-file-edit d-inline-block mr-2", "data-toggle":"modal", "data-target":"#delFile"}).append(
+                $("<i>", { class :"far fa-trash-alt"}),
+              ).on("click", function(){
+                $("#bodyDel").text("Delete "+ v.name + " ?").attr({"fileid": v.id, "linkFile": v.link});
+              }),
+            ),
+            $("<td>", { class: "w-5"}).append(
+              $("<button>", { class: "btn btn-success"}).append(
+                $("<i>", { class: "fas fa-download"}),
+              ).on("click", function(){
+                location.href = "getDownloadFileid=" + v.id;
+              }),
+            ),
+          );
+        }),
+      );
+    };
     files = function(icon){
       var fileIcon;
       $.each({
@@ -89,120 +314,133 @@
       return fileIcon;
     }
     $(".post-body").append(
-      $("<h3>", { class: "modal-header iDefault", id: "title", text: postInfo[0].title }),
-      $("<h3>", { class: "modal-header iEdit d-none w-100"}).append(
-        $("<input>", { class: "form-control", value: postInfo[0].title, text: postInfo[0].title }).css({"border":"none"}),
-      ),
-      $("<div>", { class: "col-lg-6 mb-3 " + check}),
-      $("<div>", { class: "col-lg-6 mb-3 " + check}).append(
-        $("<div>", { class: "col-lg-8 mx-auto" }).append(
-          $("<button>", { class: "d-inline-block btn mr-2 btn-success", "data-target": "#modalPP", "data-toggle": "modal"}).append(
-            $("<i>", { class: "fas fa-user-plus" }),
-          ),
-          $("<button>", { class: "d-inline-block btn mr-2 btn-primary"}).append(
-            $("<i>", { class: "far fa-edit" }),
-          ).on("click", function(){
-            $(".iEdit").removeClass("d-none").addClass("d-inline-block");
-            $(".iDefault").removeClass("d-inline-block").addClass("d-none");
-            $(".iEditFile").removeClass("d-none");
-          }),
-          $("<button>", { class: "d-inline-block btn mr-2 btn-danger"}).append(
-            $("<i>", { class: "fas fa-trash" }),
-          ),
+      $("<form>", { method:"POST", action: "{!! route('post.updateProjectInfo') !!}"}).append(
+        $("<input>", { class: "d-none", name: "_token", value:" {!! csrf_token() !!}"}),
+        $("<input>", { class: "d-none", name: "titleid", value:{!! $id !!}}),
+        $("<h3>", { class: "modal-header iDefault", id: "title", text: postInfo[0].title }),
+        $("<h3>", { class: "modal-header iEdit d-none w-100"}).append(
+          $("<input>", { class: "form-control", value: postInfo[0].title, text: postInfo[0].title, name: "title" }).css({"border":"none"}),
         ),
-      ),
-      $("<div>", { class: "col-lg-6 d-inline-block align-top"}).append(
-        $("<div>", { class: "mb-2"}).append(
-          $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Authors:"}),
-          $("<div>", { class: "col-lg-8 d-inline-block text-left"}).append(
-              $.map(author, function(v,i){
-                return $("<a>", { text: v.name + (i+1 != author.length ? ", " : "") , href: "#", numberId: v.user_id }).on("click", function(event){
-                  event.preventDefault();
-                  $(".modal-body-author").children().remove();
-                  $(".modal-body-author").append(
-                    $("<div>", { class: "col-md-12 mb-2"}).append(
-                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Name:"}),
-                        $("<div>", { class: "col-md-8 d-inline-block", text: v.name}),
-                    ),
-                    $("<div>", { class: "col-md-12 mb-2"}).append(
-                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Email:"}),
-                        $("<div>", { class: "col-md-8 d-inline-block", text: v.email}),
-                    ),
-                    $("<div>", { class: "col-md-12 mb-2"}).append(
-                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Address:"}),
-                        $("<div>", { class: "col-md-8 d-inline-block", text: v.address}),
-                    ),
-                    $("<div>", { class: "col-md-12 mb-2"}).append(
-                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Country:"}),
-                        $("<div>", { class: "col-md-8 d-inline-block", text: v.country}),
-                    ),
-                    $("<div>", { class: "col-md-12 mb-2"}).append(
-                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Phone:"}),
-                        $("<div>", { class: "col-md-8 d-inline-block", text: v.phone}),
-                    ),
-                    $("<div>", { class: "col-md-12 mb-2"}).append(
-                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Institution:"}),
-                        $("<div>", { class: "col-md-8 d-inline-block", text: v.institution}),
-                    ),
-                    $("<div>", { class: "col-md-12 mb-2"}).append(
-                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Position:"}),
-                        $("<div>", { class: "col-md-8 d-inline-block", text: v.position}),
-                    ),
-                  );
-                  $("#btn-author").click();
-                });
-              }),
+        $("<div>", { class: "col-lg-6 mb-3 " + check}),
+        $("<div>", { class: "col-lg-6 mb-3 " + check}).append(
+          $("<div>", { class: "col-lg-8 mx-auto" }).append(
+            $("<button>", { class: "d-inline-block btn mr-2 btn-success", "data-target": "#modalPP", "data-toggle": "modal", type:"button"}).append(
+              $("<i>", { class: "fas fa-user-plus" }),
+            ),
+            $("<button>", { class: "d-inline-block btn mr-2 btn-primary btn-edit", type:"button"}).append(
+              $("<i>", { class: "far fa-edit" }),
+            ).on("click", function(){
+              $(".iEdit").removeClass("d-none").addClass("d-inline-block");
+              $(".iDefault").removeClass("d-inline-block").addClass("d-none");
+              $(".iEditFile").removeClass("d-none");
+            }),
+            $("<button>", { class: "d-inline-block btn mr-2 btn-danger", type:"button"}).append(
+              $("<i>", { class: "fas fa-trash" }),
+            ),
           ),
         ),
-        $("<div>", { class: "mb-2"}).append(
-          $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Subject:"}),
-          $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].subject}),
-          $("<select>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].subject, value: postInfo[0].subject , name: "subject" }).append(
-            $("<option>", { value: postInfo[0].subject, text: postInfo[0].subject, selected: true  }),
+        $("<div>", { class: "col-lg-6 d-inline-block align-top"}).append(
+          $("<div>", { class: "mb-2"}).append(
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Authors:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left"}).append(
+                $.map(author, function(v,i){
+                  return $("<a>", { text: v.name + (i+1 != author.length ? ", " : "") , href: "#", numberId: v.user_id }).on("click", function(event){
+                    event.preventDefault();
+                    $(".modal-body-author").children().remove();
+                    $(".modal-body-author").append(
+                      $("<div>", { class: "col-md-12 mb-2"}).append(
+                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Name:"}),
+                          $("<div>", { class: "col-md-8 d-inline-block", text: v.name}),
+                      ),
+                      $("<div>", { class: "col-md-12 mb-2"}).append(
+                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Email:"}),
+                          $("<div>", { class: "col-md-8 d-inline-block", text: v.email}),
+                      ),
+                      $("<div>", { class: "col-md-12 mb-2"}).append(
+                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Address:"}),
+                          $("<div>", { class: "col-md-8 d-inline-block", text: v.address}),
+                      ),
+                      $("<div>", { class: "col-md-12 mb-2"}).append(
+                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Country:"}),
+                          $("<div>", { class: "col-md-8 d-inline-block", text: v.country}),
+                      ),
+                      $("<div>", { class: "col-md-12 mb-2"}).append(
+                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Phone:"}),
+                          $("<div>", { class: "col-md-8 d-inline-block", text: v.phone}),
+                      ),
+                      $("<div>", { class: "col-md-12 mb-2"}).append(
+                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Institution:"}),
+                          $("<div>", { class: "col-md-8 d-inline-block", text: v.institution}),
+                      ),
+                      $("<div>", { class: "col-md-12 mb-2"}).append(
+                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Position:"}),
+                          $("<div>", { class: "col-md-8 d-inline-block", text: v.position}),
+                      ),
+                    );
+                    $("#btn-author").click();
+                  });
+                }),
+            ),
+          ),
+          $("<div>", { class: "mb-2"}).append(
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Subject:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].subject}),
+            $("<select>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].subject, value: postInfo[0].subject , name: "subject" }).append(
+              $("<option>", { value: postInfo[0].subject, text: postInfo[0].subject, selected: true  }),
+            ),
+          ),
+          $("<div>", { class: "mb-2"}).append(
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Species:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].species }),
+            $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].species, value: postInfo[0].species , name: "species" }),
+          ),
+          $("<div>", { class: "mb-2"}).append(
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Language:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].language }),
+            $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].language, value: postInfo[0].language , name: "lang" }),
+          ),
+          $("<div>", { class: "mb-2"}).append(
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Availability:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].availability}),
+            $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].availability, value: postInfo[0].availability , name: "availability" }),
           ),
         ),
-        $("<div>", { class: "mb-2"}).append(
-          $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Species:"}),
-          $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].species }),
-          $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].species, value: postInfo[0].species , name: "species" }),
+        $("<div>", { class: "col-lg-6 d-inline-block align-top"}).append(
+          $("<div>", { class: "mb-2"}).append(
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Created:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left", text: postInfo[0].created_at}),
+          ),
+          $("<div>", { class: "mb-2"}).append(
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Last updated:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left", text: postInfo[0].updated_at}),
+          ),
+          $("<div>", { class: "mb-2"}).append(
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Year start:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postDescription[0].yearStart}),
+            $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postDescription[0].yearStart, value: postDescription[0].yearStart , name: "start" }),
+          ),
+          $("<div>", { class: "mb-2"}).append(
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Year end:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postDescription[0].yearEnd}),
+            $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postDescription[0].yearEnd, value: postDescription[0].yearEnd , name: "end" }),
+          ),
         ),
-        $("<div>", { class: "mb-2"}).append(
-          $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Language:"}),
-          $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].language }),
-          $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].language, value: postInfo[0].language , name: "language" }),
-        ),
-        $("<div>", { class: "mb-2"}).append(
-          $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Availability:"}),
-          $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].availability}),
-          $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].availability, value: postInfo[0].availability , name: "availability" }),
+        $("<div>", { class: "modal-header text-large h5 mt-4", text: "Abstract"}),
+        $("<div>", { class: "iDefault", text: postDescription[0].abstract }),
+        $("<textarea>", { class: "col-lg-12 form-control iEdit d-none", text: postDescription[0].abstract, name: "abstract"}),
+        $("<div>", { class: "modal-header text-large h5 mt-4", text: "Keywords"}),
+        $("<div>", { class: "iDefault", text: postDescription[0].keyword }),
+        $("<input>", { class: "col-lg-12 form-control iEdit d-none", value: postDescription[0].keyword, name: "keyword"}),
+        $("<div>", { class: "modal-header text-large h5 mt-4", text: "Funding"}),
+        $("<div>", { class: "iDefault", text: postDescription[0].funding }),
+        $("<input>", { class: "col-lg-12 form-control iEdit d-none", value: postDescription[0].funding, name: "funding"}),
+        $("<div>", { class: "modal-header text-large h5 mt-4", text: "Publication"}),
+        $("<div>", { class: "iDefault", text: postDescription[0].publication }),
+        $("<input>", { class: "col-lg-12 form-control iEdit d-none", value: postDescription[0].publication, name: "publication"}),
+        $("<div>", { class: "text-right mt-2 iEditFile d-none"}).append(
+          $("<button>", { class: "btn btn-success text-right", text: "Save Changes"}),
         ),
       ),
-      $("<div>", { class: "col-lg-6 d-inline-block align-top"}).append(
-        $("<div>", { class: "mb-2"}).append(
-          $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Created:"}),
-          $("<div>", { class: "col-lg-8 d-inline-block text-left", text: postInfo[0].created_at}),
-        ),
-        $("<div>", { class: "mb-2"}).append(
-          $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Last updated:"}),
-          $("<div>", { class: "col-lg-8 d-inline-block text-left", text: postInfo[0].updated_at}),
-        ),
-        $("<div>", { class: "mb-2"}).append(
-          $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Year start:"}),
-          $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postDescription[0].yearStart}),
-          $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].start, value: postInfo[0].start , name: "start" }),
-        ),
-        $("<div>", { class: "mb-2"}).append(
-          $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Year end:"}),
-          $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postDescription[0].yearEnd}),
-          $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].end, value: postInfo[0].end , name: "end" }),
-        ),
-      ),
-      $("<div>", { class: "modal-header text-large h5 mt-4", text: "Abstract"}),
-      $("<div>", { class: "iDefault", text: postDescription[0].abstract }),
-      $("<textarea>", { class: "col-lg-12 form-control iEdit d-none", text: postDescription[0].abstract, name: "abstract"}),
-      $("<div>", { class: "modal-header text-large h5 mt-4", text: "Keywords"}),
-      $("<div>", { class: "iDefault", text: postDescription[0].keyword }),
-      $("<input>", { class: "col-lg-12 form-control iEdit d-none", value: postDescription[0].keyword, name: "keyword"}),
       $("<div>", { class: "modal-header text-large h5 mt-4", text: "Content"}),
       $("<div>", { class: "border rounded col-lg-12 py-2"}).append(
         $("<div>", { class: "rounded col-lg-12"}).append(
@@ -216,92 +454,22 @@
               }),
             ),
             $("<div>", { class: "addFile col-lg-8 align-middle iEdit d-none text-left"}).append(
-              $("<button>", { class: "btn btn-success", text: "Add File"}),
+              $("<button>", { class: "btn btn-success", text: "Add File", "data-target":"#modalUpload", "data-toggle":"modal"}).on("click", function(){
+                
+              }),
             ),
           ),
         ),
         $("<div>", { class: "rounded col-lg-12 py-2"}).append(
           $("<div>", { class: "col-lg-6 d-inline-block fileList rounded align-top"}).append(
             $("<table>", { class: "table table-hover table-responsive-lg table-file"}).append(
-              $("<tbody>", { class: "tbody-file"}).append(
-                $.map(fileData, function(v){
-                  return $("<tr>", { class: "mb-2 cp"}).append(
-                    $("<td>", { class: "text-left w-10"}).append(
-                      files(v.typeOfFile),
-                    ),
-                    $("<td>", { class: "w-75", text: v.name}).on("click", function(){
-                      $(".selectFile").addClass("d-none");
-                      $(".metadata").children().remove();
-                      $(".metadata").append(
-                        $("<div>", { class: "iDefault"}).append(
-                          $("<div>", { class: "modal-header", text: "Title: " + v.name}),
-                          $("<div>", { class: "modal-header", text: "Description: " + v.description}),
-                          $("<div>", { class: "modal-header", text: "Type of analysis: " + v.typeOfAnalysis}),
-                            $("<div>", { class: "modal-header", text: "Type of data: " + v.typeOfData}),
-                          $("<div>", { class: "modal-header", text: "When: " + v.when}),
-                          $("<div>", { class: "modal-header", text: "Where: " + v.where}),
-                        ),
-                      );
-                    }),
-                    $("<td>", { class: "w-5 iEditFile d-none" }).append(
-                      $("<button>", { class: "btn btn-primary btn-file-edit d-inline-block mr-2"}).append(
-                        $("<i>", { class :"far fa-edit"}),
-                      ).on("click", function(){
-                        $(".metadata").children().remove();
-                        $(".metadata").append(
-                          $("<div>", { class: "col-lg-12"}).append(
-                            $("<div>", { class: "form-group row col-lg-12"}).append(
-                              $("<label>", { class: "col-lg-4 col-form-label", text: "Title:"}),
-                              $("<input>", { class: "form-control col-lg-8", value: v.name}),
-                            ),
-                            $("<div>", { class: "form-group row col-lg-12"}).append(
-                              $("<label>", { class: "col-lg-4 col-form-label", text: "Description:"}),
-                              $("<input>", { class: "form-control col-lg-8", value: v.description}),
-                            ),
-                            $("<div>", { class: "form-group row col-lg-12"}).append(
-                              $("<label>", { class: "col-lg-4 col-form-label", text: "Type of Analysis:"}),
-                              $("<input>", { class: "form-control col-lg-8", value: v.typeOfAnalysis}),
-                            ),
-                            $("<div>", { class: "form-group row col-lg-12"}).append(
-                              $("<label>", { class: "col-lg-4 col-form-label", text: "Type of data:"}),
-                              $("<input>", { class: "form-control col-lg-8", value: v.typeOfData}),
-                            ),
-                            $("<div>", { class: "form-group row col-lg-12"}).append(
-                              $("<label>", { class: "col-lg-4 col-form-label", text: "When:"}),
-                              $("<input>", { class: "form-control col-lg-8", value: v.when}),
-                            ),
-                            $("<div>", { class: "form-group row col-lg-12"}).append(
-                              $("<label>", { class: "col-lg-4 col-form-label", text: "Where:"}),
-                              $("<input>", { class: "form-control col-lg-8", value: v.where}),
-                            ),
-                            $("<div>", { class: "col-lg-12 text-right mb-2"}).append(
-                              $("<button>", { class: "btn btn-success", text: "Save" }),
-                            ),
-                          ),
-                        )
-                      }),
-                    ),
-                    $("<td>", { class: "w-5 iEditFile d-none" }).append(
-                      $("<button>", { class: "btn btn-danger btn-file-edit d-inline-block mr-2"}).append(
-                        $("<i>", { class :"far fa-trash-alt"}),
-                      ),
-                    ),
-                    $("<td>", { class: "w-5"}).append(
-                      $("<button>", { class: "btn btn-success"}).append(
-                        $("<i>", { class: "fas fa-download"}),
-                      ).on("click", function(){
-                        location.href = "getDownloadFileid=" + v.id;
-                      }),
-                    ),
-                  );
-                }),
-              ),
+              createFileList(fileData),
             ),
-          ).css({"overflow":"auto"}),
+          ).css({"overflow":"auto", "max-height":"200px"}),
           $("<div>", { class: "col-lg-6 d-inline-block metadata border border-muted rounded align-top"}).css({"overflow":"auto", "max-height": "200px","height":"193px"}).append(
             $("<div>", { class: "selectFile position-absolute", text: "Select a file to see file type metadata."}).css({"top":"50%","left":"50%","transform":"translate(-50%,-50%)"}),
           ),
-        ).css({"max-height" : "200px"}),
+        ),
       ),
     );
     createTablePP = function(data){
@@ -458,6 +626,41 @@
       });
     };
     createTablePP(author);
+    $("#fileUp").on("change",function(){
+      $("#tof").val($("#fileUp").val().split(".").reverse()[0]);
+    });
+    $("#form1").on("submit", function(event){
+      event.preventDefault();
+      var formData = new FormData(this);
+      var xhr = new XMLHttpRequest();
+      xhr.open('POST','{!! route('post.newUpload') !!}', true);
+      xhr.send(formData);
+      xhr.onload = function(){
+        if (xhr.status === 200) {
+          $(".table-file").children().remove();
+          $(".table-file").append(
+            createFileList($.parseJSON(xhr.response)),
+          );
+          $(".btn-close").click();
+        } else {
+          alert('An error occurred!');
+        }
+      }
+    });
+    delFile = function(){
+      var id = $("#bodyDel").attr("fileid"),
+          link = $("#bodyDel").attr("linkFile");
+      $.getJSON("{!! route("post.delFile",['id'=>$id]) !!}", {idfile: id, link: link}, function(data){
+        if ( data.length != 0 ){
+          $(".alert").remove(); 
+          $(".table-file").children().remove();
+          $(".table-file").append(
+            createFileList(data),
+          );
+          $(".btn-close,.btn-edit").click();
+        }
+      });
+    };
   });
 </script>
 @endsection

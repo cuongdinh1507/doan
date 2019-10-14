@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Input;
 use Illuminate\Http\Request;
 use App\projectPersonnel;
 use App\projectDescription;
 use App\projectInfoModel;
 use App\projectDataDescription;
+use Illuminate\Support\Facades\Validator;
 use DB;
 
 class postController extends Controller
@@ -256,8 +258,9 @@ class postController extends Controller
 	    	->where('user_id', '!=', $currentUser)
 	    	->get();
 
-			return redirect()->route('post.update',['id'=>$id])->with('ProjectMessage', 'Updated Successfully');
-    	}
+			return redirect()->back();
+		}
+		return "k hie";
     }
 
     public function createDD($id){
@@ -275,13 +278,13 @@ class postController extends Controller
 
 	public function newUpload(Request $request){
 		$currentUser = Auth::user()->id;
-		$fileName = $request->file('file')->getClientOriginalName();
+		// $validator = Validator::make($request->all(), [
+		// 		'fileUp' => 'required|file|max:2048',
+		// 	]
+		// );
+		$fileName = $request->file('fileUp')->getClientOriginalName();
 		$newFileName = md5($fileName.time()).$fileName;
-		$path = $request->file('file')->move(storage_path("/app/upload"), $newFileName);
-		// $rules = [
-		// 	'file' => 'required|max:'.config('app.maxFileSize')
-		// ];
-		// $this->validate($request,$rules);
+		$path = $request->file('fileUp')->move(storage_path("/app/upload"), $newFileName);
 		$pdd = new projectDataDescription;
 		$pdd->name = request()->name;
 		$pdd->typeOfData = request()->tod;
@@ -294,7 +297,7 @@ class postController extends Controller
 		$pdd->link = $newFileName;
 		$pdd->typeOfFile = request()->tof;
 		$pdd->save();
-		return back()->with('uploaded','File has been successfully uploaded');
+		return $pdd::all();
 	}
 
 	public function getAllFile($id){
@@ -331,7 +334,8 @@ class postController extends Controller
 			->where('user_id', $currentUser)
 			->delete();
 			unlink(storage_path('app/upload/'.request()->get('link')));
-			return "ok";
+			$pdd = new projectDataDescription;
+			return $pdd::all();
 		}
 	}
 
