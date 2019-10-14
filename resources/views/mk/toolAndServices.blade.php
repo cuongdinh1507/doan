@@ -171,43 +171,4 @@
         </div>
     </section>
 </div>
-
-<section id="share-form" class="m-5">
-    <div class="container text-center">
-        <h3 class="text-center">Share your resources with the Mekong community!</h3>
-        <form action="" method="POST">
-            <div class="form-group">
-                <input type="text" name="" id="" class="form-control" placeholder="Contact name">
-            </div>
-            <div class="form-group">
-                <input type="text" name="" id="" class="form-control" placeholder="Email Address">
-            </div>
-            <div class="form-group">
-                <input type="text" name="" id="" class="form-control"
-                    placeholder="Name of agency or organization / website">
-            </div>
-            <div class="form-group text-left">
-                <select name="" class="form-control">
-                    <option>---Resource type---</option>
-                    <option value="Data or data portal">Data or data portal</option>
-                    <option value="Simulations tool">Simulations tool</option>
-                    <option value="Data analysis tool">Data analysis tool</option>
-                    <option value="Compute resource">Compute resource (e.g., storage, HPC)</option>
-                    <option value="Expertise / Services">Expertise / Services</option>
-                    <option value="Other">Other</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <input type="text" name="" id="" class="form-control"
-                    placeholder="Weblink to resource to be shared">
-            </div>
-            <div class="form-group">
-                <textarea class="form-control" name="" id="" rows="4"
-                    placeholder="Please provide a few sentences describing the resource you would like to shareshare... "></textarea>
-            </div>
-            <input type="submit" class="btn btn-secondary mb-5 text-center" value="Submit">
-        </form>
-    </div>
-
-</section>
 @endsection

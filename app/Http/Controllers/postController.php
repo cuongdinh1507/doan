@@ -19,11 +19,20 @@ class postController extends Controller
 		$pdd = new projectDataDescription;
 		$pp = new projectPersonnel;
 		$checkAuthor = $pp::where('title_id', '=', $id)->where('user_id', '=', $currentUser)->get();
-		$postInfo = $pi::find($id)->get();
+		$postInfo = $pi::where('id','=',$id)->get();
 		$postDescription = $pd::where('title_id', '=', $id)->get();
-		$author = $pp::where('title_id', '=', $id)->get();
+		$author = $pp::join('users', 'user_id','=','users.id')->where('title_id', '=', $id)->get();
 		$fileData = $pdd::where('title_id', '=', $id)->get();
-    	return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData]);
+		$role = DB::table('users')
+	    	->join('project_personel', 'id', '=', 'project_personel.user_id')
+	    	->where('id',$currentUser)
+	    	->where('project_personel.title_id', $id)
+			->where('role','Project leader')
+			->orWhere('role','Owner')
+			->where('id',$currentUser)
+	    	->where('project_personel.title_id', $id)
+	    	->get();
+    	return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role]);
     }
 
     public function getAll($id){

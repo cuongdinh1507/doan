@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-md-12" id="nav-me">
                     <nav class="navbar navbar-expand-sm navbar-light bg-light-me navbar-fixed-top">
-                        <a class="navbar-brand" href="#"><img src="{!! asset('img/mk/MK_Logo.png') !!}" alt="" class="img-logo " /></a>
+                        <a class="navbar-brand" href="{!! route('home') !!}"><img src="{!! asset('img/mk/MK_Logo.png') !!}" alt="" class="img-logo " /></a>
                         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse"
                             data-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
                             aria-label="Toggle navigation">
@@ -39,34 +39,89 @@
                                 <li class="nav-item active">
                                     <a class="nav-link" href="{{route('home')}}">Home <span class="sr-only">(current)</span></a>
                                 </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{route('toolNservices')}}">Tool & Services</a>
+                                @guest
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{route('myresources.create')}}">My resources</a>
+                                    </li>
+                                @else
+                                    <li class="nav-item dropdown">
+                                        <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                            Resources <span class="caret"></span>
+                                        </a>
+                                        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                            <a class="dropdown-item" href="#"
+                                                onclick="event.preventDefault();
+                                                                document.getElementById('btn-create').click();">
+                                                {{ __('Create') }}
+                                            </a>
+                
+                                            <button data-toggle="modal" data-target="#modalCreate" id="btn-create" class="d-none"></button>
+
+                                            <a class="dropdown-item" href="{{route('myresources.create')}}">My resources</a>
+                                        </div>
+                                    </li>
+                                @endguest
+                                <li class="nav-item dropdown">
+                                    <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                        Discover <span class="caret"></span>
+                                    </a>
+                                    <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                        <a class="dropdown-item" href="{{route('discover')}}">Hydroshare</a>
+                                        <a class="dropdown-item" href="{{route('discoverMk')}}">MekongWater</a>
+                                    </div>
                                 </li>
                                 {{-- <li class="nav-item">
-                                    <a class="nav-link" href="{{route('myresources.create')}}">My resources</a>
-                                </li> --}}
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{route('discover')}}">Discovery HydroShare</a>
+                                    <a class="nav-link" href="{{route('discover')}}">Discover HydroShare</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('discoverMk')}}">Discovery MekongWater</a>
-                                </li>
-                                {{-- <li class="nav-item">
-                                    <a class="nav-link" href="{{route('news.create')}}" id="">News</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{route('contact.create')}}" id="">Contact us</a>
+                                    <a class="nav-link" href="{{route('discoverMk')}}">Discover MekongWater</a>
                                 </li> --}}
                                 @guest
                                     <li class="nav-item">
                                         <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                     </li>
-                                    {{-- @if (Route::has('register'))
-                                        <li class="nav-item">
-                                            <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                        </li>
-                                    @endif --}}
                                 @else
+                                    <div class="modal fade" id="modalCreate" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+                                        <div class="modal-dialog" role="document">
+                                            <div class="modal-content">
+                                                <div class="modal-header bge">
+                                                    <div class="">Create a Resource</div>
+                                                </div>
+                                                <div class="modal-body modal-body-profile" titleid="0" userid="0">
+                                                    <form action="{!! route('update.profile') !!}" method="POST" id="formCreate">
+                                                        @csrf
+                                                        <div class="form-group row">
+                                                            <div class="col-md-12">
+                                                                <input id="title" type="text" placeholder="Resource title" class="form-control @error('title') is-invalid @enderror" name="title">
+                                
+                                                                @error('title')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input-group">
+                                                                    <select placeholder="Choose your subject" id="subject" type="subject" name="subject" required class="custom-select form-control @error('lang') is-invalid @enderror">
+                                                                        <option value="" disabled selected>Select your subject</option>
+                                                                    </select>
+                                                                </div>
+                                                                @error('subject')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                                @enderror
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn btn-primary" form="formCreate" type="submit">Create</button>
+                                                    <button type="button" class="btn btn-light" data-dismiss="modal">Cancel</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <div class="modal fade" id="modalProfile" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
                                         <div class="modal-dialog modal-dialog-centered" role="document">
                                             <div class="modal-content">
@@ -218,6 +273,9 @@
                                             };
                                         });
                                     </script>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="{{route('toolNservices')}}">Tool & Services</a>
+                                    </li>
                                     <li class="nav-item dropdown">
                                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                             {{ Auth::user()->name }} <span class="caret"></span>
