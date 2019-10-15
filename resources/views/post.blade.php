@@ -1,9 +1,26 @@
 @extends("index")
 @section('content')
+<div class="modal fade" id="modalDelUser" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" style="z-index: 2000000 !important">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header bge">
+        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure ?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modalDelUser" titleid="0" userid="0"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" onclick="deleteUser()" data-dismiss="modal">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="modalDelPost" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header bge">
         <h5 class="modal-title" id="exampleModalLongTitle">Are you sure ?</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
@@ -215,7 +232,7 @@
             </div>
           </div>
           <div class="modal-footer">
-              <button type="button" class="btn btn-light" data-dismiss="modal">Close</button>
+              <button type="button" class="btn btn-light modalPPClose" data-dismiss="modal">Close</button>
           </div>
       </div>
   </div>
@@ -246,7 +263,10 @@
           $("<div>", { class: "modal-header", text: "Where: " + data.where}),
         ),
       );
-    }
+    };
+    $("#modalPP").on("hide.bs.modal", function(){
+      location.reload();
+    });
     createFileList = function(data){
       return $("<tbody>", { class: "tbody-file"}).append(
         $.map(data, function(v){
@@ -354,7 +374,7 @@
       });
       fileIcon = fileIcon == null ? $("<i>", {class: "far fa-file fa-2x" }) : fileIcon;
       return fileIcon;
-    }
+    };
     $(".post-body").append(
       $("<form>", { method:"POST", action: "{!! route('post.updateProjectInfo') !!}"}).append(
         $("<input>", { class: "d-none", name: "_token", value:" {!! csrf_token() !!}"}),
@@ -386,44 +406,44 @@
         $("<div>", { class: "col-lg-6 d-inline-block align-top"}).append(
           $("<div>", { class: "mb-2"}).append(
             $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Authors:"}),
-            $("<div>", { class: "col-lg-8 d-inline-block text-left"}).append(
-                $.map(author, function(v,i){
-                  return $("<a>", { text: v.name + (i+1 != author.length ? ", " : "") , href: "#", numberId: v.user_id }).on("click", function(event){
-                    event.preventDefault();
-                    $(".modal-body-author").children().remove();
-                    $(".modal-body-author").append(
-                      $("<div>", { class: "col-md-12 mb-2"}).append(
-                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Name:"}),
-                          $("<div>", { class: "col-md-8 d-inline-block", text: v.name}),
-                      ),
-                      $("<div>", { class: "col-md-12 mb-2"}).append(
-                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Email:"}),
-                          $("<div>", { class: "col-md-8 d-inline-block", text: v.email}),
-                      ),
-                      $("<div>", { class: "col-md-12 mb-2"}).append(
-                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Address:"}),
-                          $("<div>", { class: "col-md-8 d-inline-block", text: v.address}),
-                      ),
-                      $("<div>", { class: "col-md-12 mb-2"}).append(
-                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Country:"}),
-                          $("<div>", { class: "col-md-8 d-inline-block", text: v.country}),
-                      ),
-                      $("<div>", { class: "col-md-12 mb-2"}).append(
-                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Phone:"}),
-                          $("<div>", { class: "col-md-8 d-inline-block", text: v.phone}),
-                      ),
-                      $("<div>", { class: "col-md-12 mb-2"}).append(
-                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Institution:"}),
-                          $("<div>", { class: "col-md-8 d-inline-block", text: v.institution}),
-                      ),
-                      $("<div>", { class: "col-md-12 mb-2"}).append(
-                          $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Position:"}),
-                          $("<div>", { class: "col-md-8 d-inline-block", text: v.position}),
-                      ),
-                    );
-                    $("#btn-author").click();
-                  });
-                }),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left author"}).append(
+              $.map(author, function(v,i){
+                return $("<a>", { text: v.name + (i+1 != author.length ? ", " : "") , href: "#", numberId: v.user_id }).on("click", function(event){
+                  event.preventDefault();
+                  $(".modal-body-author").children().remove();
+                  $(".modal-body-author").append(
+                    $("<div>", { class: "col-md-12 mb-2"}).append(
+                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Name:"}),
+                        $("<div>", { class: "col-md-8 d-inline-block", text: v.name}),
+                    ),
+                    $("<div>", { class: "col-md-12 mb-2"}).append(
+                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Email:"}),
+                        $("<div>", { class: "col-md-8 d-inline-block", text: v.email}),
+                    ),
+                    $("<div>", { class: "col-md-12 mb-2"}).append(
+                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Address:"}),
+                        $("<div>", { class: "col-md-8 d-inline-block", text: v.address}),
+                    ),
+                    $("<div>", { class: "col-md-12 mb-2"}).append(
+                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Country:"}),
+                        $("<div>", { class: "col-md-8 d-inline-block", text: v.country}),
+                    ),
+                    $("<div>", { class: "col-md-12 mb-2"}).append(
+                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Phone:"}),
+                        $("<div>", { class: "col-md-8 d-inline-block", text: v.phone}),
+                    ),
+                    $("<div>", { class: "col-md-12 mb-2"}).append(
+                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Institution:"}),
+                        $("<div>", { class: "col-md-8 d-inline-block", text: v.institution}),
+                    ),
+                    $("<div>", { class: "col-md-12 mb-2"}).append(
+                        $("<label>", { class: "col-md-4 col-form-label text-right d-inline-block", text:"Position:"}),
+                        $("<div>", { class: "col-md-8 d-inline-block", text: v.position}),
+                    ),
+                  );
+                  $("#btn-author").click();
+                });
+              }),
             ),
           ),
           $("<div>", { class: "mb-2"}).append(
@@ -580,10 +600,10 @@
                   $(this).addClass('d-none').removeClass('d-inline-block');
                   $(".idelete"+v.id).addClass('d-none').removeClass('d-inline-block');
                 }),
-                $("<div>", { class:"btn btn-danger d-inline-block cp pt-1 pb-1 pr-3 pl-3 align-middle idelete"+v.id, "data-toggle": "modal", "data-target": "#modal"}).append(
+                $("<div>", { class:"btn btn-danger d-inline-block cp pt-1 pb-1 pr-3 pl-3 align-middle idelete"+v.id, "data-toggle": "modal", "data-target": "#modalDelUser"}).append(
                     $("<i>", { class: "far fa-trash-alt" }),
                 ).on("click",function(){
-                  $(".modal-body").text("Delete " + v.email + " from this project ?").attr("titleid", v.title_id).attr("userid", v.user_id);
+                  $(".modalDelUser").text("Delete " + v.email + " from this project ?").attr("titleid", v.title_id).attr("userid", v.user_id);
                 }),
                 $("<div>", { class:"btn btn-danger cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle d-none iclose"+v.id}).append(
                     $("<i>", { class: "fas fa-times" }),
@@ -661,8 +681,8 @@
       }
     };
     deleteUser = function(){
-      var titleid = $(".modal-body").attr("titleid"),
-          userid = $(".modal-body").attr("userid");
+      var titleid = $(".modalDelUser").attr("titleid"),
+          userid = $(".modalDelUser").attr("userid");
       $.get("{!! route('post.DelUser',['id'=>$id]) !!}", { userid: userid }, function(data){
         $("#tbody-pp").children().fadeOut().remove();
         createTablePP(data);

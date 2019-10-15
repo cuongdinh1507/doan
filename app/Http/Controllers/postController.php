@@ -302,7 +302,7 @@ class postController extends Controller
 		$pdd->link = $newFileName;
 		$pdd->typeOfFile = request()->tof;
 		$pdd->save();
-		return $pdd::all();
+		return $pdd::where("title_id",'=',request()->titleid)->get();
 	}
 
 	public function getAllFile($id){
@@ -366,7 +366,7 @@ class postController extends Controller
 				'when' => request()->get("whenEdit"),
 				'where' => request()->get("whereEdit"),
 			]);
-			return $pdd::all();
+			return $pdd::where('title_id','=',$titleid)->get();
 		}
 		else{
 			$pdd::where('id', '=', request()->get("fileid"))
@@ -379,7 +379,7 @@ class postController extends Controller
 				'when' => request()->get("whenEdit"),
 				'where' => request()->get("whereEdit"),
 			]);
-			return $pdd::all();
+			return $pdd::where('title_id','=',$titleid)->get();
 		}
 	}
 
