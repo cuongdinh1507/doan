@@ -60,16 +60,16 @@
                     $("<th>", { class:"align-middle", text: v.subject }),
                     $("<th>", { class:"align-middle", text: v.language }),
                     $("<th>").append(
-                        // $("<a>", { href : "postUpdate/postid=" + v.id}).append(
-                        //     $("<button>", { class:"btn btn-success d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
-                        //         $("<i>", { class: "far fa-edit" }),
-                        //     ),
-                        // ),
-                        $("<a>", { href: "post/uploadpostid="+ v.id }).append(
-                            $("<button>", { class:"btn btn-primary d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
-                                $("<i>", { class: "fas fa-upload" }),
+                        $("<a>", { href : "postUpdate/postid=" + v.id}).append(
+                            $("<button>", { class:"btn btn-success d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
+                                $("<i>", { class: "far fa-edit" }),
                             ),
                         ),
+                        // $("<a>", { href: "post/uploadpostid="+ v.id }).append(
+                        //     $("<button>", { class:"btn btn-primary d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
+                        //         $("<i>", { class: "fas fa-upload" }),
+                        //     ),
+                        // ),
                         $("<button>", { class:"btn btn-danger cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle " + ((v.role == "Owner") ? "d-inline-block" : "d-none"), "data-toggle": "modal", "data-target": "#modal"}).append(
                             $("<i>", { class: "far fa-trash-alt" }),
                         ).on("click", function(){

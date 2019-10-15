@@ -51,7 +51,7 @@ Route::middleware('checkAdmin')->group(function(){
 });
 Route::middleware('auth')->group(function(){
 	Route::get('post/delFilepostid={id}', 'postController@delFile')->name('post.delFile');
-	Route::post('post/updateFilepostid', 'postController@updateFile')->name('post.updateFile');
+	Route::get('post/updateFilepostid', 'postController@updateFile')->name('post.updateFile');
 	Route::get('post/delPost', 'postController@delPost')->name('post.delPost');
 	Route::get('post/uploadpostid={id}', 'postController@createDD')->name('post.createdd');
 	Route::post('post/newUploadpostid', 'postController@newUpload')->name('post.newUpload');

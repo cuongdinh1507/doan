@@ -1,5 +1,22 @@
 @extends("index")
 @section('content')
+<div class="modal fade" id="modalDelPost" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Are you sure ?</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body modal-body-delPost" titleid="0"></div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-success" onclick="delPost()">Yes</button>
+        <button type="button" class="btn btn-danger" data-dismiss="modal">No</button>
+      </div>
+    </div>
+  </div>
+</div>
 <div class="modal fade" id="delFile" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
   <div class="modal-dialog modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -213,9 +230,23 @@
         postDescription = {!! $postDescription !!},
         id = {!! $id !!},
         author = {!! $author !!},
+        check = null,
+        dataPPall = {!! $dataPP !!},
         role = {!! $role !!};
-    var check = checkAuthor.length == 0 ? "d-none" : "d-inline-block";
-    console.log(author);
+    var checkCurrentUser = checkAuthor.length == 0 ? "d-none" : "d-inline-block";
+    createMetadataList = (data) => {
+      $(".metadata").children().remove();
+      $(".metadata").append(
+        $("<div>", { class: "iDefault"}).append(
+          $("<div>", { class: "modal-header", text: "Title: " + data.name}),
+          $("<div>", { class: "modal-header", text: "Description: " + data.description}),
+          $("<div>", { class: "modal-header", text: "Type of analysis: " + data.typeOfAnalysis}),
+          $("<div>", { class: "modal-header", text: "Type of data: " + data.typeOfData}),
+          $("<div>", { class: "modal-header", text: "When: " + data.when}),
+          $("<div>", { class: "modal-header", text: "Where: " + data.where}),
+        ),
+      );
+    }
     createFileList = function(data){
       return $("<tbody>", { class: "tbody-file"}).append(
         $.map(data, function(v){
@@ -225,17 +256,7 @@
             ),
             $("<td>", { class: "w-75", text: v.name}).on("click", function(){
               $(".selectFile").addClass("d-none");
-              $(".metadata").children().remove();
-              $(".metadata").append(
-                $("<div>", { class: "iDefault"}).append(
-                  $("<div>", { class: "modal-header", text: "Title: " + v.name}),
-                  $("<div>", { class: "modal-header", text: "Description: " + v.description}),
-                  $("<div>", { class: "modal-header", text: "Type of analysis: " + v.typeOfAnalysis}),
-                    $("<div>", { class: "modal-header", text: "Type of data: " + v.typeOfData}),
-                  $("<div>", { class: "modal-header", text: "When: " + v.when}),
-                  $("<div>", { class: "modal-header", text: "Where: " + v.where}),
-                ),
-              );
+              createMetadataList(v);
             }),
             $("<td>", { class: "w-5 iEditFile d-none" }).append(
               $("<button>", { class: "btn btn-primary btn-file-edit d-inline-block mr-2"}).append(
@@ -246,30 +267,51 @@
                   $("<div>", { class: "col-lg-12"}).append(
                     $("<div>", { class: "form-group row col-lg-12"}).append(
                       $("<label>", { class: "col-lg-4 col-form-label", text: "Title:"}),
-                      $("<input>", { class: "form-control col-lg-8", value: v.name}),
+                      $("<input>", { class: "form-control col-lg-8", name: "nameEdit", value: v.name}),
                     ),
                     $("<div>", { class: "form-group row col-lg-12"}).append(
                       $("<label>", { class: "col-lg-4 col-form-label", text: "Description:"}),
-                      $("<input>", { class: "form-control col-lg-8", value: v.description}),
+                      $("<textarea>", { class: "form-control col-lg-8", name: "descriptionEdit", value: v.description, text: v.description}),
                     ),
                     $("<div>", { class: "form-group row col-lg-12"}).append(
                       $("<label>", { class: "col-lg-4 col-form-label", text: "Type of Analysis:"}),
-                      $("<input>", { class: "form-control col-lg-8", value: v.typeOfAnalysis}),
+                      $("<input>", { class: "form-control col-lg-8", name: "toaEdit", value: v.typeOfAnalysis}),
                     ),
                     $("<div>", { class: "form-group row col-lg-12"}).append(
                       $("<label>", { class: "col-lg-4 col-form-label", text: "Type of data:"}),
-                      $("<input>", { class: "form-control col-lg-8", value: v.typeOfData}),
+                      $("<input>", { class: "form-control col-lg-8", name: "todEdit", value: v.typeOfData}),
                     ),
                     $("<div>", { class: "form-group row col-lg-12"}).append(
                       $("<label>", { class: "col-lg-4 col-form-label", text: "When:"}),
-                      $("<input>", { class: "form-control col-lg-8", value: v.when}),
+                      $("<input>", { class: "form-control col-lg-8", name: "whenEdit", value: v.when}),
                     ),
                     $("<div>", { class: "form-group row col-lg-12"}).append(
                       $("<label>", { class: "col-lg-4 col-form-label", text: "Where:"}),
-                      $("<input>", { class: "form-control col-lg-8", value: v.where}),
+                      $("<input>", { class: "form-control col-lg-8", name: "whereEdit", value: v.where}),
                     ),
+                    $("<input>", { class: "d-none", name: "titleid", value: {!! $id !!} }),
+                    $("<input>", { class: "d-none", name: "fileid", value: v.id }),
                     $("<div>", { class: "col-lg-12 text-right mb-2"}).append(
-                      $("<button>", { class: "btn btn-success", text: "Save" }),
+                      $("<button>", { class: "btn btn-success", text: "Save" }).on("click", function(){
+                        var nameEdit = $("input[name='nameEdit']").val(),
+                            descriptionEdit = $("textarea[name='descriptionEdit']").val(),
+                            toaEdit = $("input[name='toaEdit']").val(),
+                            todEdit = $("input[name='todEdit']").val(),
+                            whenEdit = $("input[name='whenEdit']").val(),
+                            whereEdit = $("input[name='whereEdit']").val(),
+                            titleid = $("input[name='titleid']").val(),
+                            fileid = $("input[name='fileid']").val();
+                        $.getJSON("{!! route('post.updateFile') !!}", { nameEdit : nameEdit, descriptionEdit: descriptionEdit, toaEdit: toaEdit, todEdit: todEdit, whenEdit: whenEdit, whereEdit: whereEdit, titleid: titleid, fileid: fileid}, function(data){
+                          $(".table-file").children().remove();
+                          $(".table-file").append(
+                            createFileList(data),
+                          );
+                          newData = $.grep(data, function(n,i){
+                            return n.id == fileid;
+                          });
+                          createMetadataList(newData[0]);
+                        });
+                      }),
                     ),
                   ),
                 )
@@ -321,8 +363,8 @@
         $("<h3>", { class: "modal-header iEdit d-none w-100"}).append(
           $("<input>", { class: "form-control", value: postInfo[0].title, text: postInfo[0].title, name: "title" }).css({"border":"none"}),
         ),
-        $("<div>", { class: "col-lg-6 mb-3 " + check}),
-        $("<div>", { class: "col-lg-6 mb-3 " + check}).append(
+        $("<div>", { class: "col-lg-6 mb-3 " + checkCurrentUser}),
+        $("<div>", { class: "col-lg-6 mb-3 " + checkCurrentUser}).append(
           $("<div>", { class: "col-lg-8 mx-auto" }).append(
             $("<button>", { class: "d-inline-block btn mr-2 btn-success", "data-target": "#modalPP", "data-toggle": "modal", type:"button"}).append(
               $("<i>", { class: "fas fa-user-plus" }),
@@ -334,9 +376,11 @@
               $(".iDefault").removeClass("d-inline-block").addClass("d-none");
               $(".iEditFile").removeClass("d-none");
             }),
-            $("<button>", { class: "d-inline-block btn mr-2 btn-danger", type:"button"}).append(
+            $("<button>", { class: "d-inline-block btn mr-2 btn-danger", type:"button", "data-toggle": "modal", "data-target": "#modalDelPost"}).append(
               $("<i>", { class: "fas fa-trash" }),
-            ),
+            ).on("click", function(){
+                $(".modal-body-delPost").text("Delete " + postInfo[0].title + " ?").attr("titleid", postInfo[0].id);
+            }),
           ),
         ),
         $("<div>", { class: "col-lg-6 d-inline-block align-top"}).append(
@@ -476,14 +520,12 @@
       var dataPPemail = [],
           dataPP = [];
       $.get("{!! route('post.getAll',['id'=>$id]) !!}", function(all){
-        console.log(all)
         $.map(all,function(v){
            dataPPemail.push({"value": v.email ,"userid":v.id});
            dataPP.push(v);
         });
       });
       if (data && data.length){
-        console.log(data,{!!$id!!});
         $("#tbody-pp").append(
           $.map(data, function(v,i){
             return $("<tr>").append(
@@ -491,6 +533,7 @@
                 $("<input>", { id: "input-name", class: "w-100", disabled: "disabled", value: v.email }).css({"border":"0", "outline":"none"}).autocomplete({
                   source: dataPPemail
                 }).on("autocompleteclose", function(){
+                  console.log("vaof");
                   var email = $(this).val();
                   $.grep(dataPPemail, function(n,i){
                       if (n.value == email)
@@ -625,7 +668,7 @@
         createTablePP(data);
       });
     };
-    createTablePP(author);
+    createTablePP(dataPPall);
     $("#fileUp").on("change",function(){
       $("#tof").val($("#fileUp").val().split(".").reverse()[0]);
     });
@@ -659,6 +702,13 @@
           );
           $(".btn-close,.btn-edit").click();
         }
+      });
+    };
+    delPost = function(){
+      var id = $('.modal-body-delPost').attr('titleid');
+      $.get('{!! route('post.delPost') !!}', { id: id}, function(data){
+        if ( data == "ok")
+          location.href = "{!! route('myresources.create') !!}";
       });
     };
   });

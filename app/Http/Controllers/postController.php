@@ -33,8 +33,13 @@ class postController extends Controller
 			->orWhere('role','Owner')
 			->where('id',$currentUser)
 	    	->where('project_personel.title_id', $id)
-	    	->get();
-    	return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role]);
+			->get();
+		$dataPP = DB::table('project_personel')
+			->join("users", "user_id", "=", "users.id")
+			->where('user_id', '!=', $currentUser)
+			->where('title_id', $id)
+			->get();
+    	return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role, 'dataPP' => $dataPP]);
     }
 
     public function getAll($id){
@@ -339,10 +344,10 @@ class postController extends Controller
 		}
 	}
 
-	public function updateFile(Request $request){
+	public function updateFile(){
 		$pdd = new projectDataDescription;
 		$pp = new projectPersonnel;
-		$titleid = request()->titleid;
+		$titleid = request()->get('titleid');
 		$currentUser = Auth::user()->id;
 		$check = $pp::where('title_id', '=', $titleid)
 		->where('user_id','=', $currentUser)
@@ -351,66 +356,30 @@ class postController extends Controller
 		->where('title_id', '=', $titleid)
 		->where('user_id','=', $currentUser)
 		->get();
-		if ( $request->hasFile('fileEdit')){
-			$fileName = $request->file('fileEdit')->getClientOriginalName();
-			$newFileName = md5($fileName.time()).$fileName;
-			$path = $request->file('fileEdit')->move(storage_path("/app/upload"), $newFileName);
-			if ( count($check) != 0 ){
-				$pdd::where('id', request()->fileid)
-				->update([
-					'name' => request()->nameEdit,
-					'typeOfData' => request()->todEdit,
-					'description' => request()->descriptionEdit,
-					'typeOfAnalysis' => request()->toaEdit,
-					'when' => request()->whenEdit,
-					'where' => request()->whereEdit,
-					'link' => $newFileName,
-					'typeOfFile' => request()->tofEdit,
-				]);
-				return back()->with('updated file','File has been successfully updated');
-			}
-			else{
-				$pdd::where('id', request()->fileid)
-				->where('user_id','=',$currentUser)
-				->update([
-					'name' => request()->nameEdit,
-					'typeOfData' => request()->todEdit,
-					'description' => request()->descriptionEdit,
-					'typeOfAnalysis' => request()->toaEdit,
-					'when' => request()->whenEdit,
-					'where' => request()->whereEdit,
-					'link' => $newFileName,
-					'typeOfFile' => request()->tofEdit,
-				]);
-				return back()->with('updated file','File has been successfully updated');
-			}
+		if ( count($check) != 0 ){
+			$pdd::where('id', '=', request()->get("fileid"))
+			->update([
+				'name' => request()->get("nameEdit"),
+				'typeOfData' => request()->get("todEdit"),
+				'description' => request()->get("descriptionEdit"),
+				'typeOfAnalysis' => request()->get("toaEdit"),
+				'when' => request()->get("whenEdit"),
+				'where' => request()->get("whereEdit"),
+			]);
+			return $pdd::all();
 		}
-		else {
-			if ( count($check) != 0 ){
-				$pdd::where('id', '=', request()->fileid)
-				->update([
-					'name' => request()->nameEdit,
-					'typeOfData' => request()->todEdit,
-					'description' => request()->descriptionEdit,
-					'typeOfAnalysis' => request()->toaEdit,
-					'when' => request()->whenEdit,
-					'where' => request()->whereEdit,
-				]);
-				return back()->with('updated file','File has been successfully updated');
-			}
-			else{
-				$pdd::where('id', '=', request()->fileid)
-				->where('user_id','=',$currentUser)
-				->update([
-					'name' => request()->nameEdit,
-					'typeOfData' => request()->todEdit,
-					'description' => request()->descriptionEdit,
-					'typeOfAnalysis' => request()->toaEdit,
-					'when' => request()->whenEdit,
-					'where' => request()->whereEdit,
-				]);
-				return back()->with('updated file','File has been successfully updated');
-			}
+		else{
+			$pdd::where('id', '=', request()->get("fileid"))
+			->where('user_id','=',$currentUser)
+			->update([
+				'name' => request()->get("nameEdit"),
+				'typeOfData' => request()->get("todEdit"),
+				'description' => request()->get("descriptionEdit"),
+				'typeOfAnalysis' => request()->get("toaEdit"),
+				'when' => request()->get("whenEdit"),
+				'where' => request()->get("whereEdit"),
+			]);
+			return $pdd::all();
 		}
 	}
 

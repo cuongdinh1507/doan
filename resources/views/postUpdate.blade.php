@@ -281,7 +281,6 @@
         });
       });
       if (data && data.length){
-        console.log(data,{!!$id!!});
         $("#tbody-pp").append(
           $.map(data, function(v,i){
             return $("<tr>").append(
