@@ -9,7 +9,11 @@ use App\projectDescription;
 use App\projectDataDescription;
 use App\projectPersonnel;
 use App\User;
+use App\event;
+use App\role;
+use App\subject;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 use DB;
 
 class adminController extends Controller
@@ -36,6 +40,18 @@ class adminController extends Controller
 
     public function createProjectPersonnel(){
         return view('admin.projectPersonnel');
+    }
+
+    public function createEvents(){
+        return view('admin.events');
+    }
+
+    public function createSubjects(){
+        return view('admin.subjects');
+    }
+
+    public function createRoles(){
+        return view('admin.roles');
     }
 
     public function totalPostToday(){
@@ -134,5 +150,81 @@ class adminController extends Controller
             else
                 return back();
         }
+    }
+
+    public function saveSubject(Request $request){
+		$fileName = $request->file('file')->getClientOriginalName();
+		$newFileName = md5($fileName.time()).$fileName;
+		$path = $request->file('file')->move(storage_path("/app/public"), $newFileName);
+		$subject = new subject;
+		$subject->nameSubject = request()->name;
+        $subject->descriptionSubject = request()->description;
+        $subject->imageSubject = asset("storage/".$newFileName);
+        $subject->save();
+        return back();
+    }
+
+    public function getSubject(){
+        $subject = new subject;
+        return $subject::all();
+    }
+
+    public function delSubject(){
+        $id = request()->get('id');
+        $subject = new subject;
+        $subject::where('id','=',$id)->delete();
+        return "ok";
+    }
+
+    public function updateSubject(Request $request){
+        $subject = new subject;
+        $id = request()->id;
+        if ($request->hasFile('fileEdit')){
+            $fileName = $request->file('fileEdit')->getClientOriginalName();
+            $newFileName = md5($fileName.time()).$fileName;
+            $path = $request->file('fileEdit')->move(storage_path("/app/public"), $newFileName);
+            $subject::where('id','=',$id)->update([
+                "nameSubject" => request()->name,
+                "descriptionSubject" => request()->description,
+                "imageSubject" => asset("storage/".$newFileName),
+            ]);
+        }
+        else {
+            $subject::where('id','=',$id)->update([
+                "nameSubject" => request()->name,
+                "descriptionSubject" => request()->description,
+            ]);
+        }
+        return back();
+    }
+
+    public function saveRole(Request $request){
+        $role = new role;
+		$role->nameRole = request()->name;
+        $role->descriptionRole = request()->description;
+        $role->save();
+        return back();
+    }
+
+    public function getRole(Request $request){
+        $role = new role;
+        return role::all();
+    }
+
+    public function updateRole(Request $request){
+        $role = new role;
+        $id = request()->id;
+        $role::where('id','=',$id)->update([
+            "nameRole" => request()->name,
+            "descriptionRole" => request()->description,
+        ]);
+        return back();
+    }
+
+    public function delRole(){
+        $id = request()->get('id');
+        $role = new role;
+        $role::where('id','=',$id)->delete();
+        return "ok";
     }
 }

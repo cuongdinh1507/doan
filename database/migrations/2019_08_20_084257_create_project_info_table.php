@@ -17,10 +17,10 @@ class CreateProjectInfoTable extends Migration
             $table->smallInteger('id')->unsigned()->autoIncrement();
             $table->smallInteger('user_id')->unsigned();
             $table->string('title',60);
-            $table->string('role',20);
-            $table->string('subject',30);
-            $table->string('species',30);
-            $table->string('language',30);
+            $table->smallInteger('role_id')->unsigned();
+            $table->smallInteger('subject_id')->unsigned();
+            $table->string('species',30)->nullable();
+            $table->string('language',30)->nullable();
             $table->string('availability',10)->default('Private');
             $table->timestamps();
         });

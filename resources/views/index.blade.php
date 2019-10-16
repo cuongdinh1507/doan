@@ -88,7 +88,7 @@
                                                     <div class="">Create a Resource</div>
                                                 </div>
                                                 <div class="modal-body modal-body-profile" titleid="0" userid="0">
-                                                    <form action="{!! route('update.profile') !!}" method="POST" id="formCreate">
+                                                    <form action="{!! route('addNew.add') !!}" method="POST" id="formCreate">
                                                         @csrf
                                                         <div class="form-group row">
                                                             <div class="col-md-12">
@@ -100,13 +100,25 @@
                                                                     </span>
                                                                 @enderror
                                                             </div>
-                                                            <div class="col-md-12">
+                                                            <div class="col-md-12 mb-3">
                                                                 <div class="input-group">
-                                                                    <select placeholder="Choose your subject" id="subject" type="subject" name="subject" required class="custom-select form-control @error('lang') is-invalid @enderror">
+                                                                    <select placeholder="Choose your subject" id="subject" type="subject" name="subject" required class="custom-select form-control">
                                                                         <option value="" disabled selected>Select your subject</option>
                                                                     </select>
                                                                 </div>
                                                                 @error('subject')
+                                                                    <span class="invalid-feedback" role="alert">
+                                                                        <strong>{{ $message }}</strong>
+                                                                    </span>
+                                                                @enderror
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="input-group">
+                                                                    <select placeholder="Choose your role" id="role" type="role" name="role" required class="custom-select form-control">
+                                                                        <option value="" disabled selected>Select your role</option>
+                                                                    </select>
+                                                                </div>
+                                                                @error('role')
                                                                     <span class="invalid-feedback" role="alert">
                                                                         <strong>{{ $message }}</strong>
                                                                     </span>
@@ -417,8 +429,26 @@
             <small class="copyright">Designed with <i class="fas fa-heart" style="color: #fb866a;"></i> by <a
                     class="theme-link" href="http://data.mekongwater.org" target="_blank">data.mekongwater.org</a> for
                 developers</small>
-        </div>
+            </div>
     </footer>
 </body>
+<script>
+    $(function(){
+        $.get("{!! route('role.get') !!}", (data)=>{
+            $("#role").append(
+                $.map(data,(v)=>{
+                    return $("<option>", { text: v.nameRole, value: v.id});
+                }),
+            );
+        });
+        $.get("{!! route('subject.get') !!}", (data)=>{
+            $("#subject").append(
+                $.map(data,(v)=>{
+                    return $("<option>", { text: v.nameSubject, value: v.id});
+                }),
+            );
+        });
+    });
+</script>
 <script src="{{asset('js/C.js')}}"></script>
 </html>

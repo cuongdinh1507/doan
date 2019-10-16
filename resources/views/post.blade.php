@@ -1,5 +1,15 @@
 @extends("index")
 @section('content')
+@if (@session()->has(updateFail))
+    <div class="alert alert-danger text-center col-md-8 mx-auto" role="alert">
+      <strong>Failed!</strong> {{session()->get("updateFail")}}
+    </div>
+@endif
+@if (@session()->has(updateSucccess))
+    <div class="alert alert-success text-center col-md-8 mx-auto" role="alert">
+      <strong>Success</strong> {{session()->get("updateSucccess")}}
+    </div>
+@endif
 <div class="modal fade" id="modalDelUser" tabindex="-1" role="dialog" aria-labelledby="modal" aria-hidden="true" style="z-index: 2000000 !important">
   <div class="modal-dialog" role="document">
     <div class="modal-content">
@@ -241,6 +251,7 @@
 <div class="col-lg-10 mx-auto post-body"></div>
 <script>
   $(function(){
+    console.log("{!! $_SERVER["DOCUMENT_ROOT"].'/..' !!}");
     var checkAuthor = {!! $checkAuthor !!},
         fileData = {!! $fileData !!},
         postInfo = {!! $postInfo !!},
@@ -251,6 +262,7 @@
         dataPPall = {!! $dataPP !!},
         role = {!! $role !!};
     var checkCurrentUser = checkAuthor.length == 0 ? "d-none" : "d-inline-block";
+    console.log(postInfo);
     createMetadataList = (data) => {
       $(".metadata").children().remove();
       $(".metadata").append(
@@ -330,6 +342,7 @@
                             return n.id == fileid;
                           });
                           createMetadataList(newData[0]);
+                          $(".iEditFile").removeClass("d-none");
                         });
                       }),
                     ),
@@ -395,6 +408,24 @@
               $(".iEdit").removeClass("d-none").addClass("d-inline-block");
               $(".iDefault").removeClass("d-inline-block").addClass("d-none");
               $(".iEditFile").removeClass("d-none");
+              $.getJSON("{!! route('subject.get') !!}", (data)=>{
+                console.log(data);
+                $("#subjectPost").append(
+                  $.map(data,(v)=>{
+                    if (postInfo[0].subject_id != v.id)
+                      return $("<option>", { text: v.nameSubject, value: v.id, id: v.nameSubject });
+                  }),
+                );
+              });
+              $.getJSON("https://gist.githubusercontent.com/piraveen/fafd0d984b2236e809d03a0e306c8a4d/raw/eb8020ec3e50e40d1dbd7005eb6ae68fc24537bf/languages.json", function(data){
+                $("#lang").append(
+                  $.map(data,function(v){
+                    if (postInfo[0].language != v.name )
+                      return $("<option>", { value: v.name, text: v.name, id: v.name});
+                  }),
+                );
+                $("#"+postInfo[0].language).attr("selected","true");
+              });
             }),
             $("<button>", { class: "d-inline-block btn mr-2 btn-danger", type:"button", "data-toggle": "modal", "data-target": "#modalDelPost"}).append(
               $("<i>", { class: "fas fa-trash" }),
@@ -448,9 +479,9 @@
           ),
           $("<div>", { class: "mb-2"}).append(
             $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Subject:"}),
-            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].subject}),
-            $("<select>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].subject, value: postInfo[0].subject , name: "subject" }).append(
-              $("<option>", { value: postInfo[0].subject, text: postInfo[0].subject, selected: true  }),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].nameSubject}),
+            $("<select>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].nameSubject, value: postInfo[0].subject_id , name: "subject", id:"subjectPost"}).append(
+              $("<option>", { value: postInfo[0].subject_id, text: postInfo[0].nameSubject, selected: true  }),
             ),
           ),
           $("<div>", { class: "mb-2"}).append(
@@ -461,12 +492,17 @@
           $("<div>", { class: "mb-2"}).append(
             $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Language:"}),
             $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].language }),
-            $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].language, value: postInfo[0].language , name: "lang" }),
+            $("<select>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].language, value: postInfo[0].language , name: "lang", id:"lang"  }).append(
+              $("<option>", { value: postInfo[0].language, text: postInfo[0].language, selected: true  }),
+            ),
           ),
           $("<div>", { class: "mb-2"}).append(
             $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Availability:"}),
             $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postInfo[0].availability}),
-            $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].availability, value: postInfo[0].availability , name: "availability" }),
+            $("<select>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postInfo[0].availability, value: postInfo[0].availability , name: "availability" }).append(
+              $("<option>", { value: "Private" , text: "Private", selected: ("Private" == postInfo[0].availability ? true : false) }),
+              $("<option>", { value: "Public" , text: "Public", selected: ("Public" == postInfo[0].availability ? true : false) }),
+            ),
           ),
         ),
         $("<div>", { class: "col-lg-6 d-inline-block align-top"}).append(
@@ -537,6 +573,7 @@
       ),
     );
     createTablePP = function(data){
+      console.log(data,2);
       var dataPPemail = [],
           dataPP = [];
       $.get("{!! route('post.getAll',['id'=>$id]) !!}", function(all){
@@ -546,6 +583,7 @@
         });
       });
       if (data && data.length){
+        console.log(data,1);
         $("#tbody-pp").append(
           $.map(data, function(v,i){
             return $("<tr>").append(
@@ -572,9 +610,7 @@
               $("<td>", { scope: "row" }).append(
                 $("<div>", { class:"input-group", placeholder: "Choose role" }).append(
                   $("<select>", { type: "role", name: "role", disabled: "disabled" , class:"disabled-up"+v.id}).append(
-                    $("<option>", { value: "Owner", text: "Owner" }).attr(v.role == "Owner" ? "selected":"vl", "selected").attr(v.role != "Owner" ? "class":"vl","d-none"),
-                    $("<option>", { value: "Researcher", text: "Researcher" }).attr(v.role == "Researcher" ? "selected":"vl", "selected"),
-                    $("<option>", { value: "Project leader", text: "Project leader" }).attr(v.role == "Project leader" ? "selected":"vl", "selected"),
+                    $("<option>", { value: v.role_id, text: v.nameRole }),
                   ).css({
                     "border":"0",
                     "outline":"none"
@@ -595,6 +631,15 @@
                 $("<div>", { class:"btn btn-success d-inline-block cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle iedit"+v.id}).append(
                     $("<i>", { class: "far fa-edit" }),
                 ).on("click", function(){
+                  $.get("{!! route('role.get') !!}", (data)=>{
+                    $(".disabled-up"+v.id).append(
+                      $.map(data,(value)=>{
+                        if (value.id != v.role_id)
+                          return $("<option>", { text: value.nameRole, value: value.id});
+                      }),
+                    );
+                  });
+                  
                   $(".disabled-up"+v.id).attr("disabled", false);
                   $(".check"+v.id+",.iclose"+v.id).removeClass('d-none').addClass('d-inline-block');
                   $(this).addClass('d-none').removeClass('d-inline-block');
@@ -643,10 +688,7 @@
             $("<td>", { scope: "row" }),
             $("<td>", { scope: "row" }).append(
               $("<div>", { class:"input-group", placeholder: "Choose role" }).append(
-                $("<select>", { type: "role", name: "role" }).append(
-                  $("<option>", { value: "Researcher", text: "Researcher", selected: "selected" }),
-                  $("<option>", { value: "Project leader", text: "Project leader" }),
-                ).css({
+                $("<select>", { type: "role", name: "role", id: "roleSelect" }).css({
                   "border":"0",
                   "outline":"none"
                 }),
@@ -678,6 +720,13 @@
             ),
           ),
         ).fadeIn();
+        $.get("{!! route('role.get') !!}", (data)=>{
+          $("#roleSelect").append(
+            $.map(data,(v)=>{
+                return $("<option>", { text: v.nameRole, value: v.id});
+            }),
+          )
+        });
       }
     };
     deleteUser = function(){
@@ -704,6 +753,7 @@
           $(".table-file").append(
             createFileList($.parseJSON(xhr.response)),
           );
+          $(".iEditFile").removeClass("d-none");
           $(".btn-close").click();
         } else {
           alert('An error occurred!');

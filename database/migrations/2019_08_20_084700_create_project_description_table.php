@@ -16,12 +16,12 @@ class CreateProjectDescriptionTable extends Migration
         Schema::create('project_description', function (Blueprint $table) {
             $table->smallInteger('id')->unsigned()->autoIncrement();
             $table->smallInteger('title_id')->unsigned();
-            $table->text('abstract');
-            $table->string('keyword', 100);
-            $table->string('funding', 100);
-            $table->string('yearStart',4);
-            $table->string('yearEnd',4);
-            $table->string('publication',100);
+            $table->text('abstract')->nullable();
+            $table->string('keyword', 100)->nullable();
+            $table->string('funding', 100)->nullable();
+            $table->string('yearStart',4)->nullable();
+            $table->string('yearEnd',4)->nullable();
+            $table->string('publication',100)->nullable();
             $table->foreign('title_id')->references('id')->on('project_info')->onDelete('cascade');
             $table->timestamps();
         });

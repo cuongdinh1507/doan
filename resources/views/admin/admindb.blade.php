@@ -59,6 +59,21 @@
           <span>Users</span></a>
       </li>
       <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.subjects') }}">
+          <i class="fas fa-book"></i>
+          <span>Subjects</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.roles') }}">
+          <i class="fas fa-user-tag"></i>
+          <span>Roles</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.events') }}">
+          <i class="far fa-calendar-alt"></i>
+          <span>Events</span></a>
+      </li>
+      <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.projectInfo') }}">
           <i class="far fa-newspaper"></i>
           <span>Project Information</span></a>

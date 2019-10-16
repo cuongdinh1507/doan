@@ -11,23 +11,16 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        DB::table("discover")->insert([
-        	"id_resource" => $id_resource,
-        	"abstract" => $abstract,
-        	"author" => $author,
-        	"availability" => $availability,
-        	"contributor" => $contributor,
-        	"coverage_type" => $coverage_type,
-        	"created" => $created,
-        	"east" => $east,
-        	"eastlimit" => $eastlimit,
-        	"end_date" => $end_date,
-        	"modified" => $modified,
-        	"northlimit" => $northlimit,
-        	"resource_type" => $resource_type,
-        	"southlimit" => $southlimit,
-        	"start_date" => $start_date,
-        	"subject" => $subject,
+        DB::table("users")->insert([
+            'name'=> "Cuong Dinh",
+            'institution'=> "Khong co",
+            'address'=> "Ha noi",
+            'country'=> "Viet Nam",
+            'position'=> "Student",
+            'email'=> "cuongdz1507@gmail.com",
+            'phone'=> "0123456789",
+            'password'=> bcrypt("123123123"),
+            'isAdmin'=> 1,
         ]);
     }
 }

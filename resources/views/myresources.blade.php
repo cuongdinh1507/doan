@@ -48,6 +48,7 @@
 <script>
     $(function(){
         var data = $.parseJSON($("#dataSave").attr("value"));
+        console.log(data);
         $("tbody").append(
             $.map(data, function(v,i){
                 return $("<tr>").append(
@@ -55,9 +56,9 @@
                     $("<th>", { class:"align-middle"}).append(
                         $("<a>", { href: "post/postid="+v.id, text: v.title}),
                     ),
-                    $("<th>", { class:"align-middle", text: v.role }),
+                    $("<th>", { class:"align-middle", text: v.nameRole }),
                     $("<th>", { class:"align-middle", text: v.species }),
-                    $("<th>", { class:"align-middle", text: v.subject }),
+                    $("<th>", { class:"align-middle", text: v.nameSubject }),
                     $("<th>", { class:"align-middle", text: v.language }),
                     $("<th>").append(
                         $("<a>", { href : "postUpdate/postid=" + v.id}).append(

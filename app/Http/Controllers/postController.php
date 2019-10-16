@@ -21,21 +21,23 @@ class postController extends Controller
 		$pdd = new projectDataDescription;
 		$pp = new projectPersonnel;
 		$checkAuthor = $pp::where('title_id', '=', $id)->where('user_id', '=', $currentUser)->get();
-		$postInfo = $pi::where('id','=',$id)->get();
+		$postInfo = $pi::join('roles', 'role_id', '=', 'roles.id')->join('subjects', 'subject_id', '=', 'subjects.id')->where('project_info.id','=',$id)->get();
 		$postDescription = $pd::where('title_id', '=', $id)->get();
 		$author = $pp::join('users', 'user_id','=','users.id')->where('title_id', '=', $id)->get();
 		$fileData = $pdd::where('title_id', '=', $id)->get();
 		$role = DB::table('users')
-	    	->join('project_personel', 'id', '=', 'project_personel.user_id')
-	    	->where('id',$currentUser)
+			->join('project_personel', 'users.id', '=', 'project_personel.user_id')
+			->join('roles', '.project_personel.role_id','=','roles.id')
+	    	->where('users.id',$currentUser)
 	    	->where('project_personel.title_id', $id)
-			->where('role','Project leader')
-			->orWhere('role','Owner')
-			->where('id',$currentUser)
+			->where('roles.nameRole','Project leader')
+			->orWhere('roles.nameRole','Owner')
+			->where('users.id',$currentUser)
 	    	->where('project_personel.title_id', $id)
 			->get();
 		$dataPP = DB::table('project_personel')
 			->join("users", "user_id", "=", "users.id")
+			->join('roles', 'role_id', '=', 'roles.id')
 			->where('user_id', '!=', $currentUser)
 			->where('title_id', $id)
 			->get();
@@ -65,12 +67,13 @@ class postController extends Controller
 	    	->orWhereNull('project_personel.title_id')
 	    	->get();
 	    $role = DB::table('users')
-	    	->join('project_personel', 'id', '=', 'project_personel.user_id')
-	    	->where('id',$currentUser)
+			->join('project_personel', 'users.id', '=', 'project_personel.user_id')
+			->join('roles', 'project_personel.role_id', '=', 'roles.id')
+	    	->where('users.id',$currentUser)
 	    	->where('project_personel.title_id', $id)
-			->where('role','Project leader')
-			->orWhere('role','Owner')
-			->where('id',$currentUser)
+			->where('roles.nameRole','Project leader')
+			->orWhere('roles.nameRole','Owner')
+			->where('users.id',$currentUser)
 	    	->where('project_personel.title_id', $id)
 	    	->get();
 	    $check = DB::table('project_personel')
@@ -100,11 +103,12 @@ class postController extends Controller
     		$role = request()->get('role');
     		$currentUser = Auth::user()->id;
 
-    		$check = DB::table('project_personel')
+			$check = DB::table('project_personel')
+			->join('roles', 'role_id', '=', 'roles.id')
 	    	->where('title_id',$id)
 	    	->where('user_id',$currentUser)
-			->where('role','Project leader')
-			->orWhere('role','Owner')
+			->where('roles.nameRole','Project leader')
+			->orWhere('roles.nameRole','Owner')
 			->where('title_id',$id)
 	    	->where('user_id',$currentUser)
 	    	->get();
@@ -113,11 +117,12 @@ class postController extends Controller
 				$newpp = new projectPersonnel;
 				$newpp->user_id = request()->userid;
 				$newpp->title_id = $id;
-				$newpp->role = request()->role;
+				$newpp->role_id = request()->role;
 				$newpp->save();
 
 		    	$data = DB::table('project_personel')
-		    	->join("users", "project_personel.user_id", "=", "users.id")
+				->join("users", "project_personel.user_id", "=", "users.id")
+				->join("roles", 'role_id', '=', 'roles.id')
 		    	->where('user_id', '!=', $currentUser)
 		    	->where('title_id', $id)
 		    	->get();
@@ -141,15 +146,17 @@ class postController extends Controller
     	if (request()->ajax()){
     		$userid = request()->get('userid');
     		$currentUser = Auth::user()->id;
-    		$check_pl = DB::table('project_personel')
+			$check_pl = DB::table('project_personel')
+			->join('roles', 'role_id', '=', 'roles.id')
 	    	->where('title_id',$id)
 	    	->where('user_id',$currentUser)
-			->where('role','Project leader')
+			->where('roles.nameRole','Project leader')
 			->get();
 			$check_owner = DB::table('project_personel')
+			->join('roles', 'role_id', '=', 'roles.id')
 	    	->where('title_id',$id)
 	    	->where('user_id',$currentUser)
-			->where('role','Owner')
+			->where('roles.nameRole','Owner')
 			->get();
 	    	if ((count($check_pl) != 0) || (count($check_owner) != 0)){
 				if (count($check_owner) != 0 ){
@@ -157,6 +164,7 @@ class postController extends Controller
 
 					$data = DB::table('project_personel')
 					->join("users", "project_personel.user_id", "=", "users.id")
+					->join("roles", 'role_id', '=', 'roles.id')
 					->where('user_id', '!=', $currentUser)
 					->where('title_id', $id)
 					->get();
@@ -165,7 +173,7 @@ class postController extends Controller
 				}
 				
 				else {
-					$if_delete_owner = DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->where('role','=','Owner')->get();
+					$if_delete_owner = DB::table('project_personel')->join('roles','role_id','=','roles.id')->where('title_id','=', $id)->where('user_id','=', $userid)->where('roles.nameRole','=','Owner')->get();
 					if ( count($if_delete_owner) != 0 )
 						return redirect()->route('post.update',['id'=>$id]);
 					else {
@@ -173,6 +181,7 @@ class postController extends Controller
 
 						$data = DB::table('project_personel')
 						->join("users", "project_personel.user_id", "=", "users.id")
+						->join("roles", 'role_id', '=', 'roles.id')
 						->where('user_id', '!=', $currentUser)
 						->where('title_id', $id)
 						->get();
@@ -193,21 +202,23 @@ class postController extends Controller
     		$currentUser = Auth::user()->id;
     		$userid = request()->get('userid');
     		$role = request()->get('role');
-    		$check_pl = DB::table('project_personel')
+			$check_pl = DB::table('project_personel')
+			->join('roles', 'role_id', '=', 'roles.id')
 	    	->where('title_id',$id)
 	    	->where('user_id',$currentUser)
-			->where('role','Project leader')
+			->where('roles.nameRole','Project leader')
 			->get();
 			$check_owner = DB::table('project_personel')
+			->join('roles', 'role_id', '=', 'roles.id')
 	    	->where('title_id',$id)
 	    	->where('user_id',$currentUser)
-			->where('role','Owner')
+			->where('roles.nameRole','Owner')
 			->get();
 
 	    	if ( (count($check_pl) != 0) || ( count($check_owner) != 0 ) ){
 				$pp = new projectPersonnel;
 				if ( count($check_owner) != 0 ){
-					$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role'=>$role]);
+					$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role_id'=>$role]);
 
 					$data = $pp::join("users", "project_personel.user_id", "=", "users.id")
 					->where('user_id', '!=', $currentUser)
@@ -217,11 +228,11 @@ class postController extends Controller
 					return $data;
 				}
 				if (count($check_pl) != 0){
-					$if_owner = $pp::where('title_id','=', $id)->where('user_id','=', $userid)->where('role','=','Owner')->get();
+					$if_owner = $pp::join("roles","role_id",'=','roles.id')->where('title_id','=', $id)->where('user_id','=', $userid)->where('roleName','=','Owner')->get();
 					if ( count($if_owner) != 0 )
 						return redirect()->route('post.update',['id'=>$id]);
 					else {
-						$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role'=>$role]);
+						$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role_id'=>$role]);
 
 						$data = $pp::join("users", "project_personel.user_id", "=", "users.id")
 						->where('user_id', '!=', $currentUser)
@@ -241,10 +252,11 @@ class postController extends Controller
     	$id = request()->titleid;
 		$currentUser = Auth::user()->id;
 		$check = DB::table('project_personel')
+		->join('roles', 'role_id', '=', 'roles.id')
     	->where('title_id',$id)
     	->where('user_id',$currentUser)
-		->where('role','Project leader')
-		->orWhere('role','Owner')
+		->where('roles.nameRole','Project leader')
+		->orWhere('roles.nameRole','Owner')
 		->where('title_id',$id)
     	->where('user_id',$currentUser)
     	->get();
@@ -252,8 +264,7 @@ class postController extends Controller
 			$pi = new projectInfoModel;
 			$pd = new projectDescription;
     		$pi::where('id','=', $id)
-    		->where('user_id','=', $currentUser)
-    		->update(['title'=> request()->title, 'subject' => request()->subject, 'species' => request()->species, 'language' => request()->lang, 'availability' => request()->availability ]);
+    		->update(['title'=> request()->title, 'subject_id' => request()->subject, 'species' => request()->species, 'language' => request()->lang, 'availability' => request()->availability ]);
 
     		$pd::where('title_id','=', $id)
     		->update(['abstract'=> request()->abstract, 'keyword' => request()->keyword, 'funding' => request()->funding, 'yearStart' => request()->start, 'yearEnd' => request()->end, 'publication' => request()->publication ]);
@@ -263,18 +274,19 @@ class postController extends Controller
 	    	->where('user_id', '!=', $currentUser)
 	    	->get();
 
-			return redirect()->back();
+			return redirect()->back()->with('updateSuccess','Updated Successfully!');
 		}
-		return "k hie";
+		return redirect()->back()->with('updateFail','Your role cannot use this ability!');
     }
 
     public function createDD($id){
     	$currentUser = Auth::user()->id;
-    	$role = DB::table('project_personel')
+		$role = DB::table('project_personel')
+		->join('roles', 'role_id', '=', 'roles.id')
     	->where('user_id',$currentUser)
     	->where('title_id', $id)
-		->where('role', 'Project leader')
-		->orWhere('role','Owner')
+		->where('roles.nameRole', 'Project leader')
+		->orWhere('roles.nameRole','Owner')
 		->where('user_id',$currentUser)
     	->where('title_id', $id)
     	->get();
@@ -340,7 +352,7 @@ class postController extends Controller
 			->delete();
 			unlink(storage_path('app/upload/'.request()->get('link')));
 			$pdd = new projectDataDescription;
-			return $pdd::all();
+			return $pdd::where('title_id','=',$id)->get();
 		}
 	}
 
@@ -350,9 +362,10 @@ class postController extends Controller
 		$titleid = request()->get('titleid');
 		$currentUser = Auth::user()->id;
 		$check = $pp::where('title_id', '=', $titleid)
+		->join('roles', 'role_id', '=', 'roles.id')
 		->where('user_id','=', $currentUser)
-		->where('role', '=', 'Owner')
-		->orWhere('role', '=', 'Project leader')
+		->where('roles.nameRole', '=', 'Owner')
+		->orWhere('roles.nameRole', '=', 'Project leader')
 		->where('title_id', '=', $titleid)
 		->where('user_id','=', $currentUser)
 		->get();

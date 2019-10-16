@@ -48,8 +48,21 @@ Route::middleware('checkAdmin')->group(function(){
 	Route::get('delPp', 'adminController@delPp')->name('admin.delPp');
 	Route::get('delPd', 'adminController@delPd')->name('admin.delPd');
 	Route::get('delPdd', 'adminController@delPdd')->name('admin.delPdd');
+	Route::get('createEvents', 'adminController@createEvents')->name('admin.events');
+	Route::get('createRoles', 'adminController@createRoles')->name('admin.roles');
+	Route::get('createSubjects', 'adminController@createSubjects')->name('admin.subjects');
+	Route::post('saveSubject', 'adminController@saveSubject')->name('subject.save');
+	Route::get('getSubjects', 'adminController@getSubject')->name('subject.get');
+	Route::get('delSubjects', 'adminController@delSubject')->name('subject.del');
+	Route::post('updateSubjects', 'adminController@updateSubject')->name('subject.update');
+	Route::post('saveRoles', 'adminController@saveRole')->name('role.save');
+	Route::get('getRoles', 'adminController@getRole')->name('role.get');
+	Route::post('updateRoles', 'adminController@updateRole')->name('role.update');
+	Route::get('delRoles', 'adminController@delRole')->name('role.del');
 });
 Route::middleware('auth')->group(function(){
+	Route::get('getRoles', 'adminController@getRole')->name('role.get');
+	Route::get('getSubjects', 'adminController@getSubject')->name('subject.get');
 	Route::get('post/delFilepostid={id}', 'postController@delFile')->name('post.delFile');
 	Route::get('post/updateFilepostid', 'postController@updateFile')->name('post.updateFile');
 	Route::get('post/delPost', 'postController@delPost')->name('post.delPost');
