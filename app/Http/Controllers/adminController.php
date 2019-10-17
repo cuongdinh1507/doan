@@ -155,7 +155,7 @@ class adminController extends Controller
     public function saveSubject(Request $request){
 		$fileName = $request->file('file')->getClientOriginalName();
 		$newFileName = md5($fileName.time()).$fileName;
-		$path = $request->file('file')->move(storage_path("/app/public"), $newFileName);
+		$path = $request->file('file')->move(public_path('storage'), $newFileName);
 		$subject = new subject;
 		$subject->nameSubject = request()->name;
         $subject->descriptionSubject = request()->description;
@@ -172,7 +172,10 @@ class adminController extends Controller
     public function delSubject(){
         $id = request()->get('id');
         $subject = new subject;
-        $subject::where('id','=',$id)->delete();
+        $link = $subject::where('id','=',$id)->get();
+        $subject::select('imageSubject')->where('id','=',$id)->delete();
+        $fileName = array_values(array_slice(explode("/", $link->first()->imageSubject ), -1))[0];
+        unlink(public_path('storage/'.$fileName));
         return "ok";
     }
 
@@ -182,7 +185,7 @@ class adminController extends Controller
         if ($request->hasFile('fileEdit')){
             $fileName = $request->file('fileEdit')->getClientOriginalName();
             $newFileName = md5($fileName.time()).$fileName;
-            $path = $request->file('fileEdit')->move(storage_path("/app/public"), $newFileName);
+            $path = $request->file('fileEdit')->move(public_path('storage'), $newFileName);
             $subject::where('id','=',$id)->update([
                 "nameSubject" => request()->name,
                 "descriptionSubject" => request()->description,
