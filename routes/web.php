@@ -30,6 +30,8 @@ Route::get('news', 'newsController@create')->name('news.create');
 Route::get('post/getDownloadFileid={id}', 'postController@getDownloadFile')->name('post.getDownloadFile');
 Route::get('ToolAndServices', 'mkController@createTNS')->name('toolNservices');
 Route::get('discoverMekongWater', 'mkController@viewMk')->name('discoverMk');
+Route::get('getEventHome', 'eventController@getEvent')->name('getEvent');
+Route::get('getSubjectHome', 'subjectController@getSubject')->name('getSubject');
 Route::middleware('checkAdmin')->group(function(){
 	Route::get('dashboard', 'adminController@createDashboard')->name('admin.dashboard');
 	Route::get('usersInformation', 'adminController@createUsers')->name('admin.users');
@@ -59,6 +61,10 @@ Route::middleware('checkAdmin')->group(function(){
 	Route::get('getRoles', 'adminController@getRole')->name('role.get');
 	Route::post('updateRoles', 'adminController@updateRole')->name('role.update');
 	Route::get('delRoles', 'adminController@delRole')->name('role.del');
+	Route::post('saveEvents', 'adminController@saveEvent')->name('event.save');
+	Route::get('getEvents', 'adminController@getEvent')->name('event.get');
+	Route::post('updateEvents', 'adminController@updateEvent')->name('event.update');
+	Route::get('delEvents', 'adminController@delEvent')->name('event.del');
 });
 Route::middleware('auth')->group(function(){
 	Route::get('getRoles', 'adminController@getRole')->name('role.get');

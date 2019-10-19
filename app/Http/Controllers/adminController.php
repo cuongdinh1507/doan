@@ -68,7 +68,7 @@ class adminController extends Controller
 
     public function totalPost(){
         $post = new projectInfoModel;
-        return $post::select("project_info.id","project_info.title","users.email","project_info.subject","project_info.species","project_info.language","project_info.availability")->join("users", "user_id", "users.id")->orderBy("project_info.id","desc")->get();
+        return $post::select("project_info.id","project_info.title","users.email","project_info.subject_id","project_info.species","project_info.language","project_info.availability")->join("users", "user_id", "users.id")->orderBy("project_info.id","desc")->get();
     }
 
     public function totalFileUploaded(){
@@ -86,7 +86,7 @@ class adminController extends Controller
 
     public function getPP(){
         $pp = new projectPersonnel;
-        return $pp::join('users','user_id','=','users.id')->join('project_info','title_id','=','project_info.id')->get();
+        return $pp::join('users','user_id','=','users.id')->join('project_info','title_id','=','project_info.id')->join('roles','project_personel.role_id','=','roles.id')->get();
     }
 
     public function delUser(){
@@ -228,6 +228,61 @@ class adminController extends Controller
         $id = request()->get('id');
         $role = new role;
         $role::where('id','=',$id)->delete();
+        return "ok";
+    }
+
+    public function saveEvent(Request $request){
+		$fileName = $request->file('file')->getClientOriginalName();
+		$newFileName = md5($fileName.time()).$fileName;
+		$path = $request->file('file')->move(public_path('storage'), $newFileName);
+		$event = new event;
+		$event->titleEvent = request()->name;
+        $event->descriptionEvent = request()->description;
+        $event->timeEvent = request()->time;
+        $event->addressEvent = request()->address;
+        $event->imageEvent = asset("storage/".$newFileName);
+        $event->save();
+        return back();
+    }
+
+    public function getEvent(Request $request){
+        $event = new event;
+        return event::all();
+    }
+
+    public function updateEvent(Request $request){
+        $event = new event;
+        $id = request()->id;
+        if ($request->hasFile('fileEdit')){
+            $fileName = $request->file('fileEdit')->getClientOriginalName();
+            $newFileName = md5($fileName.time()).$fileName;
+            $path = $request->file('fileEdit')->move(public_path('storage'), $newFileName);
+            $event::where('id','=',$id)->update([
+                "titleEvent" => request()->name,
+                "descriptionEvent" => request()->description,
+                "timeEvent" => request()->time,
+                "addressEvent" => request()->address,
+                "imageEvent" => asset("storage/".$newFileName),
+            ]);
+        }
+        else {
+            $event::where('id','=',$id)->update([
+                "titleEvent" => request()->name,
+                "descriptionEvent" => request()->description,
+                "timeEvent" => request()->time,
+                "addressEvent" => request()->address,
+            ]);
+        }
+        return back();
+    }
+
+    public function delEvent(){
+        $id = request()->get('id');
+        $event = new event;
+        $link = $event::where('id','=',$id)->get();
+        $event::select('imageEvent')->where('id','=',$id)->delete();
+        $fileName = array_values(array_slice(explode("/", $link->first()->imageEvent ), -1))[0];
+        unlink(public_path('storage/'.$fileName));
         return "ok";
     }
 }

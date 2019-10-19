@@ -99,12 +99,35 @@
         </div>
     </div>
 </section>
+<section id="subjectHome" class="mx-auto section2">
+    <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner carousel-inner-subject col-lg-10 mx-auto">
+            {{-- <div class="carousel-item active">
+                <img class="d-block w-100" src="..." alt="First slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="..." alt="Second slide">
+            </div>
+            <div class="carousel-item">
+                <img class="d-block w-100" src="..." alt="Third slide">
+            </div> --}}
+        </div>
+        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Previous</span>
+        </a>
+        <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Next</span>
+        </a>
+    </div>
+</section>
 <section id="event" class="text-center mx-auto section2">
     <div class="container ">
         <h3 class="commingsoon">Upcoming Events</h3>
         <div class="list-event p-3">
-            <div class="row">
-                <div class="col-md-3 col-sm-6 col-12">
+            <div class="row event">
+                {{-- <div class="col-md-3 col-sm-6 col-12">
                     <div class="inner-list">
                         <div class="list-item">
                             <img src="{!! asset('img/mk/item1.png')!!}" alt="Bridge" />
@@ -177,9 +200,84 @@
                         </div>
                     </div>
 
-                </div>
+                </div> --}}
             </div>
         </div>
     </div>
 </section>
+<script>
+    $(function(){
+        $.getJSON("{!! route('getEvent') !!}", (data) => {
+            $(".event").append(
+                data.map((v)=>{
+                    return $("<div>", { class: "col-md-3 col-sm-6 col-12"}).append(
+                        $("<div>", { class: "inner-list"}).append(
+                            $("<div>", { class: "list-item"}).append(
+                                $("<img>", { src: v.imageEvent, alt: "Event"}),
+                                $("<div>", { class: "detail-content p-5"}).append(
+                                    $("<h5>", { class: "text-large", text: v.titleEvent }),
+                                    $("<div>", { class: "", text: v.timeEvent + " | " + v.addressEvent }),
+                                ),
+                            ),
+                            $("<div>", { class: "list-item-hover" }).append(
+                                $("<a>", { href: "#" }).append(
+                                    $("<h4>", { class: "", text: v.titleEvent }),
+                                    $("<div>", { class: "", text: v.timeEvent + " | " + v.addressEvent }),
+                                ),
+                                $("<div>", { class: "", text: v.descriptionEvent }),
+                            ),
+                        ),
+                    );
+                }),
+            );
+        });
+        makeArray = arrayLength => {
+            var array = [];
+            for (var i=0; i < arrayLength ; i++){
+                array.push(i);
+            }
+            return array;
+        }
+        $.getJSON("{!! route('getSubject') !!}", (data) => {
+            var numSlide = Math.ceil(data.length / 4);
+            for (var i=0 ; i < numSlide; i++){
+                var loop = i == numSlide - 1 ? makeArray(data.length % 4) : [0,1,2,3];
+                $(".carousel-inner-subject").append(
+                    $("<div>", { class: "carousel-item cp col-lg-12" + ( i == 0 ? " active" : "") }).append(
+                        $.map(loop, (v)=> {
+                            var n = v +4*i;
+                            return $("<div>", { class : "col-lg-3 d-inline-block"}).css({"overflow": "hidden"}).append(
+                                $("<div>", { class: "position-relative ts12h"}).css({
+                                    "background": "url('" + data[n].imageSubject + "')",
+                                    "height":"200px",
+                                    "background-repeat" : "no-repeat",
+                                    "background-size" : "cover",
+                                    "padding-left" : "0",
+                                    "transition" : "0.7s"
+                                }).append(
+                                    $("<div>", { class: "position-absolute w-100 h-100"}).css({"background-color" : "rgba(0,0,0,0.7)"}).append(
+                                        $("<div>", { class: "position-absolute text-light text-center", text: data[n].nameSubject }).css({
+                                            "top" : "50%",
+                                            "left" : "50%",
+                                            "transform" : "translate(-50%,-50%)",
+                                            "font-size" : "1.2rem"
+                                        }),
+                                    ),
+                                ),
+                            );
+                        }),
+                    ),
+                );
+            }
+        });
+        // $(".carousel-inner").append(
+        //     $("<div>", { class: "carousel-item active text-center"}).append(
+        //         $("<div>", { class: "col-lg-3 d-inline-block", text: "hihi"}),
+        //         $("<div>", { class: "col-lg-3 d-inline-block", text: "hihi"}),
+        //         $("<div>", { class: "col-lg-3 d-inline-block", text: "hihi"}),
+        //         $("<div>", { class: "col-lg-3 d-inline-block", text: "hihi"}),
+        //     ),
+        // );
+    });
+</script>
 @endsection

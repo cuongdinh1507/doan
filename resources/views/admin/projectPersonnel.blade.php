@@ -67,7 +67,7 @@
               $("<a>", { href: "post/postid="+v.id, text: v.title}),
             ),
             $("<td>", { text: v.name }),
-            $("<td>", { text: v.role }),
+            $("<td>", { text: v.nameRole }),
             $("<td>", { text: v.email }),
             $("<td>", { text: v.phone }),
             $("<td>").append(
