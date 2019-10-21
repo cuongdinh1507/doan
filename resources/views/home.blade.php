@@ -101,107 +101,22 @@
 </section>
 <section id="subjectHome" class="mx-auto section2">
     <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner carousel-inner-subject col-lg-10 mx-auto">
-            {{-- <div class="carousel-item active">
-                <img class="d-block w-100" src="..." alt="First slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="..." alt="Second slide">
-            </div>
-            <div class="carousel-item">
-                <img class="d-block w-100" src="..." alt="Third slide">
-            </div> --}}
-        </div>
-        <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="sr-only">Previous</span>
-        </a>
+        <div class="carousel-inner carousel-inner-subject col-lg-10 mx-auto"></div>
+        {{-- <button class="btn btn-primary">
+            <i class="fas fa-arrow-left"><a class="" href="#carouselExampleControls" role="button" data-slide="prev"></a></i>
+        </button>
+        
         <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
             <span class="carousel-control-next-icon" aria-hidden="true"></span>
             <span class="sr-only">Next</span>
-        </a>
+        </a> --}}
     </div>
 </section>
 <section id="event" class="text-center mx-auto section2">
     <div class="container ">
         <h3 class="commingsoon">Upcoming Events</h3>
         <div class="list-event p-3">
-            <div class="row event">
-                {{-- <div class="col-md-3 col-sm-6 col-12">
-                    <div class="inner-list">
-                        <div class="list-item">
-                            <img src="{!! asset('img/mk/item1.png')!!}" alt="Bridge" />
-                            <div class="detail-content p-5">
-                                <h4>Mekong River Commission...</h4>
-                                <h7>Sun, Aug 18 | New Orleans</h7>
-                            </div>
-                        </div>
-                        <div class="list-item-hover">
-                            <a href="#">
-                                <h4>Mekong River Commission visiting Missisippi River Commission</h4>
-                                <h7>Aug 18, 2:40 AM New Orleans, New Orleans, LA, USA</h7>
-                            </a>
-                            <p>Join Us for a visit to the USGS Hydrologic Instrumentation Facility (HIF)</p>
-                        </div>
-                    </div>
-
-                </div>
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="inner-list">
-                        <div class="list-item">
-                            <img src="{!! asset('img/mk/item2.png')!!}" alt="Sầu riêng" />
-                            <div class="detail-content p-5">
-                                <h4>First Technical Mekong...</h4>
-                                <h7>Thu, Aug 29 | Bangkok</h7>
-                            </div>
-                        </div>
-                        <div class="list-item-hover">
-                            <a href="#">
-                                <h4>First Technical Mekong Socioeconomic and Data Experts Meeting</h4>
-                                <h7>Aug 29, 7:00 AM Bangkok, Bangkok, Thailand</h7>
-                            </a>
-                            <p>LMI-SIP socio-economic data</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="inner-list">
-                        <div class="list-item">
-                            <img src="{!! asset('img/mk/item3.png')!!}" alt="Mekong" />
-                            <div class="detail-content p-5">
-                                <h4>Mekong Cascading...</h4>
-                                <h7>Thu, Sep 26 | Bangkok</h7>
-                            </div>
-                        </div>
-                        <div class="list-item-hover">
-                            <a href="#">
-                                <h4>Mekong Cascading Hydropower Management Forum</h4>
-                                <h7>Sep 26, 8:00 AM – 05:00 PM GMT+7 Bangkok, Bangkok, Thailand</h7>
-                            </a>
-                            <p>Design of the Mekong Water Data Platform</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-3 col-sm-6 col-12">
-                    <div class="inner-list">
-                        <div class="list-item">
-                            <img src="{!! asset('img/mk/item4.png')!!}" alt="Event" />
-                            <div class="detail-content p-5">
-                                <h4>2019 Mekong Research...</h4>
-                                <h7>Wed, Dec 04 | Location is...</h7>
-                            </div>
-                        </div>
-                        <div class="list-item-hover">
-                            <a href="#">
-                                <h4>2019 Mekong Research Symposium</h4>
-                                <h7>Dec 04, 7:00 PM Location is TBD</h7>
-                            </a>
-                            <p>2nd Annual Mekong Research Symposium</p>
-                        </div>
-                    </div>
-
-                </div> --}}
-            </div>
+            <div class="row event"></div>
         </div>
     </div>
 </section>
@@ -264,20 +179,24 @@
                                         }),
                                     ),
                                 ),
-                            );
+                            ).on("click", ()=>{
+                                console.log(data[n].id,data[n].nameSubject);
+                            });
                         }),
+                    ),
+                    $("<a>", { class: "bg-primary position-absolute", href: "#carouselExampleControls", "data-slide": "prev", role: "button"}).css({"top":"50%","left":"0","transform":"translateY(-50%)"}).append(
+                        $("<div>", { class: "btn bg-primary text-light"}).append(
+                            $("<i>", { class: "fas fa-arrow-left"}),
+                        )
+                    ),
+                    $("<a>", { class: "bg-primary position-absolute", href: "#carouselExampleControls", "data-slide": "next", role: "button"}).css({"top":"50%","right":"0","transform":"translateY(-50%)"}).append(
+                        $("<div>", { class: "btn bg-primary text-light"}).append(
+                            $("<i>", { class: "fas fa-arrow-right"}),
+                        )
                     ),
                 );
             }
         });
-        // $(".carousel-inner").append(
-        //     $("<div>", { class: "carousel-item active text-center"}).append(
-        //         $("<div>", { class: "col-lg-3 d-inline-block", text: "hihi"}),
-        //         $("<div>", { class: "col-lg-3 d-inline-block", text: "hihi"}),
-        //         $("<div>", { class: "col-lg-3 d-inline-block", text: "hihi"}),
-        //         $("<div>", { class: "col-lg-3 d-inline-block", text: "hihi"}),
-        //     ),
-        // );
     });
 </script>
 @endsection

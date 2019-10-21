@@ -71,7 +71,7 @@
                 $("<a>", { href: "post/postid="+v.id, text: v.title}),
             ),
             $("<td>", { text: v.email }),
-            $("<td>", { text: v.subject }),
+            $("<td>", { text: v.nameSubject }),
             $("<td>", { text: v.species }),
             $("<td>", { text: v.language }),
             $("<td>", { text: v.availability }),

@@ -1,12 +1,20 @@
 @extends("index")
 @section('content')
-<div class="col-md-6 mx-auto mt-5">
+{{-- <div class="col-md-6 mx-auto mt-5">
     <div class="input-group mb-3">
       <div class="input-group-prepend">
         <span class="input-group-text" id="basic-addon1"><i class="fa fa-search"></i></span>
       </div>
       <input id="search_txt" type="text" class="form-control" placeholder="Search All Public and Discoverable Resources" aria-label="Search All Public and Discoverable Resources" aria-describedby="basic-addon1">
       <button type="button" class="btn btn-primary btn-c"><i class="fas fa-search"></i></button>
+    </div>
+</div> --}}
+<div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4 col-lg-6 mx-auto mt-5">
+    <div class="input-group">
+        <input type="search" id="search_txt" placeholder="Search All Public and Discoverable Resources" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+        <div class="input-group-append">
+            <button id="button-addon1" type="button" class="btn btn-link text-primary btn-c"><i class="fa fa-search"></i></button>
+        </div>
     </div>
 </div>
 <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

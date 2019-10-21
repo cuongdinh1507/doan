@@ -32,6 +32,10 @@ Route::get('ToolAndServices', 'mkController@createTNS')->name('toolNservices');
 Route::get('discoverMekongWater', 'mkController@viewMk')->name('discoverMk');
 Route::get('getEventHome', 'eventController@getEvent')->name('getEvent');
 Route::get('getSubjectHome', 'subjectController@getSubject')->name('getSubject');
+Route::get('topic', 'topicController@createTopic')->name('topic');
+Route::get('topicGetSubject', 'topicController@getSubject')->name('topic.subject');
+Route::get('topicKeyword', 'topicController@getKeyword')->name('topic.keyword');
+Route::get('topicGetPost', 'topicController@getPost')->name("topic.getPost");
 Route::middleware('checkAdmin')->group(function(){
 	Route::get('dashboard', 'adminController@createDashboard')->name('admin.dashboard');
 	Route::get('usersInformation', 'adminController@createUsers')->name('admin.users');

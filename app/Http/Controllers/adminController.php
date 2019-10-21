@@ -68,7 +68,7 @@ class adminController extends Controller
 
     public function totalPost(){
         $post = new projectInfoModel;
-        return $post::select("project_info.id","project_info.title","users.email","project_info.subject_id","project_info.species","project_info.language","project_info.availability")->join("users", "user_id", "users.id")->orderBy("project_info.id","desc")->get();
+        return $post::select("project_info.id","project_info.title","users.email","subjects.nameSubject","project_info.species","project_info.language","project_info.availability")->join("subjects", "project_info.subject_id","=","subjects.id")->join("users", "user_id", "users.id")->orderBy("project_info.id","desc")->get();
     }
 
     public function totalFileUploaded(){
