@@ -15,33 +15,40 @@ use DB;
 class postController extends Controller
 {
     public function create($id){
-		$currentUser = Auth::user()->id;
 		$pi = new projectInfoModel;
 		$pd = new projectDescription;
 		$pdd = new projectDataDescription;
 		$pp = new projectPersonnel;
-		$checkAuthor = $pp::where('title_id', '=', $id)->where('user_id', '=', $currentUser)->get();
 		$postInfo = $pi::join('roles', 'role_id', '=', 'roles.id')->join('subjects', 'subject_id', '=', 'subjects.id')->where('project_info.id','=',$id)->get();
 		$postDescription = $pd::where('title_id', '=', $id)->get();
 		$author = $pp::join('users', 'user_id','=','users.id')->where('title_id', '=', $id)->get();
 		$fileData = $pdd::where('title_id', '=', $id)->get();
-		$role = DB::table('users')
-			->join('project_personel', 'users.id', '=', 'project_personel.user_id')
-			->join('roles', '.project_personel.role_id','=','roles.id')
-	    	->where('users.id',$currentUser)
-	    	->where('project_personel.title_id', $id)
-			->where('roles.nameRole','Project leader')
-			->orWhere('roles.nameRole','Owner')
-			->where('users.id',$currentUser)
-	    	->where('project_personel.title_id', $id)
-			->get();
-		$dataPP = DB::table('project_personel')
-			->join("users", "user_id", "=", "users.id")
-			->join('roles', 'role_id', '=', 'roles.id')
-			->where('user_id', '!=', $currentUser)
-			->where('title_id', $id)
-			->get();
-    	return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role, 'dataPP' => $dataPP]);
+		if (Auth::check()){
+			$currentUser = Auth::user()->id;
+			$checkAuthor = $pp::where('title_id', '=', $id)->where('user_id', '=', $currentUser)->get();
+			$role = DB::table('users')
+				->join('project_personel', 'users.id', '=', 'project_personel.user_id')
+				->join('roles', '.project_personel.role_id','=','roles.id')
+				->where('users.id',$currentUser)
+				->where('project_personel.title_id', $id)
+				->where('roles.nameRole','Project leader')
+				->orWhere('roles.nameRole','Owner')
+				->where('users.id',$currentUser)
+				->where('project_personel.title_id', $id)
+				->get();
+			$dataPP = DB::table('project_personel')
+				->join("users", "user_id", "=", "users.id")
+				->join('roles', 'role_id', '=', 'roles.id')
+				->where('user_id', '!=', $currentUser)
+				->where('title_id', $id)
+				->get();
+		}
+		else {
+			$checkAuthor = 0;
+			$role = 0;
+			$dataPP = 0;
+		}
+		return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role, 'dataPP' => $dataPP]);
     }
 
     public function getAll($id){

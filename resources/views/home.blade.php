@@ -180,7 +180,7 @@
                                     ),
                                 ),
                             ).on("click", ()=>{
-                                console.log(data[n].id,data[n].nameSubject);
+                                location.href = "topicSearchSubject="+data[n].id;
                             });
                         }),
                     ),

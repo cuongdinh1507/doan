@@ -11,7 +11,11 @@ use DB;
 class topicController extends Controller
 {
     public function createTopic(){
-        return view('topic');
+        return view('topic',['id'=>0]);
+    }
+
+    public function createTopicSubject($id){
+        return view('topic',['id'=>$id]);
     }
 
     public function getSubject(){
@@ -28,6 +32,75 @@ class topicController extends Controller
 
     public function getPost(){
         $pi = new projectInfoModel;
-        return $pi::join("project_description", "project_info.id", "=", "project_description.title_id")->join("subjects","project_info.subject_id","=","subjects.id")->where("availability","=","Public")->get();
+        return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")->join("project_description", "project_info.id", "=", "project_description.title_id")->join("subjects","project_info.subject_id","=","subjects.id")->where("availability","=","Public")->get();
+    }
+
+    public function searchsk(){
+        $pi = new projectInfoModel;
+        if (request()->ajax()){
+            $subject = request()->get('subject');
+            $text = request()->get('text');
+            $keyword = request()->get('keyword');
+            if ( $subject == null && $keyword == null && $text == null )
+                return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
+                ->join("project_description", "project_info.id", "=", "project_description.title_id")
+                ->join("subjects","project_info.subject_id","=","subjects.id")
+                ->where("availability","=","Public")
+                ->get();
+            else if ( $subject != null && $keyword != null && $text != null )
+                return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
+                ->join("project_description", "project_info.id", "=", "project_description.title_id")
+                ->join("subjects","project_info.subject_id","=","subjects.id")
+                ->where("availability","=","Public")
+                ->where("subjects.nameSubject", "=", $subject)
+                ->where("project_info.title", "LIKE", "%{$text}%")
+                ->where("project_description.keyword", "LIKE", "%{$keyword}%")
+                ->get();
+            else if ( $subject != null && $keyword == null && $text == null )
+                return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
+                ->join("project_description", "project_info.id", "=", "project_description.title_id")
+                ->join("subjects","project_info.subject_id","=","subjects.id")
+                ->where("availability","=","Public")
+                ->where("subjects.nameSubject", "=", $subject)
+                ->get();
+            else if ( $subject != null && $keyword != null && $text == null )
+                return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
+                ->join("project_description", "project_info.id", "=", "project_description.title_id")
+                ->join("subjects","project_info.subject_id","=","subjects.id")
+                ->where("availability","=","Public")
+                ->where("subjects.nameSubject", "=", $subject)
+                ->where("project_description.keyword", "LIKE", "%{$keyword}%")
+                ->get();
+            else if ( $subject != null && $keyword == null && $text != null )
+                return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
+                ->join("project_description", "project_info.id", "=", "project_description.title_id")
+                ->join("subjects","project_info.subject_id","=","subjects.id")
+                ->where("availability","=","Public")
+                ->where("subjects.nameSubject", "=", $subject)
+                ->where("project_info.title", "LIKE", "%{$text}%")
+                ->get();
+            else if ( $subject == null && $keyword != null && $text == null )
+                return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
+                ->join("project_description", "project_info.id", "=", "project_description.title_id")
+                ->join("subjects","project_info.subject_id","=","subjects.id")
+                ->where("availability","=","Public")
+                ->where("project_description.keyword", "LIKE", "%{$keyword}%")
+                ->get();
+            else if ( $subject == null && $keyword != null && $text != null )
+                return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
+                ->join("project_description", "project_info.id", "=", "project_description.title_id")
+                ->join("subjects","project_info.subject_id","=","subjects.id")
+                ->where("availability","=","Public")
+                ->where("project_description.keyword", "LIKE", "%{$keyword}%")
+                ->where("project_info.title", "LIKE", "%{$text}%")
+                ->get();
+            else if ( $subject == null && $keyword == null && $text != null )
+                return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
+                ->join("project_description", "project_info.id", "=", "project_description.title_id")
+                ->join("subjects","project_info.subject_id","=","subjects.id")
+                ->where("availability","=","Public")
+                ->where("project_info.title", "LIKE", "%{$text}%")
+                ->get();
+        }
     }
 }

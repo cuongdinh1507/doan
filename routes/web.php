@@ -36,6 +36,9 @@ Route::get('topic', 'topicController@createTopic')->name('topic');
 Route::get('topicGetSubject', 'topicController@getSubject')->name('topic.subject');
 Route::get('topicKeyword', 'topicController@getKeyword')->name('topic.keyword');
 Route::get('topicGetPost', 'topicController@getPost')->name("topic.getPost");
+Route::get('post/postid={id}','postController@create')->name('post.create');
+Route::get('postSearch', 'topicController@searchsk')->name('topic.searchsk');
+Route::get('topicSearchSubject={id}', 'topicController@createTopicSubject')->name('topic.searchSubject');
 Route::middleware('checkAdmin')->group(function(){
 	Route::get('dashboard', 'adminController@createDashboard')->name('admin.dashboard');
 	Route::get('usersInformation', 'adminController@createUsers')->name('admin.users');
@@ -84,7 +87,6 @@ Route::middleware('auth')->group(function(){
 	Route::get('postUpdate/getAll={id}','postController@getAll')->name('post.getAll');
 	Route::get('postUpdate/updateUserpostid={id}', 'postController@updateUser')->name('post.updateUser');
 	Route::post('postUpdate/updateProjectInfo', 'postController@updateProjectinfo')->name('post.updateProjectInfo');
-	Route::get('post/postid={id}','postController@create')->name('post.create');
 	Route::get('myresources', 'myResourcesController@create')->name('myresources.create');
 	Route::get('changepw', 'loginController@changepw')->name('changepw');
 	Route::get('getPw', 'loginController@getPw')->name('getpw');

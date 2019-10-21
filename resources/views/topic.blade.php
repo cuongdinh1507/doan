@@ -15,7 +15,7 @@
     </div><div class="col-md-10 mt-5 d-inline-block align-top">
         <div class="p-1 bg-light rounded rounded-pill shadow-sm mb-4 col-lg-7">
             <div class="input-group">
-                <input type="search" placeholder="What're you searching for?" aria-describedby="button-addon1" class="form-control border-0 bg-light">
+                <input type="search" id="textSearch" placeholder="What're you searching for?" aria-describedby="button-addon1" class="form-control border-0 bg-light">
                 <div class="input-group-append">
                     <button id="button-addon1" type="button" class="btn btn-link text-primary"><i class="fa fa-search"></i></button>
                 </div>
@@ -26,21 +26,19 @@
 </div>
 <script>
     $(function(){
+        var subject = "",
+            text = "",
+            keywords = "",
+            id = {!! $id !!};
         $("#searchToggle").on("click",".searchToggle",function(){
             $(this).find(".fa-angle-up").length == 0 ? $(this).find(".fa-angle-down").removeClass("fa-angle-down").addClass("fa-angle-up") :  $(this).find(".fa-angle-up").removeClass("fa-angle-up").addClass("fa-angle-down") ;
         });
-        $.getJSON("{!! route('getSubject') !!}", (data)=>{
-            $("#subjectTopic").append(
-                $.map(data, (v)=>{
-                    return $("<div>", { class: "custom-control custom-radio cp w-100 my-2"}).append(
-                        $("<input>", { type: "radio", class: "custom-control-input subjectInput", id: v.nameSubject, value: v.id, name: "subject"}).on("click", ()=>{
-                            console.log(v.id);
-                        }),
-                        $("<label>", { class: "custom-control-label cp", for: v.nameSubject, text: v.nameSubject}),
-                    );
-                }),
-            );
-        });
+        searchSK = (subject,keyword,text) => {
+            console.log(subject,keyword,text);
+            $.getJSON("{!! route('topic.searchsk') !!}", {subject: subject, keyword: keyword, text: text}, (data) => {
+                createPostList(data);
+            });
+        }
         $.getJSON("{!! route('topic.keyword') !!}", (data)=>{
             var arr = [],
                 keyword = [];
@@ -55,29 +53,61 @@
                 keyword.map((v)=>{
                     return $("<div>", { class: "custom-control custom-radio cp w-100 my-2"}).append(
                         $("<input>", { type: "radio", class: "custom-control-input keywordInput", id: v, value: v, name: "keyword"}).on("click", ()=>{
-                            console.log(v);
+                            keywords = v;
+                            searchSK(subject,keywords,text);
                         }),
                         $("<label>", { class: "custom-control-label cp", for: v, text: v}),
                     );
                 }),
             );
         });
-        $.getJSON("{!! route('topic.getPost') !!}", (data)=>{
-            $(".postTopic").append(
-                data.map((v)=>{
-                    return $("<div>", { class: "mt-5"}).append(
-                        $("<h4>", { class: "mb-1"}).append(
-                            $("<a>", { href: "post/postid=" + v.title_id, text: v.title }),
-                        ),
-                        $("<div>", { class: "font-weight-bold mb-2", text: v.nameSubject }),
-                        v.keyword.split(",").map((v)=>{
-                            return $("<div>", { class: "d-inline-block bge mr-1 px-3", text: v.trim() });
+        $.getJSON("{!! route('getSubject') !!}", (data)=>{
+            $("#subjectTopic").append(
+                $.map(data, (v)=>{
+                    return $("<div>", { class: "custom-control custom-radio cp w-100 my-2"}).append(
+                        $("<input>", { type: "radio", class: "custom-control-input subjectInput s"+v.id, id: v.nameSubject, value: v.nameSubject, name: "subject"}).on("click", ()=>{
+                            subject = v.nameSubject;
+                            searchSK(subject,keywords,text);
                         }),
-                        $("<div>", { text: v.abstract.slice(0,200) + "..." }),
-                        $("<div>", { class: "font-italic text-muted", text: "Last updated at: " + v.updated_at }),
+                        $("<label>", { class: "custom-control-label cp", for: v.nameSubject, text: v.nameSubject}),
                     );
                 }),
             );
+        });
+        createPostList = data => {
+            $(".postTopic").children().remove();
+            if (data.length != 0)
+                $(".postTopic").append(
+                    data.map((v)=>{
+                        return $("<div>", { class: "mt-5"}).append(
+                            $("<h4>", { class: "mb-1"}).append(
+                                $("<a>", { href: "post/postid=" + v.id, text: v.title }),
+                            ),
+                            $("<div>", { class: "font-weight-bold mb-2", text: v.nameSubject }),
+                            v.keyword.split(",").map((v)=>{
+                                return $("<div>", { class: "d-inline-block bge mr-1 px-3", text: v.trim() });
+                            }),
+                            $("<div>", { text: v.abstract.slice(0,200) + "..." }),
+                            $("<div>", { class: "font-italic text-muted", text: "Last updated at: " + v.updated_at }),
+                        );
+                    }),
+                ).hide().fadeIn(500);
+            else
+                $(".postTopic").append(
+                    $("<h4>", { class: "col-lg-7 mx-auto text-muted", text: "No results were found! Please try again"}),
+                );
+        };
+        $.getJSON("{!! route('topic.getPost') !!}", (data)=>{
+            createPostList(data);
+            if (id != 0){
+                $(".s"+id).click();
+            }
+        });
+        $("#textSearch").on("keypress", (e)=>{
+            if (e.which == 13){
+                text = $("#textSearch").val();
+                searchSK(subject,keywords,text);
+            }
         });
     });
 </script>

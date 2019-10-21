@@ -261,7 +261,7 @@
         check = null,
         dataPPall = {!! $dataPP !!},
         role = {!! $role !!};
-    var checkCurrentUser = checkAuthor.length == 0 ? "d-none" : "d-inline-block";
+    var checkCurrentUser = checkAuthor == 0 ? "d-none" : "d-inline-block";
     console.log(postInfo);
     createMetadataList = (data) => {
       $(".metadata").children().remove();
