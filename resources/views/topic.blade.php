@@ -43,7 +43,7 @@
             var arr = [],
                 keyword = [];
             data.map((v)=>{
-                var itemArr = v.keyword.split(",");
+                var itemArr = v.keyword == null ? [] : v.keyword.split(",");
                 arr = arr.concat(itemArr);
             });
             arr.map((v)=>{
@@ -79,17 +79,46 @@
             if (data.length != 0)
                 $(".postTopic").append(
                     data.map((v)=>{
-                        return $("<div>", { class: "mt-5"}).append(
-                            $("<h4>", { class: "mb-1"}).append(
-                                $("<a>", { href: "post/postid=" + v.id, text: v.title }),
-                            ),
-                            $("<div>", { class: "font-weight-bold mb-2", text: v.nameSubject }),
-                            v.keyword.split(",").map((v)=>{
-                                return $("<div>", { class: "d-inline-block bge mr-1 px-3", text: v.trim() });
-                            }),
-                            $("<div>", { text: v.abstract.slice(0,200) + "..." }),
-                            $("<div>", { class: "font-italic text-muted", text: "Last updated at: " + v.updated_at }),
-                        );
+                        if (v.keyword != null && v.abstract != null)
+                            return $("<div>", { class: "mt-5"}).append(
+                                $("<h4>", { class: "mb-1"}).append(
+                                    $("<a>", { href: "post/postid=" + v.id, text: v.title }),
+                                ),
+                                $("<div>", { class: "font-weight-bold mb-2", text: v.nameSubject }),
+                                v.keyword.split(",").map((v)=>{
+                                    return $("<div>", { class: "d-inline-block bge mr-1 px-3", text: v.trim() });
+                                }),
+                                $("<div>", { text: v.abstract.slice(0,200) + "..." }),
+                                $("<div>", { class: "font-italic text-muted", text: "Last updated at: " + v.updated_at }),
+                            );
+                        else if (v.keyword == null && v.abstract != null)
+                            return $("<div>", { class: "mt-5"}).append(
+                                $("<h4>", { class: "mb-1"}).append(
+                                    $("<a>", { href: "post/postid=" + v.id, text: v.title }),
+                                ),
+                                $("<div>", { class: "font-weight-bold mb-2", text: v.nameSubject }),
+                                $("<div>", { text: v.abstract.slice(0,200) + "..." }),
+                                $("<div>", { class: "font-italic text-muted", text: "Last updated at: " + v.updated_at }),
+                            );
+                        else if (v.keyword != null && v.abstract == null)
+                            return $("<div>", { class: "mt-5"}).append(
+                                $("<h4>", { class: "mb-1"}).append(
+                                    $("<a>", { href: "post/postid=" + v.id, text: v.title }),
+                                ),
+                                $("<div>", { class: "font-weight-bold mb-2", text: v.nameSubject }),
+                                v.keyword.split(",").map((v)=>{
+                                    return $("<div>", { class: "d-inline-block bge mr-1 px-3", text: v.trim() });
+                                }),
+                                $("<div>", { class: "font-italic text-muted", text: "Last updated at: " + v.updated_at }),
+                            );
+                        else
+                            return $("<div>", { class: "mt-5"}).append(
+                                $("<h4>", { class: "mb-1"}).append(
+                                    $("<a>", { href: "post/postid=" + v.id, text: v.title }),
+                                ),
+                                $("<div>", { class: "font-weight-bold mb-2", text: v.nameSubject }),
+                                $("<div>", { class: "font-italic text-muted", text: "Last updated at: " + v.updated_at }),
+                            );
                     }),
                 ).hide().fadeIn(500);
             else
@@ -99,9 +128,9 @@
         };
         $.getJSON("{!! route('topic.getPost') !!}", (data)=>{
             createPostList(data);
-            if (id != 0){
+        }).then(()=>{
+            if ( id != null)
                 $(".s"+id).click();
-            }
         });
         $("#textSearch").on("keypress", (e)=>{
             if (e.which == 13){
