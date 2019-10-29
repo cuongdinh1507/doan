@@ -1,7 +1,5 @@
 Link demo: hydrologyda.000webhostapp.com/public
 
-DB
-![alt text](https://github.com/cuongdinh1507/doan/blob/master/db.jpg)
 
 DATN
 
