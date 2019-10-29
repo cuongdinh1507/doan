@@ -1,4 +1,4 @@
-Link demo: hydrologyda.000webhostapp.com/public
+Link demo: hydrologyda.000webhostapp.com
 
 
 DATN
