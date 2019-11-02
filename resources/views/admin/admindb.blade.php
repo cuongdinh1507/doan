@@ -22,6 +22,7 @@
   {{-- <link href="{{ asset('vendor/datatables/dataTables.bootstrap4.css') }}" rel="stylesheet"> --}}
 
   <!-- Custom styles for this template-->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js"></script>
   <link href="{{ asset('css/sb-admin.css') }}" rel="stylesheet">
   <link rel="icon" href="{{asset('img/favicon.png')}}">
 </head>

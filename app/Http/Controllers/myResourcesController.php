@@ -10,7 +10,7 @@ class myResourcesController extends Controller
 {
     public function create(){
 		$project_info = DB::table('project_info')
-		->select('project_info.id','roles.nameRole','species','subjects.nameSubject','language','title')
+		->select('project_info.id','roles.nameRole','species','subjects.nameSubject','language','title','project_info.user_id')
 		->join('project_personel', 'id', '=', 'project_personel.title_id')
 		->join("roles", 'project_info.role_id', '=', 'roles.id')
 		->join("subjects", 'project_info.subject_id', '=', 'subjects.id')

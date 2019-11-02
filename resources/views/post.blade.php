@@ -251,7 +251,6 @@
 <div class="col-lg-10 mx-auto post-body"></div>
 <script>
   $(function(){
-    console.log("{!! $_SERVER["DOCUMENT_ROOT"].'/..' !!}");
     var checkAuthor = {!! $checkAuthor !!},
         fileData = {!! $fileData !!},
         postInfo = {!! $postInfo !!},
@@ -408,6 +407,7 @@
               $(".iEdit").removeClass("d-none").addClass("d-inline-block");
               $(".iDefault").removeClass("d-inline-block").addClass("d-none");
               $(".iEditFile").removeClass("d-none");
+              $(".btn-edit").attr("disabled","true");
               $.getJSON("{!! route('subject.get') !!}", (data)=>{
                 console.log(data);
                 $("#subjectPost").append(
@@ -619,7 +619,7 @@
               ).css({"width": "15%"}),
               $("<td>", { scope: "row", text: v.institution }),
               $("<td>", { scope: "row", text: v.phone }),
-              $("<td>", { scope: "row", class: ((role.length == 0) || (v.role == "Owner")) ? "d-none" : "text-center"}).append(
+              $("<td>", { scope: "row", class: role.length == 0 ? "d-none" : "text-center"}).append(
                 $("<div>", { class:"btn btn-success cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle d-none check"+v.id}).append(
                     $("<i>", { class: "fas fa-check" }),
                 ).on("click", function(){
@@ -762,8 +762,9 @@
     });
     delFile = function(){
       var id = $("#bodyDel").attr("fileid"),
-          link = $("#bodyDel").attr("linkFile");
-      $.getJSON("{!! route("post.delFile",['id'=>$id]) !!}", {idfile: id, link: link}, function(data){
+          link = $("#bodyDel").attr("linkFile"),
+          titleid = {!! $id !!};
+      $.getJSON("{!! route("post.delFile",['id'=>$id]) !!}", {idfile: id, link: link, titleid : titleid}, function(data){
         if ( data.length != 0 ){
           $(".alert").remove(); 
           $(".table-file").children().remove();
@@ -776,10 +777,11 @@
     };
     delPost = function(){
       var id = $('.modal-body-delPost').attr('titleid');
-      $.get('{!! route('post.delPost') !!}', { id: id}, function(data){
-        if ( data == "ok")
-          location.href = "{!! route('myresources.create') !!}";
-      });
+      console.log(id)
+      // $.get('{!! route('post.delPost') !!}', { id: id}, function(data){
+      //   if ( data == "ok")
+      //     location.href = "{!! route('myresources.create') !!}";
+      // });
     };
   });
 </script>

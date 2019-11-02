@@ -11,21 +11,21 @@
             <div class="carousel-item active">
                 <img class="img-slide d-block w-100" src="{!! asset('img/mk/bg01.jpg') !!}" alt="First slide" />
                 <div class="carousel-caption d-none d-md-block">
-                    <h3>MEKONG WATER WELCOMES YOU</h3>
+                    <h3>SHARE RESOURCES WELCOMES YOU</h3>
                     <p>Search. Share. Collaborate.</p>
                 </div>
             </div>
             <div class="carousel-item">
                 <img class="img-slide d-block w-100" src="{!! asset('img/mk/bg02.jpg') !!}" alt="Second slide" />
                 <div class="carousel-caption d-none d-md-block">
-                    <h3>MEKONG WATER WELCOMES YOU</h3>
+                    <h3>SHARE RESOURCES WELCOMES YOU</h3>
                     <p>Search. Share. Collaborate.</p>
                 </div>
             </div>
             <div class="carousel-item">
                 <img class="img-slide d-block w-100" src="{!! asset('img/mk/bg03.jpg') !!}" alt="Third slide" />
                 <div class="carousel-caption d-none d-md-block">
-                    <h3>MEKONG WATER WELCOMES YOU</h3>
+                    <h3>SHARE RESOURCES WELCOMES YOU</h3>
                     <p>Search. Share. Collaborate.</p>
                 </div>
             </div>

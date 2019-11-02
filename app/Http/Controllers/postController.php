@@ -19,36 +19,61 @@ class postController extends Controller
 		$pd = new projectDescription;
 		$pdd = new projectDataDescription;
 		$pp = new projectPersonnel;
-		$postInfo = $pi::join('roles', 'role_id', '=', 'roles.id')->join('subjects', 'subject_id', '=', 'subjects.id')->where('project_info.id','=',$id)->get();
+		$private = $pi::where("id","=",$id)->where("availability","=","Private")->get();
+		$postInfo = $pi::select("project_info.availability", "project_info.created_at", "roles.descriptionRole", "subjects.descriptionSubject", "project_info.id", "project_info.language", "roles.nameRole", "subjects.nameSubject", "project_info.role_id", "project_info.species", "project_info.subject_id","project_info.title", "project_info.updated_at")
+		->join('roles', 'role_id', '=', 'roles.id')->join('subjects', 'subject_id', '=', 'subjects.id')->where('project_info.id','=',$id)->get();
 		$postDescription = $pd::where('title_id', '=', $id)->get();
 		$author = $pp::join('users', 'user_id','=','users.id')->where('title_id', '=', $id)->get();
 		$fileData = $pdd::where('title_id', '=', $id)->get();
-		if (Auth::check()){
-			$currentUser = Auth::user()->id;
-			$checkAuthor = $pp::where('title_id', '=', $id)->where('user_id', '=', $currentUser)->get();
-			$role = DB::table('users')
-				->join('project_personel', 'users.id', '=', 'project_personel.user_id')
-				->join('roles', '.project_personel.role_id','=','roles.id')
-				->where('users.id',$currentUser)
-				->where('project_personel.title_id', $id)
-				->where('roles.nameRole','Project leader')
-				->orWhere('roles.nameRole','Owner')
-				->where('users.id',$currentUser)
-				->where('project_personel.title_id', $id)
-				->get();
-			$dataPP = DB::table('project_personel')
-				->join("users", "user_id", "=", "users.id")
-				->join('roles', 'role_id', '=', 'roles.id')
-				->where('user_id', '!=', $currentUser)
-				->where('title_id', $id)
-				->get();
+		if (count($private) != 0){
+			if (Auth::check()){
+				$currentUser = Auth::user()->id;
+				$checkAuthor = $pp::where('title_id', '=', $id)->where('user_id', '=', $currentUser)->get();
+				if (count($checkAuthor) != 0){
+					$role = $pi::where('project_info.user_id', '=', $currentUser)
+					->where('project_info.id', '=', $id)
+					->get();
+					$dataPP = DB::table('project_personel')
+						->join("users", "user_id", "=", "users.id")
+						->join('roles', 'role_id', '=', 'roles.id')
+						->where('user_id', '!=', $currentUser)
+						->where('title_id', $id)
+						->get();
+					return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role, 'dataPP' => $dataPP]);
+				}
+				else {
+					return redirect()->back();
+				}
+			}
+			else
+				return redirect()->back();
 		}
 		else {
 			$checkAuthor = 0;
 			$role = 0;
 			$dataPP = 0;
+			if (Auth::check()){
+				$currentUser = Auth::user()->id;
+				$checkAuthor = $pp::where('title_id', '=', $id)->where('user_id', '=', $currentUser)->get();
+				if (count($checkAuthor) != 0){
+					$role = $pi::where('project_info.user_id', '=', $currentUser)
+					->where('project_info.id', '=', $id)
+					->get();
+					$dataPP = DB::table('project_personel')
+						->join("users", "user_id", "=", "users.id")
+						->join('roles', 'role_id', '=', 'roles.id')
+						->where('user_id', '!=', $currentUser)
+						->where('title_id', $id)
+						->get();
+					return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role, 'dataPP' => $dataPP]);
+				}
+				else {
+					return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role, 'dataPP' => $dataPP]);
+				}
+			}
+			else
+				return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role, 'dataPP' => $dataPP]);
 		}
-		return view('post',['id'=>$id, 'checkAuthor'=> $checkAuthor, 'postInfo'=> $postInfo, 'postDescription'=> $postDescription, 'author'=> $author, 'fileData'=> $fileData, 'role'=>$role, 'dataPP' => $dataPP]);
     }
 
     public function getAll($id){
@@ -62,39 +87,39 @@ class postController extends Controller
     }
 
     public function update($id){
-		$currentUser = Auth::user()->id;
-    	$dataPP = DB::table('project_personel')
-	    	->join("users", "user_id", "=", "users.id")
-	    	->where('user_id', '!=', $currentUser)
-	    	->where('title_id', $id)
-	    	->get();
-	    $dataUser = DB::table('users')
-	    	->leftJoin("project_personel", "id", "=", "project_personel.user_id")
-	    	->where('project_personel.title_id', '!=', $id)
-	    	->orWhereNull('project_personel.title_id')
-	    	->get();
-	    $role = DB::table('users')
-			->join('project_personel', 'users.id', '=', 'project_personel.user_id')
-			->join('roles', 'project_personel.role_id', '=', 'roles.id')
-	    	->where('users.id',$currentUser)
-	    	->where('project_personel.title_id', $id)
-			->where('roles.nameRole','Project leader')
-			->orWhere('roles.nameRole','Owner')
-			->where('users.id',$currentUser)
-	    	->where('project_personel.title_id', $id)
-	    	->get();
-	    $check = DB::table('project_personel')
-	    	->where('title_id',$id)
-	    	->where('user_id',$currentUser)
-	    	->get();
-	    $info = DB::table('project_info')
-	    	->join('project_description', 'project_info.id', '=', 'project_description.title_id')
-	    	->where('project_info.id',$id)
-	    	->get();
-	    if ( count($check) != 0 )
-			return view('postUpdate',['id'=>$id,'data'=> $dataUser, 'datapp' => $dataPP, 'role' => $role, 'datainfo' => $info]);
-		else
-			return redirect()->route('myresources.create');
+		// $currentUser = Auth::user()->id;
+    	// $dataPP = DB::table('project_personel')
+	    // 	->join("users", "user_id", "=", "users.id")
+	    // 	->where('user_id', '!=', $currentUser)
+	    // 	->where('title_id', $id)
+	    // 	->get();
+	    // $dataUser = DB::table('users')
+	    // 	->leftJoin("project_personel", "id", "=", "project_personel.user_id")
+	    // 	->where('project_personel.title_id', '!=', $id)
+	    // 	->orWhereNull('project_personel.title_id')
+	    // 	->get();
+	    // $role = DB::table('users')
+		// 	->join('project_personel', 'users.id', '=', 'project_personel.user_id')
+		// 	->join('roles', 'project_personel.role_id', '=', 'roles.id')
+	    // 	->where('users.id',$currentUser)
+	    // 	->where('project_personel.title_id', $id)
+		// 	->where('roles.nameRole','Project leader')
+		// 	->orWhere('roles.nameRole','Owner')
+		// 	->where('users.id',$currentUser)
+	    // 	->where('project_personel.title_id', $id)
+	    // 	->get();
+	    // $check = DB::table('project_personel')
+	    // 	->where('title_id',$id)
+	    // 	->where('user_id',$currentUser)
+	    // 	->get();
+	    // $info = DB::table('project_info')
+	    // 	->join('project_description', 'project_info.id', '=', 'project_description.title_id')
+	    // 	->where('project_info.id',$id)
+	    // 	->get();
+	    // if ( count($check) != 0 )
+		// 	return view('postUpdate',['id'=>$id,'data'=> $dataUser, 'datapp' => $dataPP, 'role' => $role, 'datainfo' => $info]);
+		// else
+		// 	return redirect()->route('myresources.create');
     	// $user = DB::table("users")->get();
     	// $pd = DB::table("project_description")->where('title_id', $id)->get();
     	// $pdd = DB::table("project_data_description")->where('title_id', $id)->get();
@@ -109,16 +134,8 @@ class postController extends Controller
     		$userid = request()->get('userid');
     		$role = request()->get('role');
     		$currentUser = Auth::user()->id;
-
-			$check = DB::table('project_personel')
-			->join('roles', 'role_id', '=', 'roles.id')
-	    	->where('title_id',$id)
-	    	->where('user_id',$currentUser)
-			->where('roles.nameRole','Project leader')
-			->orWhere('roles.nameRole','Owner')
-			->where('title_id',$id)
-	    	->where('user_id',$currentUser)
-	    	->get();
+			$pi = new projectInfoModel;
+			$check = $pi::where("id","=",$id)->where("user_id","=", $currentUser)->get();
 
 	    	if (count($check) != 0){
 				$newpp = new projectPersonnel;
@@ -152,123 +169,91 @@ class postController extends Controller
     public function deleteUser($id){
     	if (request()->ajax()){
     		$userid = request()->get('userid');
-    		$currentUser = Auth::user()->id;
-			$check_pl = DB::table('project_personel')
-			->join('roles', 'role_id', '=', 'roles.id')
-	    	->where('title_id',$id)
-	    	->where('user_id',$currentUser)
-			->where('roles.nameRole','Project leader')
-			->get();
-			$check_owner = DB::table('project_personel')
-			->join('roles', 'role_id', '=', 'roles.id')
-	    	->where('title_id',$id)
-	    	->where('user_id',$currentUser)
-			->where('roles.nameRole','Owner')
-			->get();
-	    	if ((count($check_pl) != 0) || (count($check_owner) != 0)){
-				if (count($check_owner) != 0 ){
-					DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->delete();
+			$currentUser = Auth::user()->id;
+			$pi = new projectInfoModel;
+			$check = $pi::where("id","=", $id)->where("user_id","=", $currentUser)->get();
+			// $check_pl = DB::table('project_personel')
+			// ->join('roles', 'role_id', '=', 'roles.id')
+	    	// ->where('title_id',$id)
+	    	// ->where('user_id',$currentUser)
+			// ->where('roles.nameRole','Project leader')
+			// ->get();
+			// $check_owner = DB::table('project_personel')
+			// ->join('roles', 'role_id', '=', 'roles.id')
+	    	// ->where('title_id',$id)
+	    	// ->where('user_id',$currentUser)
+			// ->where('roles.nameRole','Owner')
+			// ->get();
+	    	// if ((count($check_pl) != 0) || (count($check_owner) != 0)){
+			if (count($check) != 0 ){
+				DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->delete();
 
-					$data = DB::table('project_personel')
-					->join("users", "project_personel.user_id", "=", "users.id")
-					->join("roles", 'role_id', '=', 'roles.id')
-					->where('user_id', '!=', $currentUser)
-					->where('title_id', $id)
-					->get();
-					
-					return $data;
-				}
+				$data = DB::table('project_personel')
+				->join("users", "project_personel.user_id", "=", "users.id")
+				->join("roles", 'role_id', '=', 'roles.id')
+				->where('user_id', '!=', $currentUser)
+				->where('title_id', $id)
+				->get();
 				
-				else {
-					$if_delete_owner = DB::table('project_personel')->join('roles','role_id','=','roles.id')->where('title_id','=', $id)->where('user_id','=', $userid)->where('roles.nameRole','=','Owner')->get();
-					if ( count($if_delete_owner) != 0 )
-						return redirect()->route('post.update',['id'=>$id]);
-					else {
-						DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->delete();
+				return $data;
+			}
+				
+				// else {
+				// 	$if_delete_owner = DB::table('project_personel')->join('roles','role_id','=','roles.id')->where('title_id','=', $id)->where('user_id','=', $userid)->where('roles.nameRole','=','Owner')->get();
+				// 	if ( count($if_delete_owner) != 0 )
+				// 		return redirect()->route('post.update',['id'=>$id]);
+				// 	else {
+				// 		DB::table('project_personel')->where('title_id','=', $id)->where('user_id','=', $userid)->delete();
 
-						$data = DB::table('project_personel')
-						->join("users", "project_personel.user_id", "=", "users.id")
-						->join("roles", 'role_id', '=', 'roles.id')
-						->where('user_id', '!=', $currentUser)
-						->where('title_id', $id)
-						->get();
+				// 		$data = DB::table('project_personel')
+				// 		->join("users", "project_personel.user_id", "=", "users.id")
+				// 		->join("roles", 'role_id', '=', 'roles.id')
+				// 		->where('user_id', '!=', $currentUser)
+				// 		->where('title_id', $id)
+				// 		->get();
 						
-						return $data;
-					}
-				}
-	    	}
+				// 		return $data;
+				// 	}
+				// }
 	    	else
-	    		return redirect()->route('post.update',['id'=>$id]);
+				return redirect()->back();
     	}
     	else
-    		return redirect()->route('post.update',['id'=>$id]);
+			return redirect()->back();
     }
 
     public function updateUser($id){
     	if (request()->ajax()){
-    		$currentUser = Auth::user()->id;
     		$userid = request()->get('userid');
-    		$role = request()->get('role');
-			$check_pl = DB::table('project_personel')
-			->join('roles', 'role_id', '=', 'roles.id')
-	    	->where('title_id',$id)
-	    	->where('user_id',$currentUser)
-			->where('roles.nameRole','Project leader')
-			->get();
-			$check_owner = DB::table('project_personel')
-			->join('roles', 'role_id', '=', 'roles.id')
-	    	->where('title_id',$id)
-	    	->where('user_id',$currentUser)
-			->where('roles.nameRole','Owner')
-			->get();
-
-	    	if ( (count($check_pl) != 0) || ( count($check_owner) != 0 ) ){
+			$currentUser = Auth::user()->id;
+			$pi = new projectInfoModel;
+			$check = $pi::where("id","=", $id)->where("user_id","=", $currentUser)->get();
+			$role = request()->get('role');
+	    	if (count($check) != 0 ){
 				$pp = new projectPersonnel;
-				if ( count($check_owner) != 0 ){
-					$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role_id'=>$role]);
+				$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role_id'=>$role]);
 
-					$data = $pp::join("users", "project_personel.user_id", "=", "users.id")
-					->where('user_id', '!=', $currentUser)
-					->where('title_id',$id)
-					->get();
+				$data = $pp::join("users", "project_personel.user_id", "=", "users.id")
+				->join("roles", "project_personel.role_id", "=", "roles.id")
+				->where('user_id', '!=', $currentUser)
+				->where('title_id',$id)
+				->get();
 
-					return $data;
-				}
-				if (count($check_pl) != 0){
-					$if_owner = $pp::join("roles","role_id",'=','roles.id')->where('title_id','=', $id)->where('user_id','=', $userid)->where('roleName','=','Owner')->get();
-					if ( count($if_owner) != 0 )
-						return redirect()->route('post.update',['id'=>$id]);
-					else {
-						$pp::where('title_id','=', $id)->where('user_id','=', $userid)->update(['role_id'=>$role]);
-
-						$data = $pp::join("users", "project_personel.user_id", "=", "users.id")
-						->where('user_id', '!=', $currentUser)
-						->where('title_id',$id)
-						->get();
-
-						return $data;
-					}
-				}
-	    	}
+				return $data;
+			}
+			else
+				return redirect()->back();
     	}
     	else
-    		return redirect()->route('post.update',['id'=>$id]);
+			return redirect()->back();
     }
 
     public function updateProjectinfo(){
     	$id = request()->titleid;
 		$currentUser = Auth::user()->id;
-		$check = DB::table('project_personel')
-		->join('roles', 'role_id', '=', 'roles.id')
-    	->where('title_id',$id)
-    	->where('user_id',$currentUser)
-		->where('roles.nameRole','Project leader')
-		->orWhere('roles.nameRole','Owner')
-		->where('title_id',$id)
-    	->where('user_id',$currentUser)
-    	->get();
+		$pi = new projectInfoModel;
+		$check = $pi::where("id","=",$id)->where("user_id", "=", $currentUser)->get();
     	if ( count($check) != 0 ){
-			$pi = new projectInfoModel;
 			$pd = new projectDescription;
     		$pi::where('id','=', $id)
     		->update(['title'=> request()->title, 'subject_id' => request()->subject, 'species' => request()->species, 'language' => request()->lang, 'availability' => request()->availability ]);
@@ -351,13 +336,24 @@ class postController extends Controller
 
 	public function delFile($id){
 		$currentUser = Auth::user()->id;
+		$pi = new projectInfoModel;
+		$titleid = request()->get('titleid');
+		$check = $pi::join("project_data_description", "project_info.id", "=", "project_data_description.title_id")->where("project_info.id","=", $titleid)->where("project_info.user_id","=", $currentUser)->get();
 		if (request()->ajax()){
 			$idfile = request()->get('idfile');
-			DB::table('project_data_description')
-			->where('id',$idfile)
-			->where('user_id', $currentUser)
-			->delete();
-			unlink(storage_path('app/upload/'.request()->get('link')));
+			if ( count($check) == 0) {
+				DB::table('project_data_description')
+				->where('id',$idfile)
+				->where('user_id', $currentUser)
+				->delete();
+				unlink(storage_path('app/upload/'.request()->get('link')));
+			}
+			else {
+				DB::table('project_data_description')
+				->where('id',$idfile)
+				->delete();
+				unlink(storage_path('app/upload/'.request()->get('link')));
+			}
 			$pdd = new projectDataDescription;
 			return $pdd::where('title_id','=',$id)->get();
 		}
@@ -368,14 +364,8 @@ class postController extends Controller
 		$pp = new projectPersonnel;
 		$titleid = request()->get('titleid');
 		$currentUser = Auth::user()->id;
-		$check = $pp::where('title_id', '=', $titleid)
-		->join('roles', 'role_id', '=', 'roles.id')
-		->where('user_id','=', $currentUser)
-		->where('roles.nameRole', '=', 'Owner')
-		->orWhere('roles.nameRole', '=', 'Project leader')
-		->where('title_id', '=', $titleid)
-		->where('user_id','=', $currentUser)
-		->get();
+		$pi = new projectInfoModel;
+		$check = $pi::join("project_data_description", "project_info.id", "=", "project_data_description.title_id")->where("project_info.id","=", $titleid)->where("project_info.user_id","=", $currentUser)->get();
 		if ( count($check) != 0 ){
 			$pdd::where('id', '=', request()->get("fileid"))
 			->update([
@@ -407,8 +397,14 @@ class postController extends Controller
 		if (request()->ajax()){
 			$id = request()->get('id');
 			$pi = new projectInfoModel;
-			$pi::find($id)->delete();
-			return "ok";
+			$check = $pi::where("user_id", "=", Auth::user()->id)->get();
+			if (count($check) != 0){
+				$pi::find($id)->delete();
+				return "ok";
+			}
+			else {
+				return "no";
+			}
 		}
 	}
 }

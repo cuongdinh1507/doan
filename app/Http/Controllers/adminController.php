@@ -285,4 +285,12 @@ class adminController extends Controller
         unlink(public_path('storage/'.$fileName));
         return "ok";
     }
+
+    public function weekStatistics(){
+        $pi = new projectInfoModel;
+        Carbon::setWeekStartsAt(Carbon::MONDAY);
+        Carbon::setWeekEndsAt(Carbon::SUNDAY);
+        $data = $pi::whereBetween('created_at', [Carbon::now()->startOfWeek(), Carbon::now()->endOfWeek()])->get();
+        return $data;
+    }
 }

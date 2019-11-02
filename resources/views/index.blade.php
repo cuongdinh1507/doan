@@ -28,7 +28,7 @@
             <div class="row">
                 <div class="col-md-12" id="nav-me">
                     <nav class="navbar navbar-expand-sm navbar-light bg-light-me navbar-fixed-top">
-                        <a class="navbar-brand" href="{!! route('home') !!}"><img src="{!! asset('img/mk/MK_Logo.png') !!}" alt="" class="img-logo " /></a>
+                        <a class="navbar-brand" href="{!! route('home') !!}"><img src="{!! asset('img/logo-share.jpg') !!}" alt="" class="img-logo " /></a>
                         <button class="navbar-toggler d-lg-none" type="button" data-toggle="collapse"
                             data-target="#collapsibleNavId" aria-controls="collapsibleNavId" aria-expanded="false"
                             aria-label="Toggle navigation">
@@ -72,6 +72,9 @@
                                         <a class="dropdown-item" href="{{route('discover')}}">Hydroshare</a>
                                         <a class="dropdown-item" href="{{route('discoverMk')}}">MekongWater</a>
                                     </div>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="{{route('toolNservices')}}">Tool & Services</a>
                                 </li>
                                 {{-- <li class="nav-item">
                                     <a class="nav-link" href="{{route('discover')}}">Discover HydroShare</a>
@@ -288,9 +291,6 @@
                                             };
                                         });
                                     </script>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="{{route('toolNservices')}}">Tool & Services</a>
-                                    </li>
                                     <li class="nav-item dropdown">
                                         <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                             {{ Auth::user()->name }} <span class="caret"></span>
@@ -430,8 +430,8 @@
                 class="theme-link" href="{!! route('contact.create') !!}">contact us</a> directly. Our team will come back to you within a matter of hours to help you.</div>
             <br>
             <small class="copyright">Designed with <i class="fas fa-heart" style="color: #fb866a;"></i> by <a
-                    class="theme-link" href="http://data.mekongwater.org" target="_blank">data.mekongwater.org</a> for
-                developers</small>
+                    class="theme-link" href="#">Dinh Viet Cuong</a>
+            </small>
             </div>
     </footer>
 </body>

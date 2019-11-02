@@ -25,7 +25,6 @@
   </div>
 </div>
 <div class="col-lg-10 mx-auto">
-    <a href="{{route('addNew.create')}}"><button type="button" class="btn btn-primary mt-2 mb-2 addnew"><i class="fas fa-plus"></i> Add new</button></a>
     <div>
         <table class="table table-responsive-lg table-hover table-bordered" id="mytable">
           <thead class="thead-dark">
@@ -61,17 +60,7 @@
                     $("<th>", { class:"align-middle", text: v.nameSubject }),
                     $("<th>", { class:"align-middle", text: v.language }),
                     $("<th>").append(
-                        $("<a>", { href : "postUpdate/postid=" + v.id}).append(
-                            $("<button>", { class:"btn btn-success d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
-                                $("<i>", { class: "far fa-edit" }),
-                            ),
-                        ),
-                        // $("<a>", { href: "post/uploadpostid="+ v.id }).append(
-                        //     $("<button>", { class:"btn btn-primary d-inline-block cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle"}).append(
-                        //         $("<i>", { class: "fas fa-upload" }),
-                        //     ),
-                        // ),
-                        $("<button>", { class:"btn btn-danger cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle " + ((v.role == "Owner") ? "d-inline-block" : "d-none"), "data-toggle": "modal", "data-target": "#modal"}).append(
+                        $("<button>", { class:"btn btn-danger cp pt-2 pb-2 pr-3 pl-3 mr-2 align-middle " + ({!! Auth::user()->id !!} == v.user_id ? "d-inline-block" : "d-none"), "data-toggle": "modal", "data-target": "#modal"}).append(
                             $("<i>", { class: "far fa-trash-alt" }),
                         ).on("click", function(){
                             $(".modal-body").text("Delete " + v.title + " ?").attr("titleid", v.id);

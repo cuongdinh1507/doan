@@ -72,6 +72,7 @@ Route::middleware('checkAdmin')->group(function(){
 	Route::get('getEvents', 'adminController@getEvent')->name('event.get');
 	Route::post('updateEvents', 'adminController@updateEvent')->name('event.update');
 	Route::get('delEvents', 'adminController@delEvent')->name('event.del');
+	Route::get('WeekStatistics', 'adminController@weekStatistics')->name('admin.weekPost');
 });
 Route::middleware('auth')->group(function(){
 	Route::get('getRoles', 'adminController@getRole')->name('role.get');
