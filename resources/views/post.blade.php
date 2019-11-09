@@ -621,7 +621,7 @@
               $("<td>", { scope: "row", text: v.phone }),
               $("<td>", { scope: "row", class: role.length == 0 ? "d-none" : "text-center"}).append(
                 $("<div>", { class:"btn btn-success cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle d-none check"+v.id}).append(
-                    $("<i>", { class: "fas fa-check" }),
+                    $("<i>", { class: "fas fa-check" }).css({"color":"white"}),
                 ).on("click", function(){
                   $.get("{!! route('post.updateUser', ['id'=>$id]) !!}", { userid: v.user_id, role: $("select[class='disabled-up"+v.id+"']").val() }, function(c){
                     $("#tbody-pp").children().fadeOut().remove();
@@ -629,7 +629,7 @@
                   });
                 }),
                 $("<div>", { class:"btn btn-success d-inline-block cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle iedit"+v.id}).append(
-                    $("<i>", { class: "far fa-edit" }),
+                    $("<i>", { class: "far fa-edit" }).css({"color":"white"}),
                 ).on("click", function(){
                   $.get("{!! route('role.get') !!}", (data)=>{
                     $(".disabled-up"+v.id).append(
@@ -646,12 +646,12 @@
                   $(".idelete"+v.id).addClass('d-none').removeClass('d-inline-block');
                 }),
                 $("<div>", { class:"btn btn-danger d-inline-block cp pt-1 pb-1 pr-3 pl-3 align-middle idelete"+v.id, "data-toggle": "modal", "data-target": "#modalDelUser"}).append(
-                    $("<i>", { class: "far fa-trash-alt" }),
+                    $("<i>", { class: "far fa-trash-alt" }).css({"color":"white"}),
                 ).on("click",function(){
                   $(".modalDelUser").text("Delete " + v.email + " from this project ?").attr("titleid", v.title_id).attr("userid", v.user_id);
                 }),
                 $("<div>", { class:"btn btn-danger cp pt-1 pb-1 pr-3 pl-3 mr-2 align-middle d-none iclose"+v.id}).append(
-                    $("<i>", { class: "fas fa-times" }),
+                    $("<i>", { class: "fas fa-times" }).css({"color":"white"}),
                 ).on("click", function(){
                   console.log("hi")
                   $(".disabled-up"+v.id).attr("disabled", true);
@@ -698,7 +698,7 @@
             $("<td>", { scope: "row" }),
             $("<td>", { scope: "row", class:"text-center" }).append(
               $("<div>", { class:"btn btn-success d-inline-block cp pt-1 pb-1 pr-3 pl-3 align-middle"}).append(
-                  $("<i>", { class: "far fa-save" }),
+                  $("<i>", { class: "far fa-save" }).css({"color":"white"}),
               ).on("click", function(){
                 var curEmail = $(this).parents().eq(1).children(":first").children(":first").val();
                 var checkCurEmail = $.grep(dataPPemail, function(n,i){
@@ -778,10 +778,10 @@
     delPost = function(){
       var id = $('.modal-body-delPost').attr('titleid');
       console.log(id)
-      // $.get('{!! route('post.delPost') !!}', { id: id}, function(data){
-      //   if ( data == "ok")
-      //     location.href = "{!! route('myresources.create') !!}";
-      // });
+      $.get('{!! route('post.delPost') !!}', { id: id}, function(data){
+        if ( data == "ok")
+          location.href = "{!! route('myresources.create') !!}";
+      });
     };
   });
 </script>
