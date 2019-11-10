@@ -177,9 +177,12 @@
         });
         makeArray = arrayLength => {
             var array = [];
-            for (var i=0; i < arrayLength ; i++){
-                array.push(i);
-            }
+            if (arrayLength == 0)
+                array = [0,1,2,3];
+            else
+                for (var i=0; i < arrayLength ; i++){
+                    array.push(i);
+                }
             return array;
         }
         $.getJSON("{!! route('getSubject') !!}", (data) => {
@@ -213,18 +216,20 @@
                             });
                         }),
                     ),
-                    $("<a>", { class: "bg-primary position-absolute", href: "#carouselExampleControls", "data-slide": "prev", role: "button"}).css({"top":"50%","left":"0","transform":"translateY(-50%)"}).append(
-                        $("<div>", { class: "btn bg-primary text-light"}).append(
-                            $("<i>", { class: "fas fa-arrow-left"}),
-                        )
-                    ),
-                    $("<a>", { class: "bg-primary position-absolute", href: "#carouselExampleControls", "data-slide": "next", role: "button"}).css({"top":"50%","right":"0","transform":"translateY(-50%)"}).append(
-                        $("<div>", { class: "btn bg-primary text-light"}).append(
-                            $("<i>", { class: "fas fa-arrow-right"}),
-                        )
-                    ),
                 );
             }
+            $(".carousel-inner-subject").append(
+                $("<a>", { class: "bg-primary position-absolute", href: "#carouselExampleControls", "data-slide": "prev", role: "button"}).css({"top":"50%","left":"0","transform":"translateY(-50%)"}).append(
+                    $("<div>", { class: "btn bg-primary text-light"}).append(
+                        $("<i>", { class: "fas fa-arrow-left"}),
+                    )
+                ),
+                $("<a>", { class: "bg-primary position-absolute", href: "#carouselExampleControls", "data-slide": "next", role: "button"}).css({"top":"50%","right":"0","transform":"translateY(-50%)"}).append(
+                    $("<div>", { class: "btn bg-primary text-light"}).append(
+                        $("<i>", { class: "fas fa-arrow-right"}),
+                    )
+                ),
+            )
         });
     });
 </script>

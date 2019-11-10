@@ -259,7 +259,7 @@ class postController extends Controller
     		->update(['title'=> request()->title, 'subject_id' => request()->subject, 'species' => request()->species, 'language' => request()->lang, 'availability' => request()->availability ]);
 
     		$pd::where('title_id','=', $id)
-    		->update(['abstract'=> request()->abstract, 'keyword' => request()->keyword, 'funding' => request()->funding, 'yearStart' => request()->start, 'yearEnd' => request()->end, 'publication' => request()->publication ]);
+    		->update(['abstract'=> request()->abstract, 'keyword' => request()->keyword, 'funding' => request()->funding, 'startDate' => request()->start, 'endDate' => request()->end, 'publication' => request()->publication, 'lat' => request()->lat, 'lng' => request()->lng ]);
 
     		$data = DB::table('project_personel')
 	    	->join("users", "project_personel.user_id", "=", "users.id")
@@ -287,10 +287,10 @@ class postController extends Controller
 
 	public function newUpload(Request $request){
 		$currentUser = Auth::user()->id;
-		// $validator = Validator::make($request->all(), [
-		// 		'fileUp' => 'required|file|max:2048',
-		// 	]
-		// );
+		$validator = Validator::make($request->all(), [
+				'fileUp' => 'required|file|max:2048',
+			]
+		);
 		$fileName = $request->file('fileUp')->getClientOriginalName();
 		$newFileName = md5($fileName.time()).$fileName;
 		$path = $request->file('fileUp')->move(storage_path("/app/upload"), $newFileName);

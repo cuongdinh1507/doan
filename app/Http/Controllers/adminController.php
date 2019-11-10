@@ -15,6 +15,7 @@ use App\subject;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 use DB;
+use Illuminate\Support\Facades\Validator;
 
 class adminController extends Controller
 {
@@ -153,6 +154,10 @@ class adminController extends Controller
     }
 
     public function saveSubject(Request $request){
+        $validator = Validator::make($request->all(), [
+                'file' => 'required|image|mimes:jpeg,jpg,png,gif|max:2048',
+            ]
+        );
 		$fileName = $request->file('file')->getClientOriginalName();
 		$newFileName = md5($fileName.time()).$fileName;
 		$path = $request->file('file')->move(public_path('storage'), $newFileName);
@@ -183,6 +188,10 @@ class adminController extends Controller
         $subject = new subject;
         $id = request()->id;
         if ($request->hasFile('fileEdit')){
+            $validator = Validator::make($request->all(), [
+                    'fileEdit' => 'required|image|mimes:jpeg,jpg,png,gif|max:2048',
+                ]
+            );
             $fileName = $request->file('fileEdit')->getClientOriginalName();
             $newFileName = md5($fileName.time()).$fileName;
             $path = $request->file('fileEdit')->move(public_path('storage'), $newFileName);
@@ -232,6 +241,10 @@ class adminController extends Controller
     }
 
     public function saveEvent(Request $request){
+        $validator = Validator::make($request->all(), [
+                'file' => 'required|image|mimes:jpeg,jpg,png,gif|max:2048',
+            ]
+        );
 		$fileName = $request->file('file')->getClientOriginalName();
 		$newFileName = md5($fileName.time()).$fileName;
 		$path = $request->file('file')->move(public_path('storage'), $newFileName);
@@ -254,6 +267,10 @@ class adminController extends Controller
         $event = new event;
         $id = request()->id;
         if ($request->hasFile('fileEdit')){
+            $validator = Validator::make($request->all(), [
+                    'fileEdit' => 'required|image|mimes:jpeg,jpg,png,gif|max:2048',
+                ]
+            );
             $fileName = $request->file('fileEdit')->getClientOriginalName();
             $newFileName = md5($fileName.time()).$fileName;
             $path = $request->file('fileEdit')->move(public_path('storage'), $newFileName);

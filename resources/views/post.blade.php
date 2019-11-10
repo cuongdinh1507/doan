@@ -165,12 +165,12 @@
                                 </div>
 
                                 <div class="form-group row">
-                                    <label for="file" class="col-md-4 col-form-label text-md-right">Upload File</label>
+                                    <label for="fileUp" class="col-md-4 col-form-label text-md-right">Upload File</label>
 
                                     <div class="col-md-6">
-                                        <input id="fileUp" type="file" class="form-control-file @error('file') is-invalid @enderror" name="fileUp" required autocomplete="file">
+                                        <input id="fileUp" type="file" class="form-control-file @error('fileUp') is-invalid @enderror" name="fileUp" required autocomplete="file">
 
-                                        @error('file')
+                                        @error('fileUp')
                                             <span class="invalid-feedback" role="alert">
                                                 <strong>{{ $message }}</strong>
                                             </span>
@@ -248,9 +248,59 @@
   </div>
 </div>
 <button data-toggle="modal" data-target="#modalAuthor" id="btn-author" class="d-none"></button>
-<div class="col-lg-10 mx-auto post-body"></div>
+<form method="POST" action="{!! route('post.updateProjectInfo') !!}">
+  <div class="col-lg-10 mx-auto post-body"></div>
+  <div class="col-lg-10 mx-auto">
+    <div class="spatial">
+        <div class="modal-header text-large h5 mt-4">Spatial</div>
+        <div class="col-lg-4 d-inline-block align-top">
+          <i class="fas fa-map-marker-alt d-inline-block"></i>
+          <div class="d-inline-block">Coordinate Units:</div>
+          <div>WGS 84 EPSG:4326</div>
+          <div>
+            <div class="mt-2">
+              <div class="d-inline-block">Latitude: </div>
+              <div class="d-inline-block">
+                <div class="iDefault lat"></div>
+                <input type="number" step="0.000000000001" class="text-left iEdit d-none form-control" name="lat">
+              </div>
+            </div>
+            <div class="mt-2">
+              <div class="d-inline-block">Longitude: </div>
+              <div class="d-inline-block">
+                <div class="iDefault lng"></div>
+                <input type="number" step="0.000000000001" class="text-left iEdit d-none form-control" name="lng">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="map" class="col-lg-7 d-inline-block align-top" style="height:400px"></div>
+      </div>
+    </div>
+    <div class="text-center mt-2 iEditFile d-none">
+      <button class="btn btn-success text-right">Save Changes</button>
+    </div>
+</form>
+<div class="col-lg-10 mx-auto">
+  <div class="contentFile"></div>
+</div>
+<script>
+  function initMap(lat,lng) {
+    if (lat != undefined && lng != undefined ){
+      var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: lat, lng: lng},
+        zoom: 10
+      });
+      var marker = new google.maps.Marker({
+        position: {lat: lat, lng: lng},
+        map: map,
+      });
+    }
+  }
+</script>
 <script>
   $(function(){
+    // initMap(-34.397,150.644)
     var checkAuthor = {!! $checkAuthor !!},
         fileData = {!! $fileData !!},
         postInfo = {!! $postInfo !!},
@@ -261,7 +311,7 @@
         dataPPall = {!! $dataPP !!},
         role = {!! $role !!};
     var checkCurrentUser = checkAuthor == 0 ? "d-none" : "d-inline-block";
-    console.log(postInfo);
+    console.log(checkAuthor == 0);
     createMetadataList = (data) => {
       $(".metadata").children().remove();
       $(".metadata").append(
@@ -388,7 +438,7 @@
       return fileIcon;
     };
     $(".post-body").append(
-      $("<form>", { method:"POST", action: "{!! route('post.updateProjectInfo') !!}"}).append(
+      // $("<form>", { method:"POST", action: "{!! route('post.updateProjectInfo') !!}"}).append(
         $("<input>", { class: "d-none", name: "_token", value:" {!! csrf_token() !!}"}),
         $("<input>", { class: "d-none", name: "titleid", value:{!! $id !!}}),
         $("<h3>", { class: "modal-header iDefault", id: "title", text: postInfo[0].title }),
@@ -409,7 +459,6 @@
               $(".iEditFile").removeClass("d-none");
               $(".btn-edit").attr("disabled","true");
               $.getJSON("{!! route('subject.get') !!}", (data)=>{
-                console.log(data);
                 $("#subjectPost").append(
                   $.map(data,(v)=>{
                     if (postInfo[0].subject_id != v.id)
@@ -515,14 +564,14 @@
             $("<div>", { class: "col-lg-8 d-inline-block text-left", text: postInfo[0].updated_at}),
           ),
           $("<div>", { class: "mb-2"}).append(
-            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Year start:"}),
-            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postDescription[0].yearStart}),
-            $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postDescription[0].yearStart, value: postDescription[0].yearStart , name: "start" }),
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Start date:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postDescription[0].startDate}),
+            $("<input>", { type: "date", class: "col-lg-8 text-left iEdit d-none form-control", text: postDescription[0].startDate, value: postDescription[0].startDate , name: "start" }),
           ),
           $("<div>", { class: "mb-2"}).append(
-            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "Year end:"}),
-            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postDescription[0].yearEnd}),
-            $("<input>", { class: "col-lg-8 text-left iEdit d-none form-control", text: postDescription[0].yearEnd, value: postDescription[0].yearEnd , name: "end" }),
+            $("<strong>", { class: "col-lg-4 d-inline-block text-right", text: "End date:"}),
+            $("<div>", { class: "col-lg-8 d-inline-block text-left iDefault", text: postDescription[0].endDate}),
+            $("<input>", { type: "date", class: "col-lg-8 text-left iEdit d-none form-control", text: postDescription[0].endDate, value: postDescription[0].endDate , name: "end" }),
           ),
         ),
         $("<div>", { class: "modal-header text-large h5 mt-4", text: "Abstract"}),
@@ -537,11 +586,21 @@
         $("<div>", { class: "modal-header text-large h5 mt-4", text: "Publication"}),
         $("<div>", { class: "iDefault", text: postDescription[0].publication }),
         $("<input>", { class: "col-lg-12 form-control iEdit d-none", value: postDescription[0].publication, name: "publication"}),
-        $("<div>", { class: "text-right mt-2 iEditFile d-none"}).append(
-          $("<button>", { class: "btn btn-success text-right", text: "Save Changes"}),
-        ),
-      ),
-      $("<div>", { class: "modal-header text-large h5 mt-4", text: "Content"}),
+        // $("<div>", { class: "text-right mt-2 iEditFile d-none"}).append(
+        //   $("<button>", { class: "btn btn-success text-right", text: "Save Changes"}),
+        // ),
+      // ),
+    );
+    $("input[name='lat']").val(postDescription[0].lat).text(postDescription[0].lat);
+    $(".lat").text(postDescription[0].lat);
+    $("input[name='lng']").val(postDescription[0].lng).text(postDescription[0].lng);
+    $(".lng").text(postDescription[0].lng);
+    if (postDescription[0].lat != null && postDescription[0].lng != null)
+      initMap(postDescription[0].lat,postDescription[0].lng)
+    if ((postDescription[0].lat == null || postDescription[0].lng == null) && checkAuthor ==0 )
+      $(".spatial").addClass("d-none");
+    $(".contentFile").append(
+      $("<div>", { class: "modal-header text-large h5 mt-4 ", text: "Content"}),
       $("<div>", { class: "border rounded col-lg-12 py-2"}).append(
         $("<div>", { class: "rounded col-lg-12"}).append(
           $("<div>", { class: "col-lg-12 bge py-2"}).append(
@@ -554,7 +613,7 @@
               }),
             ),
             $("<div>", { class: "addFile col-lg-8 align-middle iEdit d-none text-left"}).append(
-              $("<button>", { class: "btn btn-success", text: "Add File", "data-target":"#modalUpload", "data-toggle":"modal"}).on("click", function(){
+              $("<button>", { class: "btn btn-success", text: "Upload File", "data-target":"#modalUpload", "data-toggle":"modal"}).on("click", function(){
                 
               }),
             ),
@@ -573,7 +632,6 @@
       ),
     );
     createTablePP = function(data){
-      console.log(data,2);
       var dataPPemail = [],
           dataPP = [];
       $.get("{!! route('post.getAll',['id'=>$id]) !!}", function(all){
@@ -765,14 +823,12 @@
           link = $("#bodyDel").attr("linkFile"),
           titleid = {!! $id !!};
       $.getJSON("{!! route("post.delFile",['id'=>$id]) !!}", {idfile: id, link: link, titleid : titleid}, function(data){
-        if ( data.length != 0 ){
           $(".alert").remove(); 
           $(".table-file").children().remove();
           $(".table-file").append(
             createFileList(data),
           );
           $(".btn-close,.btn-edit").click();
-        }
       });
     };
     delPost = function(){
@@ -785,4 +841,6 @@
     };
   });
 </script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBpI0g8al7qjAuxiZoD4nDcAnzqQOz2YUk&callback=initMap"
+async defer></script>
 @endsection

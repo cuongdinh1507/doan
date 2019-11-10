@@ -17,11 +17,13 @@ class CreateProjectDescriptionTable extends Migration
             $table->smallInteger('id')->unsigned()->autoIncrement();
             $table->smallInteger('title_id')->unsigned();
             $table->text('abstract')->nullable();
-            $table->string('keyword', 100)->nullable();
-            $table->string('funding', 100)->nullable();
-            $table->string('yearStart',4)->nullable();
-            $table->string('yearEnd',4)->nullable();
-            $table->string('publication',100)->nullable();
+            $table->string('keyword')->nullable();
+            $table->string('funding')->nullable();
+            $table->string('startDate',10)->nullable();
+            $table->string('endDate',10)->nullable();
+            $table->string('publication')->nullable();
+            $table->float('lat', 8, 2)->nullable();
+            $table->float('lng', 8, 2)->nullable();
             $table->foreign('title_id')->references('id')->on('project_info')->onDelete('cascade');
             $table->timestamps();
         });
