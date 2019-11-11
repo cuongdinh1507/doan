@@ -209,13 +209,17 @@
                     $("<td>", { class: "w-25 text-center" }).append(
                         $("<img>", { src: v.imageSubject, class: "w-50" }),
                     ),
-                    $("<td>").append(
-                        $("<button>", { class: "btn btn-success mr-2", text: "Edit", "data-toggle":"modal", "data-target":"#edit"}).on("click", function(){
+                    $("<td>", { class: "text-center"}).append(
+                        $("<button>", { class: "btn btn-success mt-2 col-lg-8", "data-toggle":"modal", "data-target":"#edit"}).append(
+                            $("<i>", { class: "fas fa-pencil-alt"}),
+                        ).on("click", function(){
                             $("#subject_id").val(v.id);
                             $("#nameEdit").val(v.nameSubject);
                             $("#descriptionEdit").val(v.descriptionSubject);
                         }),
-                        $("<button>", { class: "btn btn-danger", text: "Delete", "data-toggle":"modal", "data-target":"#delPi"}).on("click", function(){
+                        $("<button>", { class: "btn btn-danger mt-2 col-lg-8", "data-toggle":"modal", "data-target":"#delPi"}).append(
+                            $("<i>", { class: "fas fa-trash-alt"}),
+                        ).on("click", function(){
                             $(".modal-body-pi").text("Do you want to delete " + v.nameSubject + " ?").attr("subjectid", v.id);
                         }),
                     ),

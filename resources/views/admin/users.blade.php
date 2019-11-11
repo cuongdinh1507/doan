@@ -74,7 +74,9 @@
             $("<td>", { text: v.position }),
             $("<td>", { text: v.phone }),
             $("<td>").append(
-              $("<button>", { class: "btn btn-danger", text: "Delete", "data-toggle":"modal", "data-target":"#delUser"}).on("click", function(){
+              $("<button>", { class: "btn btn-danger", "data-toggle":"modal", "data-target":"#delUser"}).append(
+                $("<i>", { class: "fas fa-trash-alt"}),
+              ).on("click", function(){
                 $(".modal-body-user").text("Do you want to delete user "+ v.name + " (" + v.email + ") ?").attr("userid",v.id);
               }),
             ),

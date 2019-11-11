@@ -35,7 +35,7 @@
               <th scope="col">Species</th>
               <th scope="col">Subject</th>
               <th scope="col">Language</th>
-              <th scope="col" class="w-20">Actions</th>
+              <th scope="col">Actions</th>
             </tr>
           </thead>
           <tbody>

@@ -77,8 +77,10 @@
               $("<a>",  { text: v.link.slice(32).split(".")[0], href: "post/getDownloadFileid=" + v.id }),
             ),
             $("<td>", { text: v.email }),
-            $("<td>").append(
-              $("<button>", { class: "btn btn-danger", text: "Delete", "data-toggle":"modal", "data-target":"#delPdd"}).on("click", function(){
+            $("<td>", { class: "text-center"}).append(
+              $("<button>", { class: "btn btn-danger", "data-toggle":"modal", "data-target":"#delPdd"}).append(
+                $("<i>", { class: "fas fa-trash-alt"}),
+              ).on("click", function(){
                 $(".modal-body-pdd").text("Do you want to delete user "+ v.name + " (" + v.email + ") ?").attr("file",v.id);
               }),
             ),

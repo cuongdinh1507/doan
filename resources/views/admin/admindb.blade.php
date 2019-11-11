@@ -79,11 +79,11 @@
           <i class="far fa-newspaper"></i>
           <span>Project Information</span></a>
       </li>
-      <li class="nav-item">
+      {{-- <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.projectDescription') }}">
           <i class="fas fa-newspaper"></i>
           <span>Project Description</span></a>
-      </li>
+      </li> --}}
       <li class="nav-item">
         <a class="nav-link" href="{{ route('admin.projectPersonnel') }}">
           <i class="fas fa-users"></i>

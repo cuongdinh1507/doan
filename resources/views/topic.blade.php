@@ -33,6 +33,7 @@
         $("#searchToggle").on("click",".searchToggle",function(){
             $(this).find(".fa-angle-up").length == 0 ? $(this).find(".fa-angle-down").removeClass("fa-angle-down").addClass("fa-angle-up") :  $(this).find(".fa-angle-up").removeClass("fa-angle-up").addClass("fa-angle-down") ;
         });
+        
         searchSK = (subject,keyword,text) => {
             console.log(subject,keyword,text);
             $.getJSON("{!! route('topic.searchsk') !!}", {subject: subject, keyword: keyword, text: text}, (data) => {
@@ -74,9 +75,9 @@
                 }),
             );
         });
-        createPostList = data => {
+        createPostList = (data,id) => {
             $(".postTopic").children().remove();
-            if (data.length != 0)
+            if (data.length != 0){
                 $(".postTopic").append(
                     data.map((v)=>{
                         if (v.keyword != null && v.abstract != null)
@@ -121,16 +122,16 @@
                             );
                     }),
                 ).hide().fadeIn(500);
+                if (id != null)
+                    $(".s"+id).click();
+            }
             else
                 $(".postTopic").append(
                     $("<h4>", { class: "col-lg-7 mx-auto text-muted", text: "No results were found! Please try again"}),
                 );
         };
         $.getJSON("{!! route('topic.getPost') !!}", (data)=>{
-            createPostList(data);
-        }).then(()=>{
-            if ( id != null)
-                $(".s"+id).click();
+            createPostList(data,id);
         });
         $("#textSearch").on("keypress", (e)=>{
             if (e.which == 13){

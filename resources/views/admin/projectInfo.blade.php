@@ -75,8 +75,10 @@
             $("<td>", { text: v.species }),
             $("<td>", { text: v.language }),
             $("<td>", { text: v.availability }),
-            $("<td>").append(
-              $("<button>", { class: "btn btn-danger", text: "Delete", "data-toggle":"modal", "data-target":"#delPi"}).on("click", function(){
+            $("<td>", { class: "text-center"}).append(
+              $("<button>", { class: "btn btn-danger", "data-toggle":"modal", "data-target":"#delPi"}).append(
+                $("<i>", { class: "fas fa-trash-alt"}),
+              ).on("click", function(){
                 $(".modal-body-pi").text("Do you want to delete " + v.title + " ?").attr("titleid", v.id);
               }),
             ),

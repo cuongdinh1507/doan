@@ -74,8 +74,11 @@
                                     </div>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{route('toolNservices')}}">Tool & Services</a>
+                                    <a class="nav-link" href="{{route('contact.create')}}">Contact us</a>
                                 </li>
+                                {{-- <li class="nav-item">
+                                    <a class="nav-link" href="{{route('toolNservices')}}">Tool & Services</a>
+                                </li> --}}
                                 {{-- <li class="nav-item">
                                     <a class="nav-link" href="{{route('discover')}}">Discover HydroShare</a>
                                 </li>

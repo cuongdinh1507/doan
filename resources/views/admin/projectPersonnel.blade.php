@@ -70,8 +70,10 @@
             $("<td>", { text: v.nameRole }),
             $("<td>", { text: v.email }),
             $("<td>", { text: v.phone }),
-            $("<td>").append(
-              $("<button>", { class: "btn btn-danger", text: "Delete", "data-toggle":"modal", "data-target":"#delPp"}).on("click", function(){
+            $("<td>", { class: "text-center"}).append(
+              $("<button>", { class: "btn btn-danger", "data-toggle":"modal", "data-target":"#delPp"}).append(
+                $("<i>", { class: "fas fa-trash-alt"}),
+              ).on("click", function(){
                 $(".modal-body-pp").text("Do you want to delete " + v.title + " ( "+ v.name +" ) ?").attr({"title_id":v.title_id, "user_id":v.user_id, "role": v.role});
               }),
             ),

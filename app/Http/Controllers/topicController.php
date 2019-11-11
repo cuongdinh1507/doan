@@ -32,7 +32,7 @@ class topicController extends Controller
 
     public function getPost(){
         $pi = new projectInfoModel;
-        return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")->join("project_description", "project_info.id", "=", "project_description.title_id")->join("subjects","project_info.subject_id","=","subjects.id")->where("availability","=","Public")->get();
+        return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")->join("project_description", "project_info.id", "=", "project_description.title_id")->join("subjects","project_info.subject_id","=","subjects.id")->where("availability","=","Public")->orderBy("project_info.id","desc")->get();
     }
 
     public function searchsk(){
@@ -46,6 +46,7 @@ class topicController extends Controller
                 ->join("project_description", "project_info.id", "=", "project_description.title_id")
                 ->join("subjects","project_info.subject_id","=","subjects.id")
                 ->where("availability","=","Public")
+                ->orderBy("project_info.id","desc")
                 ->get();
             else if ( $subject != null && $keyword != null && $text != null )
                 return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
@@ -55,6 +56,7 @@ class topicController extends Controller
                 ->where("subjects.nameSubject", "=", $subject)
                 ->where("project_info.title", "LIKE", "%{$text}%")
                 ->where("project_description.keyword", "LIKE", "%{$keyword}%")
+                ->orderBy("project_info.id","desc")
                 ->get();
             else if ( $subject != null && $keyword == null && $text == null )
                 return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
@@ -62,6 +64,7 @@ class topicController extends Controller
                 ->join("subjects","project_info.subject_id","=","subjects.id")
                 ->where("availability","=","Public")
                 ->where("subjects.nameSubject", "=", $subject)
+                ->orderBy("project_info.id","desc")
                 ->get();
             else if ( $subject != null && $keyword != null && $text == null )
                 return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
@@ -70,6 +73,7 @@ class topicController extends Controller
                 ->where("availability","=","Public")
                 ->where("subjects.nameSubject", "=", $subject)
                 ->where("project_description.keyword", "LIKE", "%{$keyword}%")
+                ->orderBy("project_info.id","desc")
                 ->get();
             else if ( $subject != null && $keyword == null && $text != null )
                 return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
@@ -78,6 +82,7 @@ class topicController extends Controller
                 ->where("availability","=","Public")
                 ->where("subjects.nameSubject", "=", $subject)
                 ->where("project_info.title", "LIKE", "%{$text}%")
+                ->orderBy("project_info.id","desc")
                 ->get();
             else if ( $subject == null && $keyword != null && $text == null )
                 return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
@@ -85,6 +90,7 @@ class topicController extends Controller
                 ->join("subjects","project_info.subject_id","=","subjects.id")
                 ->where("availability","=","Public")
                 ->where("project_description.keyword", "LIKE", "%{$keyword}%")
+                ->orderBy("project_info.id","desc")
                 ->get();
             else if ( $subject == null && $keyword != null && $text != null )
                 return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
@@ -93,6 +99,7 @@ class topicController extends Controller
                 ->where("availability","=","Public")
                 ->where("project_description.keyword", "LIKE", "%{$keyword}%")
                 ->where("project_info.title", "LIKE", "%{$text}%")
+                ->orderBy("project_info.id","desc")
                 ->get();
             else if ( $subject == null && $keyword == null && $text != null )
                 return $pi::select("project_info.title", "project_info.id", "subjects.nameSubject", "project_description.keyword", "project_description.abstract", "project_info.updated_at")
@@ -100,6 +107,7 @@ class topicController extends Controller
                 ->join("subjects","project_info.subject_id","=","subjects.id")
                 ->where("availability","=","Public")
                 ->where("project_info.title", "LIKE", "%{$text}%")
+                ->orderBy("project_info.id","desc")
                 ->get();
         }
     }
